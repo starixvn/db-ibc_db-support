@@ -16,5 +16,6 @@ Begin DataProject = "DBAQueries"
    End
    Begin Folder = "Support"
       Script = "000_Sample.sql"
+      Script = "Sup_20130522_Hotfix1593_Racing_GetLicenseeList_NegativeBalance.sql"
    End
 End
