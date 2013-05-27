@@ -14,6 +14,7 @@ Begin DataProject = "DBAQueries"
    Begin Folder = "Requirement"
       Script = "000_Sample.sql"
       Begin Folder = "Racing"
+         Script = "Req_20130527_Feature1699_AddNSWtoAusRacing.sql"
       End
    End
    Begin Folder = "Support"
