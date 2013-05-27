@@ -9,6 +9,8 @@
 		+ for the selection of "Any Other Player" wrong key to WON status.
 			==> Need to change the status to "LOSE"	
 	
+	TEST
+	
 */
 
 SELECT	t.teamname, o.* 
