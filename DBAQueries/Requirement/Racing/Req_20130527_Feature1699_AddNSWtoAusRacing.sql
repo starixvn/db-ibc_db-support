@@ -1,4 +1,11 @@
-﻿ INSERT INTO RacingPartner(PartnerID,PartnerName,Description,ChannelID)
+﻿ /*
+	Created: Johnson
+	Date: 20130527
+	Task: Script to group NSW into AUS Racing
+ */
+ 
+ 
+ INSERT INTO RacingPartner(PartnerID,PartnerName,Description,ChannelID)
 SELECT 6,'RACE-TABCORPNSW','TabCorp - NSW Australian Horse Racing',5
 union 
 SELECT 104,'GREY-TABCORPNSW','TabCorp - NSW Australian Greyhound Racing',5
