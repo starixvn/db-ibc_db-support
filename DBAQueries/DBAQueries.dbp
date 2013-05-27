@@ -22,5 +22,8 @@ Begin DataProject = "DBAQueries"
       Begin Folder = "Racing"
          Script = "Sup_20130522_Hotfix1593_Racing_GetLicenseeList_NegativeBalance.sql"
       End
+      Begin Folder = "Settlement"
+         Script = "Sup_20130527_Outright_ReSettle.sql"
+      End
    End
 End
