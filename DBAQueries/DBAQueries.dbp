@@ -14,10 +14,13 @@ Begin DataProject = "DBAQueries"
    Begin Folder = "Requirement"
       Script = "000_Sample.sql"
       Begin Folder = "P2P"
-         Script = "20130604_Disable_P2P_Product.sql"
+         Script = "Req_20130604_Feature1910_Disable_P2P_Product.sql"
       End
       Begin Folder = "Racing"
          Script = "Req_20130527_Feature1699_AddNSWtoAusRacing.sql"
+      End
+      Begin Folder = "Virtual Sports"
+         Script = "Sup_20130603_Support1884_OfferVirtualSportForDepositLicensee.sql"
       End
    End
    Begin Folder = "Support"
