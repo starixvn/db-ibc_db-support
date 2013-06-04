@@ -67,6 +67,7 @@ INSERT INTO #temp (custid, isfinished)
 SELECT DISTINCT c.custid, 0
 FROM custinfo c WITH(NOLOCK)
 WHERE DisableP2P = 0 or DisableFunP2P = 0
+	AND RoleID <=4
 	AND custid <= @maxCustID
 
 	
