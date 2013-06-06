@@ -20,7 +20,9 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130527_Feature1699_AddNSWtoAusRacing.sql"
       End
       Begin Folder = "Virtual Sports"
-         Script = "Sup_20130603_Support1884_OfferVirtualSportForDepositLicensee.sql"
+         Script = "20130606_scr2_support1884_SetBetsettingFor12Bet.sql"
+         Script = "20130606_scr3_support1884_UpdateVirtualSoccer_Status.sql"
+         Script = "Sup_20130603_Support1884_UpdatePTSetting.sql"
       End
    End
    Begin Folder = "Support"

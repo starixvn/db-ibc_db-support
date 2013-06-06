@@ -6,8 +6,7 @@ AS
 SET NOCOUNT ON
 
 /*
-	licensee customers 
-	Virtual soccer: copy setting from NG 
+	script 1: copy PT setting from NG to virtual soccer (Dafa & 12Bet)
 */
 	
 BEGIN
@@ -39,8 +38,6 @@ BEGIN
 	SET spositiontaking = ng.spositiontaking
 		,mpositiontaking = ng.mpositiontaking
 		,apositiontaking = ng.apositiontaking
-		--,minbet = ng.minbet,
-		--,maxbet = ng.maxbet
 	FROM Dep_Custsetting3rd vs 
 		INNER JOIN Dep_Custsetting3rd ng WITH(NOLOCK) ON vs.custid = ng.custid
 			AND vs.sporttype = 180 AND vs.bettype = 1201 AND ng.sporttype = 161 AND ng.bettype = 81
@@ -70,10 +67,6 @@ WHERE	vs.custid < @maxCustID
 		vs.mpositiontaking <> ng.mpositiontaking
 		OR
 		vs.apositiontaking <> ng.apositiontaking
-		--OR
-		--vs.minbet <> ng.minbet
-		--OR
-		--vs.maxbet <> ng.maxbet
 		)
 AND srecommend IN (SELECT custid FROM f_depSuper_1('12Bet')
 					UNION ALL
