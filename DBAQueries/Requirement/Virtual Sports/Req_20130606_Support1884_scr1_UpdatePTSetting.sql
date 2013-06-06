@@ -49,7 +49,7 @@ GO
 
 DECLARE @maxCustID INT
 
-SET @maxCustID = 2000000000
+SET @maxCustID = xxx
 
 create table #temp (custid int primary key, isfinished bit)
 
