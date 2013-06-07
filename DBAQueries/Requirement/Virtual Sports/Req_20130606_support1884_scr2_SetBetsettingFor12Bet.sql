@@ -1,5 +1,4 @@
 ﻿
-
 ALTER PROCEDURE [dbo].[Acc_ExecRep_09]	
 	@ids varchar(max)
 AS
@@ -45,6 +44,7 @@ BEGIN
 	UNION ALL SELECT	12	,	1	,	200	,	700
 	UNION ALL SELECT	6	,	1	,	200	,	700
 	UNION ALL SELECT	9	,	1	,	200	,	700
+	UNION ALL SELECT	41	,	1	,	200	,	700
 	
 	-- UPDATE min/max bet	
 	UPDATE vs WITH(ROWLOCK,UPDLOCK)
@@ -83,6 +83,7 @@ CREATE TABLE #betsetting(currency INT, minbet MONEY, maxbet MONEY,maxpermatch MO
 	UNION ALL SELECT	12	,	1	,	200	,	700
 	UNION ALL SELECT	6	,	1	,	200	,	700
 	UNION ALL SELECT	9	,	1	,	200	,	700
+	UNION ALL SELECT	41	,	1	,	200	,	700
 	
 create table #temp (custid int primary key, isfinished bit)
 
