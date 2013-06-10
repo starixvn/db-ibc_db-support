@@ -21,6 +21,7 @@ Begin DataProject = "DBAQueries"
       End
       Begin Folder = "Virtual Sports"
          Script = "Req_20130604_Feature1793_VirtualGreyhound_AddMaxPerMatch182.sql"
+         Script = "Req_20130606_Support1884_scr00_CorrectDataForNG.sql"
          Script = "Req_20130606_Support1884_scr1_UpdatePTSetting.sql"
          Script = "Req_20130606_support1884_scr2_SetBetsettingFor12Bet.sql"
          Script = "Req_20130606_support1884_scr3_UpdateVirtualSoccer_Status.sql"
