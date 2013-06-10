@@ -1,4 +1,5 @@
-﻿ 
+﻿
+
 
 ALTER PROCEDURE [dbo].[Acc_ExecRep_09]	
 	@ids varchar(max)
@@ -6,7 +7,7 @@ AS
 SET NOCOUNT ON
 
 /*
-	script 3: update status
+	script 4: update Alog customer status
 */
 	
 BEGIN
@@ -53,10 +54,7 @@ SELECT DISTINCT c.custid, 0
 FROM custinfo c WITH(NOLOCK)	
 WHERE c.custid < @maxCustID
 	AND	(c.HideVirtualSports = 1 OR c.DisableVirtualSports = 1)
-	AND srecommend IN ( SELECT custid FROM f_depSuper_1('12Bet')
-						UNION ALL
-						SELECT custid FROM f_depSuper_1('Alog') -- DAFA
-						)
+	AND srecommend IN ( SELECT custid FROM f_depSuper_1('Alog'))
 
 GO
 
