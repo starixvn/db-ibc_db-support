@@ -13,28 +13,10 @@ Begin DataProject = "DBAQueries"
    End
    Begin Folder = "Requirement"
       Script = "000_Sample.sql"
-      Begin Folder = "P2P"
-         Script = "Req_20130604_Feature1910_Disable_P2P_Product.sql"
-      End
-      Begin Folder = "Racing"
-         Script = "Req_20130527_Feature1699_AddNSWtoAusRacing.sql"
-      End
-      Begin Folder = "Virtual Sports"
-         Script = "Req_20130604_Feature1793_VirtualGreyhound_AddMaxPerMatch182.sql"
-         Script = "Req_20130606_Support1884_scr00_CorrectDataForNG.sql"
-         Script = "Req_20130606_Support1884_scr1_UpdatePTSetting.sql"
-         Script = "Req_20130606_support1884_scr2_SetBetsettingFor12Bet.sql"
-         Script = "Req_20130606_support1884_scr3_UpdateVirtualSoccer12BET_Status.sql"
-         Script = "Req_20130606_support1884_scr4_UpdateVirtualSoccerAlog_Status.sql"
-      End
+      Script = "Req_20130611_Feature1290_ImplementSMATurnoverManagement.sql"
+      Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
    End
    Begin Folder = "Support"
       Script = "000_Sample.sql"
-      Begin Folder = "Racing"
-         Script = "Sup_20130522_Hotfix1593_Racing_GetLicenseeList_NegativeBalance.sql"
-      End
-      Begin Folder = "Settlement"
-         Script = "Sup_20130527_Outright_ReSettle.sql"
-      End
    End
 End
