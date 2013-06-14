@@ -1,5 +1,7 @@
-﻿ /*
-Creator: Elodie
+﻿/*
+	Created by: Elodie
+	Date: 2013-06-11
+	Task: Insert log action for SMA Management function
 */
  INSERT INTO [bodb_CustomerLog].[dbo].[LogAction]
            ([ActionID]

@@ -1,5 +1,7 @@
 ﻿/*
-Creator: Elodie
+	Created by: Elodie
+	Date: 2013-06-11
+	Task: Insert Log action for setting IsViewReport status of Credit Term Headline
 */
 ALTER TABLE CustAccount ADD IsViewReport BIT NOT NULL DEFAULT (0)
 
