@@ -16,6 +16,9 @@ Begin DataProject = "DBAQueries"
       Begin Folder = "Bingo"
          Script = "Req_20130616_Feature2344_UpdateBingoStatus_AllCreditCustomer.sql"
       End
+      Script = "000_Sample.sql"   
+      Script = "Req_20130611_Feature1290_ImplementSMATurnoverManagement.sql"
+      Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
       Begin Folder = "P2P"
          Script = "Req_20130604_Feature1910_Disable_P2P_Product.sql"
       End
