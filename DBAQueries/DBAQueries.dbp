@@ -13,18 +13,19 @@ Begin DataProject = "DBAQueries"
    End
    Begin Folder = "Requirement"
       Script = "000_Sample.sql"
+      Script = "000_Sample.sql"
       Begin Folder = "Bingo"
          Script = "Req_20130616_Feature2344_UpdateBingoStatus_AllCreditCustomer.sql"
       End
-      Script = "000_Sample.sql"   
-      Script = "Req_20130611_Feature1290_ImplementSMATurnoverManagement.sql"
-      Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
       Begin Folder = "P2P"
          Script = "Req_20130604_Feature1910_Disable_P2P_Product.sql"
       End
       Begin Folder = "Racing"
          Script = "Req_20130527_Feature1699_AddNSWtoAusRacing.sql"
       End
+      Script = "Req_20130611_Feature1290_ImplementSMATurnoverManagement.sql"
+      Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
+      Script = "Req_20130618_Feature2048_NegativeBalance_Licensee.sql"
       Begin Folder = "Virtual Sports"
          Script = "Req_20130604_Feature1793_VirtualGreyhound_AddMaxPerMatch182.sql"
          Script = "Req_20130606_Support1884_scr00_CorrectDataForNG.sql"
