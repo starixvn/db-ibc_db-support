@@ -1,6 +1,7 @@
 ﻿/*
 	Created by:Jamie
 	Date: 2013-06-18
+	DB: DBTRANS/bodb02
 	Task: Negative Balanace for HAIFA - Email notification
 		+ Add new table [BalanceNegativeRecord]
 

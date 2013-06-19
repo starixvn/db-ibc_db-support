@@ -14,6 +14,9 @@ Begin DataProject = "DBAQueries"
    Begin Folder = "Requirement"
       Script = "000_Sample.sql"
       Script = "000_Sample.sql"
+      Begin Folder = "Balance"
+         Script = "Req_20130618_Feature2048_NegativeBalance_Licensee.sql"
+      End
       Begin Folder = "Bingo"
          Script = "Req_20130616_Feature2344_UpdateBingoStatus_AllCreditCustomer.sql"
       End
@@ -25,7 +28,6 @@ Begin DataProject = "DBAQueries"
       End
       Script = "Req_20130611_Feature1290_ImplementSMATurnoverManagement.sql"
       Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
-      Script = "Req_20130618_Feature2048_NegativeBalance_Licensee.sql"
       Begin Folder = "Virtual Sports"
          Script = "Req_20130604_Feature1793_VirtualGreyhound_AddMaxPerMatch182.sql"
          Script = "Req_20130606_Support1884_scr00_CorrectDataForNG.sql"
