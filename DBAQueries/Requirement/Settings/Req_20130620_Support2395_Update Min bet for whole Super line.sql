@@ -1,4 +1,4 @@
-﻿ ALTER PROCEDURE [dbo].[Acc_ExecRep_09]	
+﻿ALTER PROCEDURE [dbo].[Acc_ExecRep_09]	
 
 	@ids varchar(max)
 
@@ -64,7 +64,7 @@ BEGIN
 END
 
 ------------------------------------------------------------------------------------------------------
-
+---- REPLACE THE SUPERID THAT NEED TO BE UPDATED
 
 CREATE TABLE #SuperIds (custid int)
 INSERT INTO #SuperIds

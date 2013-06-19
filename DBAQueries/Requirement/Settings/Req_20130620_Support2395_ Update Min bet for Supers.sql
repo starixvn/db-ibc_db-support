@@ -8,7 +8,7 @@ SET NOCOUNT ON
 
 /*
 
-	script 2: set bet setting for 12Bet customers
+	script: Update Min Bet for credit Supers from min bet setting at currenies
 
 */
 

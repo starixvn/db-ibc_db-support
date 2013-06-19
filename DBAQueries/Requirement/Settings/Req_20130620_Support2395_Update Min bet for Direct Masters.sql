@@ -1,4 +1,4 @@
-﻿ --2. UPDATE MIN BET FOR DIRECT MASTERS 
+﻿--2. UPDATE MIN BET FOR DIRECT MASTERS 
 ALTER PROCEDURE [dbo].[Acc_ExecRep_09]	
 
 	@ids varchar(max)
@@ -9,7 +9,7 @@ SET NOCOUNT ON
 
 /*
 
-	script 2: set bet setting for 12Bet customers
+	script: Update Min Bet for direct masters, copied value from dummy super
 
 */
 
