@@ -2,6 +2,9 @@
 	Created: Johnson
 	Date: 20130527
 	Task: Script to group NSW into AUS Racing
+	
+	Revision: 
+		- 20130529@Jamie: Update ht_min = 2 for NSW 
  */
  
  
@@ -15,10 +18,11 @@ SELECT 202,'HAR-TABCORPNSW','TabCorp - NSW Australian Harness Racing',5
 declare @NSWMeeting TABLE(meetingID int)
 
 INSERT INTO @NSWMeeting(meetingID)
-SELECT leagueid 
-FROM league WITH(NOLOCK)
-WHERE leaguename LIKE '%(NSW)%' 
-and sporttype BETWEEN 151 and 153
+SELECT	leagueid 
+FROM	league WITH(NOLOCK)
+WHERE	sporttype BETWEEN 151 AND 153
+		AND ht_min = 2
+
 
 UPDATE rm
 set rm.PartnerID = CASE rm.PartnerID when 5 then 6

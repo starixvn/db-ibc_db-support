@@ -13,17 +13,40 @@ Begin DataProject = "DBAQueries"
    End
    Begin Folder = "Requirement"
       Script = "000_Sample.sql"
+      Script = "000_Sample.sql"
+      Begin Folder = "Balance"
+         Script = "Req_20130618_Feature2048_NegativeBalance_Licensee.sql"
+      End
+      Begin Folder = "Bingo"
+         Script = "Req_20130616_Feature2344_UpdateBingoStatus_AllCreditCustomer.sql"
+      End
+      Begin Folder = "P2P"
+         Script = "Req_20130604_Feature1910_Disable_P2P_Product.sql"
+      End
       Begin Folder = "Racing"
          Script = "Req_20130527_Feature1699_AddNSWtoAusRacing.sql"
       End
-      Begin Folder = "Winloss summary 3rd"
-         Script = "Req_20130619_Feature2043_Add3rdProducttoWinlossSummary.sql"
+      Script = "Req_20130611_Feature1290_ImplementSMATurnoverManagement.sql"
+      Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
+      Begin Folder = "Settings"
+         Script = "Req_20130620_Support2395_ Update Min bet for Supers.sql"
+         Script = "Req_20130620_Support2395_Update Min bet for Direct Masters.sql"
+         Script = "Req_20130620_Support2395_Update Min bet for whole Super line.sql"
+      End
+      Begin Folder = "Virtual Sports"
+         Script = "Req_20130604_Feature1793_VirtualGreyhound_AddMaxPerMatch182.sql"
+         Script = "Req_20130606_Support1884_scr00_CorrectDataForNG.sql"
+         Script = "Req_20130606_Support1884_scr1_UpdatePTSetting.sql"
+         Script = "Req_20130606_support1884_scr2_SetBetsettingFor12Bet.sql"
+         Script = "Req_20130606_support1884_scr3_UpdateVirtualSoccer12BET_Status.sql"
+         Script = "Req_20130606_support1884_scr4_UpdateVirtualSoccerAlog_Status.sql"
       End
    End
    Begin Folder = "Support"
       Script = "000_Sample.sql"
       Begin Folder = "Racing"
          Script = "Sup_20130522_Hotfix1593_Racing_GetLicenseeList_NegativeBalance.sql"
+         Script = "Sup_20130619_Support2422_Racing_RefundRace.sql"
       End
       Begin Folder = "Settlement"
          Script = "Sup_20130527_Outright_ReSettle.sql"
