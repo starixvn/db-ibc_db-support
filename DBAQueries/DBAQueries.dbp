@@ -33,6 +33,10 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130620_Support2395_Update Min bet for Direct Masters.sql"
          Script = "Req_20130620_Support2395_Update Min bet for whole Super line.sql"
       End
+      Begin Folder = "Summary Winloss(2d)"
+         Script = "Req_20130619_Feature2043_ImportDataRptWinloss2.sql"
+         Script = "Req_20130619_Feature2043_StructureRptWinloss2.sql"
+      End
       Begin Folder = "Virtual Sports"
          Script = "Req_20130604_Feature1793_VirtualGreyhound_AddMaxPerMatch182.sql"
          Script = "Req_20130606_Support1884_scr00_CorrectDataForNG.sql"
