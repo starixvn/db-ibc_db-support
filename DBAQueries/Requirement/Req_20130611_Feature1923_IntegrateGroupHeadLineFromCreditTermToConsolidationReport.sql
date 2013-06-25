@@ -3,7 +3,7 @@
 	Date: 2013-06-11
 	Task: Insert Log action for setting IsViewReport status of Credit Term Headline
 */
-ALTER TABLE CustAccount ADD IsViewReport BIT NOT NULL DEFAULT (0)
+ALTER TABLE CustAccount ADD IsRptConsol BIT NOT NULL DEFAULT (0)
 
 GO
  INSERT INTO [bodb_CustomerLog].[dbo].[LogAction]
