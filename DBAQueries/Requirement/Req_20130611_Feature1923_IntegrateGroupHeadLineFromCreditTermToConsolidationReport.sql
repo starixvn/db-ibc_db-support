@@ -1,7 +1,8 @@
 ﻿/*
 	Created by: Elodie
 	Date: 2013-06-11
-	Task: Insert Log action for setting IsViewReport status of Credit Term Headline
+	Task: Insert Log action for setting IsRptConsol status of Credit Term Headline
+		  Add new column IsRptConsol into CustAccount table
 */
 ALTER TABLE CustAccount ADD IsRptConsol BIT NOT NULL DEFAULT (0)
 
@@ -22,13 +23,13 @@ GO
      VALUES
            (1006
            ,4
-           ,'Acc_CreditTermUpdIsViewReport'
-           ,N'Update IsViewReport status for Credit Term Headline'
-           ,N'Update IsViewReport status for Credit Term Headline'
-           ,N'Update IsViewReport status for Credit Term Headline'
-           ,N'Update IsViewReport status for Credit Term Headline'
-           ,N'Update IsViewReport status for Credit Term Headline'
-           ,N'Update IsViewReport status for Credit Term Headline'
-           ,N'Update IsViewReport status for Credit Term Headline'
+           ,'Acc_CreditTermUpdIsRptConsol'
+           ,N'Update IsRptConsol status for Credit Term Headline'
+           ,N'Update IsRptConsol status for Credit Term Headline'
+           ,N'Update IsRptConsol status for Credit Term Headline'
+           ,N'Update IsRptConsol status for Credit Term Headline'
+           ,N'Update IsRptConsol status for Credit Term Headline'
+           ,N'Update IsRptConsol status for Credit Term Headline'
+           ,N'Update IsRptConsol status for Credit Term Headline'
            ,null
            ,1)
