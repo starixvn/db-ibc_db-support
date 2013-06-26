@@ -32,4 +32,6 @@ INSERT INTO [bodb_CustomerLog].[dbo].[LogAction]
        ,N'Update Disallowed/Allowed Consolidation Report status'
        ,N'Update Disallowed/Allowed Consolidation Report status'
        ,null
-       ,1)
+       ,1) 
+       
+       
