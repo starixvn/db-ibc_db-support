@@ -16,6 +16,7 @@ Begin DataProject = "DBAQueries"
       Script = "000_Sample.sql"
       Begin Folder = "Balance"
          Script = "Req_20130618_Feature2048_NegativeBalance_Licensee.sql"
+         Script = "Req_20130628_Feature2437_NegativeBalanceBBIN_AddNewTables.sql"
       End
       Begin Folder = "Bingo"
          Script = "Req_20130616_Feature2344_UpdateBingoStatus_AllCreditCustomer.sql"
