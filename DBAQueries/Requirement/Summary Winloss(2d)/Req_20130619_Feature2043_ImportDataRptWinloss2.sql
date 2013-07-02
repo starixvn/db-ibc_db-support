@@ -175,6 +175,13 @@ INSERT INTO #rptWinlost(
 	WHERE #rptWinlost.matchid = o.orid	
 	AND #rptWinlost.bettype IN (10,31,32,33)
 	
+	--Virtual Racing
+	UPDATE #rptWinlost
+	SET SportType = r.sporttype
+	FROM VSRaceInfo r with (nolock)
+	WHERE #rptWinlost.matchid = r.EventID	
+	AND #rptWinlost.bettype in (1231, 1232, 1233, 1237, 1238)	
+	
 		INSERT INTO bodb_report.dbo.rptWinlost2(
 					[winlostdate]
 				   ,[matchid]
