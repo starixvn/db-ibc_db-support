@@ -23,9 +23,6 @@ CREATE TABLE [dbo].[rptWinLost2](
 	[exrisk] [smallmoney] NULL
 ) ON [rptWinLost]
 
-GO
-GRANT SELECT ON [dbo].[rptWinLost2] TO [bodbAdminNet]
-
 USE [bodb_report]
 GO
 /****** Object:  Index [IX_rptWinLost2]    Script Date: 06/19/2013 17:24:33 ******/
@@ -35,3 +32,17 @@ CREATE CLUSTERED INDEX [IX_rptWinLost2] ON [dbo].[rptWinLost2]
 	[bettype] ASC,
 	[SportType] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [rptWinLost]
+
+GO
+GRANT SELECT ON [dbo].[rptWinLost2] TO [bodbAdminNet]
+GO
+GRANT delete on rptWinlost to bodbAdminNet
+GO
+GRANT insert on rptWinlost to bodbAdminNet
+GO
+GRANT delete on rptWinlost2 to bodbAdminNet
+GO
+GRANT insert on rptWinlost2 to bodbAdminNet
+GO
+GRANT update on rptWinlost2 to bodbAdminNet
+GO
