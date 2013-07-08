@@ -20,6 +20,7 @@ Begin DataProject = "DBAQueries"
       End
       Begin Folder = "Bingo"
          Script = "Req_20130616_Feature2344_UpdateBingoStatus_AllCreditCustomer.sql"
+         Script = "Req_20130708_Feature1940_UpdateMatchidBingo_71.sql"
       End
       Begin Folder = "CreditTerm"
          Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
