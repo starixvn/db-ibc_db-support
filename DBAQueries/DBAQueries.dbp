@@ -20,7 +20,7 @@ Begin DataProject = "DBAQueries"
       End
       Begin Folder = "Bingo"
          Script = "Req_20130616_Feature2344_UpdateBingoStatus_AllCreditCustomer.sql"
-         Script = "Req_20130708_Feature1940_UpdateMatchidBingo_71.sql"
+         Script = "Req_20130708_Feature1940_UpdateMatchidBingo_73.sql"
       End
       Begin Folder = "CreditTerm"
          Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
@@ -33,6 +33,9 @@ Begin DataProject = "DBAQueries"
       End
       Script = "Req_20130611_Feature1290_ImplementSMATurnoverManagement.sql"
       Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
+      Begin Folder = "RNGCasino"
+         Script = "Req_20130708_Feature1940_UpdateMatchidCasino_71.sql"
+      End
       Begin Folder = "Settings"
          Script = "Req_20130620_Support2395_ Update Min bet for Supers.sql"
          Script = "Req_20130620_Support2395_Update Min bet for Direct Masters.sql"
@@ -48,6 +51,7 @@ Begin DataProject = "DBAQueries"
       Begin Folder = "Summary Winloss(2d)"
          Script = "Req_20130619_Feature2043_ImportDataRptWinloss2.sql"
          Script = "Req_20130619_Feature2043_StructureRptWinloss2.sql"
+         Script = "Req_20130708_Feature2043_CheckDataRptWinloss2.sql"
       End
       Begin Folder = "Virtual Sports"
          Script = "Req_20130604_Feature1793_VirtualGreyhound_AddMaxPerMatch182.sql"
