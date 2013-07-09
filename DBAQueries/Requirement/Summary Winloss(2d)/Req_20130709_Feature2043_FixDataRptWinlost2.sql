@@ -62,50 +62,6 @@ WHERE winlostdate BETWEEN @fromdate and @todate
 GROUP BY refno
 
 
-
-INSERT INTO #rptWinlost(
-					[winlostdate]
-				   ,[matchid]
-				   ,[bettype]
-				   ,[liveindicator]
-				   ,[Status]
-				   ,[IBC]
-				   ,[RealTurnover]
-				   ,[RealWinLost]
-				   ,[RealPosition]
-				   ,[RealCommission]
-				   ,[RealLineTotal]
-				   ,[VirtualTurnover]
-				   ,[VirtualLineTotal]
-				   ,[SportType]
-				   ,[exrisk]
-				)
-SELECT
-	winlostdate,
-	matchid, bettype, liveindicator, Status,
-	case when recommend = 52466 then 1 when recommend = 5707545 then 2 else 0 end as ibc,
-	sum(case when bettype IN (71,73,1000) then 0 else (1-tpositiontaking)*abs(stake)*actualrate end) as realturnover,
-	sum((winlost-actual_stake)* actualrate)  realWinlost,
-	sum((awinlost+mwinlost+swinlost)* actualrate) realPos,
-	sum((scomm) * actualrate) realComm,
-	sum((case when bettype = 1000 then -1*(odds-scomm) else winlost-actual_stake+awinlost+mwinlost+swinlost+scomm end)*actualrate) realLineTotal,
-	sum((1-tpositiontaking)*abs(CASE WHEN bettype IN (71,73,1000) THEN 0 
-									WHEN bettype = 29 AND betid > 0 THEN actual_stake 
-									ELSE stake END)*virtualrate) as virtualTurnover,
-	sum(CASE WHEN bettype IN (71,73,1000) OR bettype between 1101 and 1199 OR bettype between 1201 and 1299 THEN 0 
-			ELSE (winlost-actual_stake+awinlost+mwinlost+swinlost+scomm)*virtualrate END ) as virtualLineTotal,
-	0, 0
-FROM
-	bettrans_bk b with (nolock)
-WHERE
-	bettype = 71
-	AND winlostdate between @fromdate and @todate
-	AND statusID NOT IN (101, 102, 103, 121) --('VOID', 'REJECT', 'REFUND', 'DONE')
-GROUP BY
-	winlostdate, matchid, bettype, liveindicator, status,
-	case when recommend = 52466 then 1 when recommend = 5707545 then 2 else 0 end
-
-
 --import racing data
 INSERT INTO #rptWinlost(
 					[winlostdate]
