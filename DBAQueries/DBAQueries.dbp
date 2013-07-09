@@ -31,7 +31,6 @@ Begin DataProject = "DBAQueries"
       Begin Folder = "Racing"
          Script = "Req_20130527_Feature1699_AddNSWtoAusRacing.sql"
       End
-      Script = "Req_20130611_Feature1290_ImplementSMATurnoverManagement.sql"
       Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
       Begin Folder = "RNGCasino"
          Script = "Req_20130708_Feature1940_UpdateMatchidCasino_71.sql"
@@ -63,6 +62,10 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130704_Feature3045_scr1_SunGame_CopyPTSetting_MinMaxBet_FromNG.sql"
          Script = "Req_20130704_Feature3045_scr2_SunGame_CopyMaxPerMatch_FromNG.sql"
          Script = "Req_20130704_Feature3045_scr3_SunGame_UpdateStatus.sql"
+         Script = "Req_20130708_Feature2009_scr0_ClearOldData.sql"
+         Script = "Req_20130708_Feature2009_scr1_InsertMinPT.sql"
+         Script = "Req_20130708_Feature2009_scr2_InsertPTSetting.sql"
+         Script = "Req_20130708_Feature2009_scr3_UpdateMaxPerMatch.sql"
       End
    End
    Begin Folder = "Support"
