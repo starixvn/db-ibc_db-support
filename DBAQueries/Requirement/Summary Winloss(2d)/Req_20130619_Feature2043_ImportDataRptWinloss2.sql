@@ -100,7 +100,7 @@ INSERT INTO #rptWinlost(
 		WHERE
 			bettype < 19999 and bettype not in (31,32,33)
 			AND winlostdate between @fromdate and @todate
-			AND statusID NOT IN (101, 102) --('VOID', 'REJECT')
+			AND statusID NOT IN (101, 102, 103, 121) --('VOID', 'REJECT', 'REFUND', 'DONE')
 		GROUP BY
 			winlostdate, matchid, bettype, liveindicator, status,
 			case when recommend = 52466 then 1 when recommend = 5707545 then 2 else 0 end
