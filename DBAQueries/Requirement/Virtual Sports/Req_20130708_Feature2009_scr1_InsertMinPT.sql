@@ -60,7 +60,7 @@ SET @maxcustid = xxx
 
 
 CREATE TABLE #temp (custid INT PRIMARY KEY, isfinished BIT)
-
+--689809
 INSERT INTO #temp (custid, isfinished)
 SELECT custid, 0
 FROM dbo.custinfo c WITH (NOLOCK)

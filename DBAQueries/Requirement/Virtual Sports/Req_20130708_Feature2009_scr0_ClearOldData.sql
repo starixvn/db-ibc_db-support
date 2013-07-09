@@ -1,4 +1,7 @@
 ﻿ 
+ /*
+	Clear old data - test currency
+ */
 -- 784
 DELETE CustSetting3rd WITH(ROWLOCK,UPDLOCK)
 WHERE (bettype = 1220 AND sporttype = 186) 
