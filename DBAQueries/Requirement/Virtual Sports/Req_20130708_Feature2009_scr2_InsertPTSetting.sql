@@ -52,7 +52,7 @@ DECLARE @maxcustid INT
 SET @maxcustid = xxx
 	
 CREATE TABLE #temp (custid INT PRIMARY KEY, isfinished BIT)
-
+-- 5211101
 INSERT INTO #temp (custid, isfinished)
 SELECT custid, 0
 FROM dbo.custinfo c WITH (NOLOCK)
