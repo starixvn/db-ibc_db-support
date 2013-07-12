@@ -42,7 +42,7 @@ SELECT @fromdate = '2011-01-01',@todate = '2011-01-01'
 
 DELETE bodb_report.dbo.rptWinlost2 WITH(UPDLOCK,ROWLOCK)
 WHERE winlostdate BETWEEN @fromdate AND @todate
-and bettype IN (10,31,32,33)
+and bettype IN (31,32,33)
 
 --calculate racing winlost
 INSERT INTO @CommSetting (MatchID, IBCFee, ToteCommWin, ToteCommPlace, ToteCommWP, ToteFee)

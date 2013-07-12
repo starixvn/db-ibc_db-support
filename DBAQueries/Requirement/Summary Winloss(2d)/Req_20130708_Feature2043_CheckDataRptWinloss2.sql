@@ -26,7 +26,9 @@ FROM rptWinLost2 with(NOLOCK)
 where winlostdate BETWEEN @fromdate AND @todate
 GROUP BY winlostdate, matchid, bettype, IBC 
 ) r2 on r1.winlostdate = r2.winlostdate and r1.matchid = r2.matchid and r1.bettype = r2.bettype and r1.ibc = r2.ibc
-where ISNULL(r1.winlost,0) - ISNULL(r2.winlost,0) <>0 or isnull(r1.position,0) - isnull(r2.position,0) <>0 OR isnull(r1.commission,0) - isnull(r2.commission,0) <>0
+where ISNULL(r1.winlost,0) - ISNULL(r2.winlost,0) not between -0.01 and 0.01 
+	or isnull(r1.position,0) - isnull(r2.position,0) not between -0.01 and 0.01 
+	OR isnull(r1.commission,0) - isnull(r2.commission,0) not between -0.01 and 0.01 
 
 
 
