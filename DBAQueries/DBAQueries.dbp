@@ -52,6 +52,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130619_Feature2043_StructureRptWinloss2.sql"
          Script = "Req_20130708_Feature2043_CheckDataRptWinloss2.sql"
          Script = "Req_20130709_Feature2043_FixDataRptWinlost2.sql"
+         Script = "Req_20130712_Feature2043_ImportDatabettrans14toRptWinloss2.sql"
       End
       Begin Folder = "Virtual Sports"
          Script = "Req_20130604_Feature1793_VirtualGreyhound_AddMaxPerMatch182.sql"
