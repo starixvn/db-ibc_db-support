@@ -178,7 +178,7 @@ INSERT INTO #rptWinlost(
 	--Virtual Racing
 	UPDATE #rptWinlost
 	SET SportType = r.sporttype
-	FROM VSRaceInfo r with (nolock)
+	FROM bodb02.dbo.VSRaceInfo r with (nolock)
 	WHERE #rptWinlost.matchid = r.EventID	
 	AND #rptWinlost.bettype in (1231, 1232, 1233, 1237, 1238)	
 	
