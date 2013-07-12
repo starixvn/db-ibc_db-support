@@ -48,6 +48,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130606_support1884_scr2_SetBetsettingFor12Bet.sql"
          Script = "Req_20130606_support1884_scr3_UpdateVirtualSoccer12BET_Status.sql"
          Script = "Req_20130606_support1884_scr4_UpdateVirtualSoccerAlog_Status.sql"
+         Script = "Req_20130712_support3338_SetBetsettingFor12Bet.sql"
       End
    End
    Begin Folder = "Support"
