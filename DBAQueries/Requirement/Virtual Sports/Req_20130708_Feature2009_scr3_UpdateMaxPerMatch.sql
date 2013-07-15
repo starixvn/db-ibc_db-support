@@ -45,13 +45,13 @@ SET @maxcustid = xxx
 
 	
 CREATE TABLE #temp (custid INT PRIMARY KEY, isfinished BIT)
-
+-- 1471721
 INSERT INTO #temp (custid, isfinished)
 SELECT custid, 0
 FROM dbo.custinfo c WITH (NOLOCK)
 WHERE custid <= @maxcustid
 	AND srecommend NOT IN (SELECT custid FROM dbo.f_DepSuper_1('all'))
-	AND (maxpermatch180 <> maxpermatch181 OR maxpermatch180 <> maxpermatch186)
+	AND (maxpermatch180 <> maxpermatch181) -- OR maxpermatch180 <> maxpermatch186)
 GO
 
 DECLARE @ids VARCHAR(MAX), @rowcnt INT
