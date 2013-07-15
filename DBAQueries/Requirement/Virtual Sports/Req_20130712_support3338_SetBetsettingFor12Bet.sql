@@ -1,10 +1,11 @@
-﻿ALTER PROCEDURE [dbo].[Acc_ExecRep_09]	
+﻿
+ALTER PROCEDURE [dbo].[Acc_ExecRep_09]	
 	@ids varchar(max)
 AS
 SET NOCOUNT ON
 
 /*
-	script 2: set bet setting for 12Bet customers
+	script 1: set bet setting for 12Bet customers
 */
 	
 BEGIN
@@ -36,14 +37,14 @@ BEGIN
 	INSERT INTO #betsetting
 			  SELECT	2	,	1	,	2000	,5000
 	UNION ALL SELECT	13	,	2	,	3000	,10000
-	UNION ALL SELECT	43	,	10	,	20000	,50000
-	UNION ALL SELECT	34	,	3	,	5000	,15000
+	UNION ALL SELECT	4	,	10	,	20000	,50000
+	UNION ALL SELECT	15	,	3	,	5000	,15000
 	UNION ALL SELECT	51	,	6	,	10000	,30000
-	UNION ALL SELECT	3	,	1	,	200		,700
-	UNION ALL SELECT	12	,	1	,	200		,700
-	UNION ALL SELECT	6	,	1	,	200		,700
-	UNION ALL SELECT	9	,	1	,	200		,700
-	UNION ALL SELECT	41	,	1	,	200		,700
+	UNION ALL SELECT	3	,	1	,	200	,	700
+	UNION ALL SELECT	12	,	1	,	200	,	700
+	UNION ALL SELECT	6	,	1	,	200	,	700
+	UNION ALL SELECT	9	,	1	,	200	,	700
+	UNION ALL SELECT	41	,	1	,	200	,	700
 	
 	-- UPDATE min/max bet	
 	UPDATE vs WITH(ROWLOCK,UPDLOCK)
@@ -68,21 +69,21 @@ END
 GO
 
 DECLARE @maxCustID INT
-SET @maxCustID = xxx
+SET @maxCustID = 2100000000
 
 CREATE TABLE #betsetting(currency INT, minbet MONEY, maxbet MONEY,maxpermatch MONEY)
 	
 	INSERT INTO #betsetting
 			  SELECT	2	,	1	,	2000	,5000
 	UNION ALL SELECT	13	,	2	,	3000	,10000
-	UNION ALL SELECT	43	,	10	,	20000	,50000
-	UNION ALL SELECT	34	,	3	,	5000	,15000
+	UNION ALL SELECT	4	,	10	,	20000	,50000
+	UNION ALL SELECT	15	,	3	,	5000	,15000
 	UNION ALL SELECT	51	,	6	,	10000	,30000
-	UNION ALL SELECT	3	,	1	,	200		,700
-	UNION ALL SELECT	12	,	1	,	200		,700
-	UNION ALL SELECT	6	,	1	,	200		,700
-	UNION ALL SELECT	9	,	1	,	200		,700
-	UNION ALL SELECT	41	,	1	,	200		,700
+	UNION ALL SELECT	3	,	1	,	200	,	700
+	UNION ALL SELECT	12	,	1	,	200	,	700
+	UNION ALL SELECT	6	,	1	,	200	,	700
+	UNION ALL SELECT	9	,	1	,	200	,	700
+	UNION ALL SELECT	41	,	1	,	200	,	700
 	
 create table #temp (custid int primary key, isfinished bit)
 
@@ -92,7 +93,7 @@ FROM custinfo c WITH(NOLOCK)
 	INNER JOIN Dep_Custsetting3rd vs WITH(NOLOCK) ON c.custid = vs.custid	
 		AND vs.sporttype = 180 AND vs.bettype = 1201 
 	INNER JOIN #betsetting b ON b.currency = c.currency
-WHERE	vs.custid < @maxCustID
+WHERE	vs.custid <= @maxCustID
 		AND
 		(		
 		c.maxpermatch180 <> b.maxpermatch
