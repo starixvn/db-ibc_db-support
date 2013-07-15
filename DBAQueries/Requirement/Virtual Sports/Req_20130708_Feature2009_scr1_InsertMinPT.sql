@@ -30,16 +30,16 @@ BEGIN
 		SET @i=@i+1
 	END
 	
-	-- virtual Tennis
-	INSERT INTO CustOverride3rd([custId], [bettype], [sporttype], minpositiontaking, maxpositiontaking,minlivepositiontaking,maxlivepositiontaking)		
-	SELECT co.CustID, 1220, 186, minpositiontaking, 
-		case when roleid = 4 then maxpositiontaking
-			else 0.9 end as maxpositiontaking, 
-		0 as minlivepositiontaking,0 as maxlivepositiontaking
-	FROM custinfo ci WITH(NOLOCK) 
-		INNER JOIN custOverride3rd co WITH(NOLOCK)	ON ci.custid=co.custid 		
-	WHERE co.custid IN (SELECT * FROM @res)		
-		AND co.bettype = 1201 AND co.sporttype = 180
+	---- virtual Tennis
+	--INSERT INTO CustOverride3rd([custId], [bettype], [sporttype], minpositiontaking, maxpositiontaking,minlivepositiontaking,maxlivepositiontaking)		
+	--SELECT co.CustID, 1220, 186, minpositiontaking, 
+	--	case when roleid = 4 then maxpositiontaking
+	--		else 0.9 end as maxpositiontaking, 
+	--	0 as minlivepositiontaking,0 as maxlivepositiontaking
+	--FROM custinfo ci WITH(NOLOCK) 
+	--	INNER JOIN custOverride3rd co WITH(NOLOCK)	ON ci.custid=co.custid 		
+	--WHERE co.custid IN (SELECT * FROM @res)		
+	--	AND co.bettype = 1201 AND co.sporttype = 180
 	
 	-- virtual racing
 	INSERT INTO CustOverride3rd([custId], [bettype], [sporttype], minpositiontaking, maxpositiontaking,minlivepositiontaking,maxlivepositiontaking)		

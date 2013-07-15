@@ -33,7 +33,7 @@ BEGIN
     				
 	UPDATE custinfo WITH(ROWLOCK,UPDLOCK)
 	SET maxpermatch181 = maxpermatch180  --- virtual racing
-		,maxpermatch186 = maxpermatch180 -- virtual tennis		
+		--,maxpermatch186 = maxpermatch180 -- virtual tennis		
 	WHERE custid IN (SELECT * FROM @res)
 	
 END
