@@ -51,7 +51,7 @@ SELECT custid, 0
 FROM dbo.custinfo c WITH (NOLOCK)
 WHERE custid <= @maxcustid
 	AND srecommend NOT IN (SELECT custid FROM dbo.f_DepSuper_1('all'))
-	AND (maxpermatch180 <> maxpermatch181 OR maxpermatch180 <> maxpermatch186)
+	AND (maxpermatch180 <> ISNULL(maxpermatch181,0) --OR maxpermatch180 <> ISNULL(maxpermatch186,0)
 GO
 
 DECLARE @ids VARCHAR(MAX), @rowcnt INT
