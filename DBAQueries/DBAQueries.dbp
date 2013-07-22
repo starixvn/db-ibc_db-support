@@ -34,11 +34,7 @@ Begin DataProject = "DBAQueries"
       Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
       Begin Folder = "RNGCasino"
          Script = "Req_20130708_Feature1940_UpdateMatchidCasino_71.sql"
-<<<<<<< HEAD
-         Script = "Req_20130719_Feature1164_ApplyProgressiveCasinoBonus.sql"
-=======
-         Script = "Req_20130718_Feature1164_ScriptModifyDatabaseStructure.sql"
->>>>>>> 67aef00f0f8733b4cfda37a3a0208191c908d9e5
+         Script = "Req_20130719_Feature1164_ApplyProgressiveCasinoBonus1.sql"
       End
       Begin Folder = "Settings"
          Script = "Req_20130620_Support2395_ Update Min bet for Supers.sql"
