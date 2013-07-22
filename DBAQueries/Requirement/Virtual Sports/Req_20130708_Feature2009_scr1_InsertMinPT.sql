@@ -58,11 +58,14 @@ GO
 DECLARE @maxcustid INT
 SET @maxcustid = xxx
 
+
 CREATE TABLE #temp (custid INT PRIMARY KEY, isfinished BIT)
 
+
 INSERT INTO #temp (custid, isfinished)
-SELECT c.custid, 0
+SELECT custid, 0
 FROM dbo.custinfo c WITH (NOLOCK)
+WHERE custid <= @maxcustid
 	INNER JOIN CustOverride3rd co3 WITH(NOLOCK) ON c.custid = co3.custid AND co3.sporttype = 180 AND co3.bettype = 1201
 WHERE c.custid <= @maxcustid
 	AND roleid IN (2,3,4) AND srecommend NOT IN (SELECT custid FROM dbo.f_DepSuper_1('All'))
