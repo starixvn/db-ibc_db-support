@@ -1,4 +1,19 @@
 ﻿
+
+
+
+DELETE CustSetting3rd WITH(ROWLOCK,UPDLOCK)
+WHERE   (bettype = 1220 AND sporttype = 186) 
+		AND custid > 11759895
+	
+GO
+
+DELETE CustOverride3rd WITH(ROWLOCK,UPDLOCK)
+WHERE   (bettype = 1220 AND sporttype = 186) 
+		AND custid > 11759895
+
+
+GO
 -- min PT
 INSERT INTO CustOverride3rd([custId], [bettype], [sporttype], minpositiontaking, maxpositiontaking,minlivepositiontaking,maxlivepositiontaking)		
 SELECT co.CustID, 1220, 186, minpositiontaking, 
