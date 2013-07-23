@@ -28,13 +28,13 @@ UNION
 SELECT @mrecommend
 
 --downlines u3s
-INSERT INTO @tmpcust(custid)
-SELECT custid 
-FROM custinfo WITH(NOLOCK)
-WHERE srecommend = 1426163
+--INSERT INTO @tmpcust(custid)
+--SELECT custid 
+--FROM custinfo WITH(NOLOCK)
+--WHERE srecommend = 1426163
 
---enable RNG progressive bonus 
+--update status of progressive bonus RNG
 
 UPDATE custinfo WITH(UPDLOCK,ROWLOCK)
-SET DisableCasinoBonus = 0
-WHERE custid IN (SELECT custid FROM @tmpCust)
+SET DisableCasinoBonus = 1
+WHERE custid NOT IN (SELECT custid FROM @tmpCust)
