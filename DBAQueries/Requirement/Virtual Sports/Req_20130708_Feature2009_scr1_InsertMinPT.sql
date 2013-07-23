@@ -30,27 +30,27 @@ BEGIN
 		SET @i=@i+1
 	END
 	
-	---- virtual Tennis
-	--INSERT INTO CustOverride3rd([custId], [bettype], [sporttype], minpositiontaking, maxpositiontaking,minlivepositiontaking,maxlivepositiontaking)		
-	--SELECT co.CustID, 1220, 186, minpositiontaking, 
-	--	case when roleid = 4 then maxpositiontaking
-	--		else 0.9 end as maxpositiontaking, 
-	--	0 as minlivepositiontaking,0 as maxlivepositiontaking
-	--FROM custinfo ci WITH(NOLOCK) 
-	--	INNER JOIN custOverride3rd co WITH(NOLOCK)	ON ci.custid=co.custid 		
-	--WHERE co.custid IN (SELECT * FROM @res)		
-	--	AND co.bettype = 1201 AND co.sporttype = 180
-	
-	-- virtual racing
+	-- virtual Tennis
 	INSERT INTO CustOverride3rd([custId], [bettype], [sporttype], minpositiontaking, maxpositiontaking,minlivepositiontaking,maxlivepositiontaking)		
-	SELECT co.CustID, 1231, 181, minpositiontaking, 
+	SELECT co.CustID, 1220, 186, minpositiontaking, 
 		case when roleid = 4 then maxpositiontaking
 			else 0.9 end as maxpositiontaking, 
 		0 as minlivepositiontaking,0 as maxlivepositiontaking
-	FROM custinfo ci WITH (NOLOCK) 
-		INNER JOIN custOverride3rd co WITH(NOLOCK) ON ci.custid=co.custid 		
+	FROM custinfo ci WITH(NOLOCK) 
+		INNER JOIN custOverride3rd co WITH(NOLOCK)	ON ci.custid=co.custid 		
 	WHERE co.custid IN (SELECT * FROM @res)		
-		AND co.bettype = 1201 AND co.sporttype = 180							
+		AND co.bettype = 1201 AND co.sporttype = 180
+	
+	---- virtual racing
+	--INSERT INTO CustOverride3rd([custId], [bettype], [sporttype], minpositiontaking, maxpositiontaking,minlivepositiontaking,maxlivepositiontaking)		
+	--SELECT co.CustID, 1231, 181, minpositiontaking, 
+	--	case when roleid = 4 then maxpositiontaking
+	--		else 0.9 end as maxpositiontaking, 
+	--	0 as minlivepositiontaking,0 as maxlivepositiontaking
+	--FROM custinfo ci WITH (NOLOCK) 
+	--	INNER JOIN custOverride3rd co WITH(NOLOCK) ON ci.custid=co.custid 		
+	--WHERE co.custid IN (SELECT * FROM @res)		
+	--	AND co.bettype = 1201 AND co.sporttype = 180							
 END
 
 GO
@@ -60,16 +60,13 @@ SET @maxcustid = xxx
 
 
 CREATE TABLE #temp (custid INT PRIMARY KEY, isfinished BIT)
---689809
+
+
 INSERT INTO #temp (custid, isfinished)
-SELECT custid, 0
+SELECT c.custid, 0
 FROM dbo.custinfo c WITH (NOLOCK)
-<<<<<<< HEAD
-WHERE custid <= @maxcustid
-=======
 	INNER JOIN CustOverride3rd co3 WITH(NOLOCK) ON c.custid = co3.custid AND co3.sporttype = 180 AND co3.bettype = 1201
 WHERE c.custid <= @maxcustid
->>>>>>> 67aef00f0f8733b4cfda37a3a0208191c908d9e5
 	AND roleid IN (2,3,4) AND srecommend NOT IN (SELECT custid FROM dbo.f_DepSuper_1('All'))
 
 
