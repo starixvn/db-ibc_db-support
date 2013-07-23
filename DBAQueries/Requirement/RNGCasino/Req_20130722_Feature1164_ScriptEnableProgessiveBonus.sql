@@ -38,3 +38,4 @@ SELECT @mrecommend
 UPDATE custinfo WITH(UPDLOCK,ROWLOCK)
 SET DisableCasinoBonus = 1
 WHERE custid NOT IN (SELECT custid FROM @tmpCust)
+AND srecommend = @srecommend
