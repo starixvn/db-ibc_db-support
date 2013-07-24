@@ -70,6 +70,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130708_Feature2009_scr2_InsertPTSetting.sql"
          Script = "Req_20130708_Feature2009_scr3_UpdateMaxPerMatch.sql"
          Script = "Req_20130712_support3338_SetBetsettingFor12Bet.sql"
+         Script = "Req_20130723_Feature2009_scr4_Total.sql"
       End
    End
    Begin Folder = "Support"
