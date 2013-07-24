@@ -1,4 +1,5 @@
 ﻿
+
 ALTER PROCEDURE [dbo].[Acc_ExecRep_09]	
 	@ids VARCHAR(MAX)
 AS
@@ -32,8 +33,8 @@ BEGIN
     END    
     				
 	UPDATE custinfo WITH(ROWLOCK,UPDLOCK)
-	SET maxpermatch181 = maxpermatch180  --- virtual racing
-		--,maxpermatch186 = maxpermatch180 -- virtual tennis		
+	SET --maxpermatch181 = maxpermatch180  --- virtual racing
+		maxpermatch186 = maxpermatch180 -- virtual tennis		
 	WHERE custid IN (SELECT * FROM @res)
 	
 END
@@ -51,7 +52,8 @@ SELECT custid, 0
 FROM dbo.custinfo c WITH (NOLOCK)
 WHERE custid <= @maxcustid
 	AND srecommend NOT IN (SELECT custid FROM dbo.f_DepSuper_1('all'))
-	AND (maxpermatch180 <> ISNULL(maxpermatch181,0) --OR maxpermatch180 <> ISNULL(maxpermatch186,0)
+	AND (maxpermatch186 IS NULL OR maxpermatch180 <> maxpermatch186)	
+
 GO
 
 DECLARE @ids VARCHAR(MAX), @rowcnt INT
@@ -74,7 +76,3 @@ BEGIN
 
     WAITFOR DELAY '00:00:01'   
 END
-
-GO
-
- 
