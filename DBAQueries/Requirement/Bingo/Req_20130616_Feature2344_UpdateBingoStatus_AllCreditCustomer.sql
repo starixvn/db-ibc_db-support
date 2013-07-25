@@ -35,8 +35,8 @@ BEGIN
 	
 		
 	UPDATE custinfo WITH(ROWLOCK,UPDLOCK)
-	SET SyncBingo = 1
-		,DisableBingo = 0
+	SET SyncBingo = 0
+		,DisableBingo = 1
 	WHERE custid IN (SELECT * FROM @res)
 		
 END
@@ -65,9 +65,9 @@ FROM custinfo c WITH(NOLOCK)
 WHERE	custid < @maxCustID
 		AND
 		(
-		SyncBingo = 0
+		SyncBingo = 1
 		OR 
-		DisableBingo = 1
+		DisableBingo = 0
 		)
 AND srecommend IN (SELECT custid FROM #srecommend)
 GO
