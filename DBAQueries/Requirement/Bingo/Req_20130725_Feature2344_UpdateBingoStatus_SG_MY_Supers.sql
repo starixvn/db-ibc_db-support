@@ -1009,7 +1009,26 @@ WHERE	custid < @maxCustID
 		)
 AND srecommend IN (SELECT custid FROM @tmpSuper)
 
---members master M312RR
+--check super level of SLH Headline and upline of master M312RR & M58SD
+INSERT INTO #temp (custid, isfinished)
+SELECT DISTINCT custid, 0
+FROM custinfo c WITH(NOLOCK)	
+WHERE	custid IN (
+				1,--SA-SD$
+				13,--SA_RMB
+				2178402 , ---SLH
+				3872549 , ---SLJ
+				2937091 , ---SLK
+				5473299  ---SLM
+			)
+		AND
+		(
+			SyncBingo = 0
+			OR 
+			DisableBingo = 1
+		)
+
+--members under master M312RR
 INSERT INTO #temp (custid, isfinished)
 SELECT DISTINCT custid, 0
 FROM custinfo c WITH(NOLOCK)
@@ -1021,9 +1040,9 @@ WHERE mrecommend = 4020626 --M312RR
 			OR 
 			DisableBingo = 1
 		)
-	AND roleid < 3
+	AND roleid <= 3
 	
---members master M58SD
+--members under master M58SD
 INSERT INTO #temp (custid, isfinished)
 SELECT DISTINCT custid, 0
 FROM custinfo c WITH(NOLOCK)
@@ -1035,7 +1054,7 @@ WHERE mrecommend = 398333 --M58SD
 			OR 
 			DisableBingo = 1
 		)
-	AND roleid < 3	
+	AND roleid <= 3	
 
 GO
 
