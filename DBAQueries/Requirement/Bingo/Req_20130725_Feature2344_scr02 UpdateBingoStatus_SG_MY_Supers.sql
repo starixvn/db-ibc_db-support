@@ -1,11 +1,15 @@
-﻿ 
+﻿
 ALTER PROCEDURE [dbo].[Acc_ExecRep_09]	
 	@ids varchar(max)
 AS
 SET NOCOUNT ON
 
 /*
-	script update bingo status for credit customers
+	1. collect all affected supers & their downlines (except 4 supers SLH,SLK,SLJ,SLM)
+	2. collect 4 supers only ( these 4 supers do not enable for downlines: SLH,SLK,SLJ,SLM )
+	3. collect master M312RR & downlines
+	4. collect master M58SD & downline
+	5. collect supers of these 2 masters M312RR & M58SD
 */
 	
 BEGIN
@@ -41,9 +45,6 @@ BEGIN
 END
 
 GO
-
-DECLARE @maxCustID INT
-SET @maxCustID = xxx
 
 declare @tmpSuper table(custid int)
 
@@ -993,6 +994,10 @@ UNION ALL SELECT 	7757683	-- YH
 UNION ALL SELECT 	10529214	-- YHA
 
 
+DECLARE @maxCustID INT
+SET @maxCustID = xxx
+
+
 --members under MY & SG not sync yet
 create table #temp (custid int primary key, isfinished bit)
 
@@ -1000,7 +1005,7 @@ create table #temp (custid int primary key, isfinished bit)
 INSERT INTO #temp (custid, isfinished)
 SELECT DISTINCT custid, 0
 FROM custinfo c WITH(NOLOCK)	
-WHERE	custid < @maxCustID
+WHERE	custid <= @maxCustID
 		AND
 		(
 		SyncBingo = 0
@@ -1033,7 +1038,7 @@ INSERT INTO #temp (custid, isfinished)
 SELECT DISTINCT custid, 0
 FROM custinfo c WITH(NOLOCK)
 WHERE mrecommend = 4020626 --M312RR
-	AND custid < @maxCustID
+	AND custid <= @maxCustID
 	AND
 		(
 			SyncBingo = 0
@@ -1047,7 +1052,7 @@ INSERT INTO #temp (custid, isfinished)
 SELECT DISTINCT custid, 0
 FROM custinfo c WITH(NOLOCK)
 WHERE mrecommend = 398333 --M58SD
-	AND custid < @maxCustID
+	AND custid <= @maxCustID
 	AND
 		(
 			SyncBingo = 0

@@ -1,12 +1,16 @@
 ﻿
 
+
 ALTER PROCEDURE [dbo].[Acc_ExecRep_09]	
 	@ids varchar(max)
 AS
 SET NOCOUNT ON
 
 /*
-	script update bingo status for credit customers
+	Task: update unsync & disable for all customers that not offer yet
+	1. collect all supers & downline of supers that are not in supers request list (include 2 supers request disable)
+	2. collect downlines of 4 supers only
+	3. except 2 special masters & downlines
 */
 	
 BEGIN
@@ -728,13 +732,6 @@ UNION ALL SELECT 	10346359	 ---XKM
 UNION ALL SELECT 	6092482	 ---YHK
 UNION ALL SELECT 	5931469	 ---YKM
 UNION ALL SELECT 	5931489	 ---YKS
---SHL group
-UNION ALL SELECT	2178402 , ---SLH
-UNION ALL SELECT	3872549 , ---SLJ
-UNION ALL SELECT	2937091 , ---SLK
-UNION ALL SELECT	5473299  ---SLM
---upline master M312RR
-UNION ALL SELECT	13  ---SA-RMB
 
 --Headline SG
 UNION ALL SELECT 	2267027	-- AHS
@@ -998,6 +995,16 @@ UNION ALL SELECT 	8864806	-- WMB
 UNION ALL SELECT 	1419459	-- WN
 UNION ALL SELECT 	7757683	-- YH
 UNION ALL SELECT 	10529214	-- YHA
+
+--SHL group
+UNION ALL SELECT	2178402  ---SLH
+UNION ALL SELECT	3872549  ---SLJ
+UNION ALL SELECT	2937091  ---SLK
+UNION ALL SELECT	5473299  ---SLM
+
+--upline master M312RR
+UNION ALL SELECT	13  ---SA-RMB
+
 --upline master M58SD
 UNION ALL SELECT	1  --SA-SD$
 
@@ -1018,7 +1025,7 @@ create table #temp (custid int primary key, isfinished bit)
 INSERT INTO #temp (custid, isfinished)
 SELECT DISTINCT custid, 0
 FROM custinfo c WITH(NOLOCK)	
-WHERE	custid < @maxCustID
+WHERE	custid <= @maxCustID
 		AND
 		(
 		SyncBingo = 1
@@ -1037,7 +1044,7 @@ WHERE srecommend IN (
 						2937091 , ---SLK
 						5473299  ---SLM
 					)
-AND custid < @maxCustID
+AND custid <= @maxCustID
 AND
 	(
 		SyncBingo = 1
@@ -1052,7 +1059,7 @@ SELECT DISTINCT custid, 0
 FROM custinfo c WITH(NOLOCK)
 WHERE srecommend = 13
 	AND mrecommend <> 4020626 --M312RR
-	AND custid < @maxCustID
+	AND custid <= @maxCustID
 	AND
 		(
 			SyncBingo = 1
@@ -1067,7 +1074,7 @@ SELECT DISTINCT custid, 0
 FROM custinfo c WITH(NOLOCK)
 WHERE srecommend = 1
 	AND mrecommend <> 398333 --M58SD
-	AND custid < @maxCustID
+	AND custid <= @maxCustID
 	AND
 		(
 			SyncBingo = 1
