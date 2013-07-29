@@ -952,13 +952,16 @@ UNION ALL SELECT 	7757683	-- YH
 UNION ALL SELECT 	10529214	-- YHA
 
 
-DECLARE @maxCustID INT 
-SELECT @maxCustID = xxx
+DECLARE @maxCustID INT,
+		@newMaxCustid INT
+		
+SELECT	@maxCustID = xxx,
+		@newMaxCustid = yyy
 
 UPDATE custinfo WITH(ROWLOCK,UPDLOCK)
 SET SyncBingo = 1
 	,DisableBingo = 0
-WHERE custid > @maxcustid
+WHERE custid > @maxcustid AND custid <= @newMaxCustid
 AND srecommend IN (SELECT custid FROM @tmpSuper)
 AND (SyncBingo = 0 OR DisableBingo = 1)
 
@@ -966,7 +969,7 @@ AND (SyncBingo = 0 OR DisableBingo = 1)
 UPDATE custinfo WITH(ROWLOCK,UPDLOCK)
 SET SyncBingo = 1
 	,DisableBingo = 0
-WHERE custid > @maxcustid
+WHERE custid > @maxcustid AND custid <= @newMaxCustid
 AND mrecommend IN (	4020626, --M312RR
 					398333 --M58SD
 				  )
