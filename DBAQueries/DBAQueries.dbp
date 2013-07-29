@@ -19,9 +19,9 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130628_Feature2437_NegativeBalanceBBIN_AddNewTables.sql"
       End
       Begin Folder = "Bingo"
-         Script = "Req_20130616_Feature2344_UpdateBingoStatus_AllCreditCustomer.sql"
          Script = "Req_20130708_Feature1940_UpdateMatchidBingo_73.sql"
-         Script = "Req_20130725_Feature2344_UpdateBingoStatus_SG_MY_Supers.sql"
+         Script = "Req_20130725_Feature2344_scr01 UpdateBingoStatus_AllCreditCustomer.sql"
+         Script = "Req_20130725_Feature2344_scr02 UpdateBingoStatus_SG_MY_Supers.sql"
       End
       Begin Folder = "CreditTerm"
          Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
