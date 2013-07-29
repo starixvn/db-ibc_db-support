@@ -1052,6 +1052,21 @@ WHERE srecommend = 13
 			DisableBingo = 0
 		)
 	AND roleid < 4
+
+--members under super SA-SD$ not include members under master M58SD
+INSERT INTO #temp (custid, isfinished)
+SELECT DISTINCT custid, 0
+FROM custinfo c WITH(NOLOCK)
+WHERE srecommend = 1
+	AND mrecommend <> 398333 --M58SD
+	AND custid < @maxCustID
+	AND
+		(
+			SyncBingo = 1
+			OR 
+			DisableBingo = 0
+		)
+	AND roleid < 4	
 GO
 
 declare @ids varchar(max), @rowcnt int

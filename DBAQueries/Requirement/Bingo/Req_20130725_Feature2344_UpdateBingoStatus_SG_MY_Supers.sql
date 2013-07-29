@@ -1022,6 +1022,20 @@ WHERE mrecommend = 4020626 --M312RR
 			DisableBingo = 1
 		)
 	AND roleid < 3
+	
+--members master M58SD
+INSERT INTO #temp (custid, isfinished)
+SELECT DISTINCT custid, 0
+FROM custinfo c WITH(NOLOCK)
+WHERE mrecommend = 398333 --M58SD
+	AND custid < @maxCustID
+	AND
+		(
+			SyncBingo = 0
+			OR 
+			DisableBingo = 1
+		)
+	AND roleid < 3	
 
 GO
 
