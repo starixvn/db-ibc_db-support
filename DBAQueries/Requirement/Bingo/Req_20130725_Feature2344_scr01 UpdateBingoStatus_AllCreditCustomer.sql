@@ -1015,6 +1015,7 @@ FROM custinfo WITH(NOLOCK)
 WHERE roleid = 4
 	AND custid NOT IN (SELECT custid FROM f_depsuper_1('All'))
 	AND custid NOT IN (SELECT custid FROM @tmpSuper)
+	AND currency <> 20
 GO
 
 DECLARE @maxCustID INT
