@@ -24,6 +24,8 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130725_Feature2344_scr02 UpdateBingoStatus_SG_MY_Supers.sql"
          Script = "Req_20130725_Feature2344_scr03 UpdateForNewCustomers.sql"
          Script = "Req_20130801_Feature2334_scr04 UpdateEnableForUnsyncCustomers.sql"
+         Script = "Req_20130805__Feature2344_scr01 UpdateEnableForCustomers.sql"
+         Script = "Req_20130805__Feature2344_scr02 UpdateEnableForNewCustomers.sql"
       End
       Begin Folder = "CreditTerm"
          Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
