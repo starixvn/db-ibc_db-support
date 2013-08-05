@@ -81,6 +81,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130801_Feature3739_Asiabet88_CopyPT_BetSettingFrom_NG.sql"
          Script = "Req_20130801_Feature3739_scr2_Asiabet88_CopyMaxPerMatch_FromNG.sql.sql"
          Script = "Req_20130801_Feature3739_scr3_Asiabet88_UpdateStatus.sql.sql"
+         Script = "Req_20130805_UpdateBetLimitFor12BET_onVirtualSoccer.sql"
       End
    End
    Begin Folder = "Support"
