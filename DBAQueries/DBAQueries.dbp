@@ -40,6 +40,8 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130527_Feature1699_AddNSWtoAusRacing.sql"
       End
       Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
+      Begin Folder = "RMS"
+      End
       Begin Folder = "RNGCasino"
          Script = "Req_20130708_Feature1940_UpdateMatchidCasino_71.sql"
          Script = "Req_20130718_Feature1164_ScriptModifyDatabaseStructure.sql"
