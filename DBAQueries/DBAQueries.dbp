@@ -41,6 +41,8 @@ Begin DataProject = "DBAQueries"
       End
       Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
       Begin Folder = "RMS"
+         Script = "Req_20130813_Feature4355_StructureRMSumWinloss_Old2.sql"
+         Script = "Req_20130813_Feature4355_StructureRMSumWinloss2.sql"
       End
       Begin Folder = "RNGCasino"
          Script = "Req_20130708_Feature1940_UpdateMatchidCasino_71.sql"
