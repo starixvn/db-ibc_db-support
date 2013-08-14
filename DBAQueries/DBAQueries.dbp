@@ -38,6 +38,7 @@ Begin DataProject = "DBAQueries"
       End
       Begin Folder = "Racing"
          Script = "Req_20130527_Feature1699_AddNSWtoAusRacing.sql"
+         Script = "Req_20130814_HotFix4638_CorrectRacingPTSetting.sql"
       End
       Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
       Begin Folder = "RMS"
