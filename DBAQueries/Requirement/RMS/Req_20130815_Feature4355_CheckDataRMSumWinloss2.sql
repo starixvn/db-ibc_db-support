@@ -8,7 +8,10 @@
 DECLARE @fromdate DATETIME,
 		@todate	DATETIME
 
-SELECT s1.*, s2.*
+SELECT @fromdate = '2013-08-15',
+		@todate = '2013-08-15'
+		
+SELECT s1.*, s2.stake, s2.winlost, s2.company_stake, s2.company_winlost
 FROM 
 	(SELECT winlostdate
 		,custid
