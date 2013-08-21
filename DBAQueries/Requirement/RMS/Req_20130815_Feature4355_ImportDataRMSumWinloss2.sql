@@ -7,7 +7,7 @@
 	DECLARE @fromdate DATETIME, 
 			@todate	DATETIME
 
-	CREATE TABLE #tmpSumWinloss
+	CREATE TABLE #tmpSumWinloss(
 		[winlostdate] [smalldatetime] NOT NULL,
 		[custid] [int] NOT NULL,
 		[sporttype] [tinyint] NOT NULL,
