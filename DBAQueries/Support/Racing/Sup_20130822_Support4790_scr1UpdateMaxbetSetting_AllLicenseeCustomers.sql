@@ -86,7 +86,7 @@ BEGIN
 			AND cs3.custid IN (SELECT * FROM @res)
 		INNER JOIN @betsetting b ON ci.currency = b.currency
 	WHERE ci.custid IN (SELECT * FROM @res)		
-		
+		AND cs3.maxbet <> b.maxbet
 END
 
 GO
