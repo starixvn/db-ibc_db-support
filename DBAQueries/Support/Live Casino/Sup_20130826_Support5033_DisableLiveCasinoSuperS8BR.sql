@@ -51,6 +51,7 @@ SELECT DISTINCT c.custid, 0
 FROM custinfo c WITH(NOLOCK)
 WHERE SyncLiveCasino=1 AND srecommend=3491753
 	AND DisableLiveCasino = 0
+	AND custid <= @maxCustID
 GO
 
 declare @ids varchar(max), @rowcnt int
