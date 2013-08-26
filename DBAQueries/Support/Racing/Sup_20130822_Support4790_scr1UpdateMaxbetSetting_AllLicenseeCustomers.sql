@@ -5,7 +5,7 @@ AS
 SET NOCOUNT ON
 
 /*
-	Set racing maxbet setting for all licensee customer.
+	Set horse racing maxbet setting for all licensee customer.(all partner)
 */
 	
 BEGIN
@@ -82,7 +82,7 @@ BEGIN
 	SET cs3.maxbet = b.maxbet
 	FROM Dep_Custsetting3rd cs3 
 		INNER JOIN custinfo ci WITH(NOLOCK) ON cs3.custid = ci.custid	
-			AND sporttype = 151 AND bettype IN (41,42)
+			AND sporttype = 151 AND bettype IN (31,32,41,42,51,52)
 			AND cs3.custid IN (SELECT * FROM @res)
 		INNER JOIN @betsetting b ON ci.currency = b.currency
 	WHERE ci.custid IN (SELECT * FROM @res)		
@@ -146,7 +146,7 @@ INSERT INTO #temp (custid, isfinished)
 SELECT DISTINCT c.custid, 0
 FROM custinfo c WITH(NOLOCK)
 	INNER JOIN Dep_Custsetting3rd cs3 WITH(NOLOCK) ON c.custid = cs3.custid	
-		AND cs3.sporttype = 151 AND cs3.bettype IN (41,42)
+		AND cs3.sporttype = 151 AND cs3.bettype IN (31,32,41,42,51,52)
 	INNER JOIN @betsetting b ON c.currency = b.currency
 WHERE	cs3.custid <= @maxCustID
 		AND	b.maxbet <> cs3.maxbet
@@ -159,7 +159,7 @@ while (1=1)
 begin
 	select @ids = ''
 	
-	update TOP (10000) #temp
+	update TOP (5000) #temp
 	set @ids = @ids + case @ids when '' then '' else ',' end + cast(custid as varchar(12))
 		,isfinished = 1
 	from #temp
@@ -169,7 +169,7 @@ begin
 
 	EXEC [Acc_ExecRep_09] @ids = @ids
 
-	if @rowcnt < 10000 RETURN
+	if @rowcnt < 5000 RETURN
 
 	WAITFOR DELAY '00:00:01'
 end
