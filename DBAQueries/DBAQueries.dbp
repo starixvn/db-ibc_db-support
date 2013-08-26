@@ -104,6 +104,9 @@ Begin DataProject = "DBAQueries"
    End
    Begin Folder = "Support"
       Script = "000_Sample.sql"
+      Begin Folder = "Live Casino"
+         Script = "Sup_20130826_Support5033_DisableLiveCasinoSuperS8BR.sql"
+      End
       Begin Folder = "Racing"
          Script = "Sup_20130522_Hotfix1593_Racing_GetLicenseeList_NegativeBalance.sql"
          Script = "Sup_20130619_Support2422_Racing_RefundRace.sql"
