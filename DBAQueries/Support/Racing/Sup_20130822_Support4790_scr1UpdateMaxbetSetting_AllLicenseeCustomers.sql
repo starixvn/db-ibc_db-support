@@ -32,8 +32,11 @@ BEGIN
 		SET @i=@i+1
 	END	
 	
-	DECLARE @betsetting TABLE (currencyname VARCHAR(20),currency INT, maxbet money)
-	INSERT INTO @betsetting 
+	--DECLARE @betsetting TABLE (currencyname VARCHAR(20),currency INT, maxbet money)
+	
+	CREATE TABLE #betsetting (currencyname VARCHAR(20),currency INT PRIMARY KEY, maxbet money)
+	
+	INSERT INTO #betsetting 
 			  SELECT 'RM',	2	,	4000.00		--,	30.00	,	80000.00
 	UNION ALL SELECT '$US',	35	,	1200.00		--,	10.00	,	30000.00
 	UNION ALL SELECT 'AUD',	9	,	1400.00		--,	10.00	,	30000.00
@@ -84,14 +87,16 @@ BEGIN
 		INNER JOIN custinfo ci WITH(NOLOCK) ON cs3.custid = ci.custid	
 			AND sporttype = 151 AND bettype IN (31,32,41,42,51,52)
 			AND cs3.custid IN (SELECT * FROM @res)
-		INNER JOIN @betsetting b ON ci.currency = b.currency
+		INNER JOIN #betsetting b ON ci.currency = b.currency
 	WHERE ci.custid IN (SELECT * FROM @res)		
 		AND cs3.maxbet <> b.maxbet
 END
 
 GO
-DECLARE @betsetting TABLE (currencyname VARCHAR(20),currency INT, maxbet money)
-	INSERT INTO @betsetting 
+--DECLARE @betsetting TABLE (currencyname VARCHAR(20),currency INT, maxbet money)
+CREATE TABLE #betsetting (currencyname VARCHAR(20),currency INT PRIMARY KEY, maxbet money)
+
+	INSERT INTO #betsetting 
 			  SELECT 'RM',	2	,	4000.00		--,	30.00	,	80000.00
 	UNION ALL SELECT '$US',	35	,	1200.00		--,	10.00	,	30000.00
 	UNION ALL SELECT 'AUD',	9	,	1400.00		--,	10.00	,	30000.00
@@ -147,7 +152,7 @@ SELECT DISTINCT c.custid, 0
 FROM custinfo c WITH(NOLOCK)
 	INNER JOIN Dep_Custsetting3rd cs3 WITH(NOLOCK) ON c.custid = cs3.custid	
 		AND cs3.sporttype = 151 AND cs3.bettype IN (31,32,41,42,51,52)
-	INNER JOIN @betsetting b ON c.currency = b.currency
+	INNER JOIN #betsetting b ON c.currency = b.currency
 WHERE	cs3.custid <= @maxCustID
 		AND	b.maxbet <> cs3.maxbet
 	AND srecommend IN (SELECT custid FROM Dep_Custsuper WITH(NOLOCK))
