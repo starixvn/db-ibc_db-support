@@ -101,6 +101,9 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130812_Feature3739_scr3_TLC_UpdateStatus.sql.sql"
          Script = "Req_20130812_Feature3739_TLC_CopyPT_BetSettingFrom_NG.sql"
          Script = "Req_20130828_Featurexxxx_VirtualMotorRacing_AddMaxPerMatch184.sql"
+         Script = "Req_20130901_Feature3739_scr1_W88_CopyPT_BetSettingFrom_NG.sql"
+         Script = "Req_20130901_Feature3739_scr2_W88_CopyMaxPerMatch_FromNG.sql.sql.sql"
+         Script = "Req_20130901_Feature3739_scr3_W88_UpdateStatus.sql.sql.sql"
       End
    End
    Begin Folder = "Support"
