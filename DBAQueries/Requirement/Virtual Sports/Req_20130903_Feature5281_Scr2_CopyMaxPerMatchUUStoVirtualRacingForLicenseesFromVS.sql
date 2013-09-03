@@ -1,0 +1,48 @@
+﻿  /*
+	Created: Johnson
+	Date: 2013-09-03
+	Task: Copy bet setting UUS from virtual soccer to virtual tennis and racing for licensee sites
+	DB: DBTXN/bodb02
+*/
+
+DECLARE @maxCustID INT
+
+SET @maxCustID = xxx
+
+create table #temp (custid int primary key, isfinished bit)
+
+INSERT INTO #temp (custid, isfinished)
+SELECT DISTINCT custid, 0
+FROM custinfo c WITH(NOLOCK)	
+WHERE	custid < @maxCustID		
+AND srecommend IN (	SELECT custid 
+					FROM Dep_CustSuper WITH(NOLOCK) 
+					WHERE site IN ('12bet','Mansion88','Mayfair','Vwin','Alog','ZZun88','haifa','Bodog','asiabet88','TLC','Dela','Sungame','Tycoon','VCAsia','W88','Avia','67bet','3star88','SLC88')
+						AND currency = 20
+				)
+GO
+
+
+declare @rowcnt int
+
+while (1=1)
+begin	
+	update TOP (1000) #temp
+	set isfinished = 1
+	from #temp
+	where isfinished = 0
+
+	select @rowcnt = @@rowcount	
+
+	UPDATE custinfo WITH(UPDLOCK,ROWLOCK)
+	SET maxpermatch181 = maxpermatch180,
+		maxpermatch182 = maxpermatch180,
+		maxpermatch186 = maxpermatch180
+	WHERE custid IN (SELECT custid FROM #temp WHERE isfinished = 1)
+	
+	if @rowcnt < 1000 RETURN
+	
+	DELETE #temp WHERE isfinished = 1
+
+	WAITFOR DELAY '00:00:03'
+end
