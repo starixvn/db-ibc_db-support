@@ -27,7 +27,7 @@ AND srecommend IN (	SELECT custid
 						AND currency = 20
 				)
 GO
-
+--6872 customer affected
 declare @rowcnt int
 
 while (1=1)
