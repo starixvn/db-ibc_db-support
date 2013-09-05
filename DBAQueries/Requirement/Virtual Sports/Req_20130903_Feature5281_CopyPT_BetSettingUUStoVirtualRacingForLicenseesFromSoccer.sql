@@ -32,20 +32,17 @@ GO
 		,minbet = cs.minbet
 		,maxbet = cs.maxbet
 	FROM Dep_CustSetting3rd vr
-		INNER JOIN Dep_CustSetting cs  ON vr.custid = cs.custid AND vr.sporttype IN (181,186) AND cs.sporttype = 1 and cs.bettype = 1
+		INNER JOIN Dep_CustSetting cs  ON vr.custid = cs.custid AND vr.sporttype IN (181,186) AND cs.sporttype = 1 and cs.bettype = 1 and islive =0
 	WHERE vr.custid IN (SELECT custid FROM #temp)
 
 GO
--- copy maxpermatch setting
+-- copy maxpermatch and enable status
 	UPDATE custinfo WITH(UPDLOCK,ROWLOCK)
 	SET maxpermatch181 = maxpermatch,		
-		maxpermatch186 = maxpermatch
+		maxpermatch186 = maxpermatch,
+		HideVirtualSports = 0,
+		DisableVirtualSports = 0
 	WHERE custid IN (SELECT custid FROM #temp )
 
 GO
 
--- update status
-	UPDATE custinfo WITH(ROWLOCK,UPDLOCK)
-	SET HideVirtualSports = 0,
-		DisableVirtualSports = 0
-	WHERE custid IN (SELECT custid FROM #temp)	
