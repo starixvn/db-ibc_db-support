@@ -105,10 +105,6 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130901_Feature3739_scr2_W88_CopyMaxPerMatch_FromNG.sql.sql.sql"
          Script = "Req_20130901_Feature3739_scr3_W88_UpdateStatus.sql.sql.sql"
          Script = "Req_20130903_Feature5281_CopyPT_BetSettingUUStoVirtualRacingForLicenseesFromSoccer.sql"
-         Script = "Req_20130903_Feature5281_Scr0_CopyPT_BetSettingUUStoVirtualSoccerForLicenseesFromSoccer.sql"
-         Script = "Req_20130903_Feature5281_Scr00_CopyMaxPerMatchUUStoVirtualSoccerForLicenseesFromSoccer.sql"
-         Script = "Req_20130903_Feature5281_Scr2_CopyMaxPerMatchUUStoVirtualRacingForLicenseesFromVS.sql"
-         Script = "Req_20130903_Feature5281_Scr3_EnableUUStoVirtualSportsForLicensees.sql"
       End
    End
    Begin Folder = "Support"
