@@ -32,7 +32,7 @@ GO
 		,minbet = cs.minbet
 		,maxbet = cs.maxbet
 	FROM Dep_CustSetting3rd vr
-		INNER JOIN Dep_CustSetting cs  ON vr.custid = cs.custid AND vr.sporttype IN (181,186) AND cs.sporttype = 1 and cs.bettype = 1 and islive =0
+		INNER JOIN Dep_CustSetting cs  ON vr.custid = cs.custid AND vr.sporttype IN (181,186) AND cs.sporttype = 1 and cs.bettype = 1 and cs.islive =0
 	WHERE vr.custid IN (SELECT custid FROM #temp)
 
 GO
