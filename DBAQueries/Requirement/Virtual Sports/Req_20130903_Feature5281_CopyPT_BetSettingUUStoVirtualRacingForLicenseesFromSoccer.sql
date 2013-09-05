@@ -14,7 +14,7 @@ create table #temp (custid int primary key)
 INSERT INTO #temp (custid)
 SELECT DISTINCT c.custid
 FROM custinfo c WITH(NOLOCK)
-WHERE	c.custid < @maxCustID		
+WHERE	c.custid <= @maxCustID		
 AND srecommend IN (	SELECT custid 
 					FROM Dep_CustSuper WITH(NOLOCK) 
 					WHERE site IN ('12bet','Mansion88','Mayfair','Vwin','Alog','ZZun88','haifa','Bodog','asiabet88','TLC','Dela','Sungame','Tycoon','VCAsia','W88','Avia','67bet','3star88','SLC88')
