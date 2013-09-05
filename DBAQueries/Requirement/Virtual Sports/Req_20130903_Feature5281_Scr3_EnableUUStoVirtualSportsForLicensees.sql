@@ -7,7 +7,7 @@
 
 DECLARE @maxCustID INT
 
-SET @maxCustID = xxx
+SET @maxCustID = 2100000000
 
 create table #temp (custid int primary key, isfinished bit)
 
@@ -27,12 +27,12 @@ AND srecommend IN (	SELECT custid
 						AND currency = 20
 				)
 GO
---6872 customer affected
+
 declare @rowcnt int
 
 while (1=1)
 begin	
-	update TOP (1000) #temp
+	update TOP (5000) #temp
 	set isfinished = 1
 	from #temp
 	where isfinished = 0
@@ -44,13 +44,9 @@ begin
 		DisableVirtualSports = 0
 	WHERE custid IN (SELECT custid FROM #temp WHERE isfinished = 1)
 
-	if @rowcnt < 1000 RETURN
+	if @rowcnt < 5000 RETURN
 	
 	DELETE #temp WHERE isfinished = 1
 
 	WAITFOR DELAY '00:00:01'
 end
-
-				
-
-

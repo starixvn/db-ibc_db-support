@@ -1,7 +1,10 @@
-﻿  /*
+﻿
+ 
+ 
+/*
 	Created: Johnson
 	Date: 2013-09-03
-	Task: Copy bet setting UUS from virtual soccer to virtual tennis and racing for licensee sites
+	Task: Copy maxpermatch UUS from virtual soccer to virtual tennis and racing for licensee sites
 	DB: DBTXN/bodb02
 */
 
@@ -20,14 +23,18 @@ AND srecommend IN (	SELECT custid
 					WHERE site IN ('12bet','Mansion88','Mayfair','Vwin','Alog','ZZun88','haifa','Bodog','asiabet88','TLC','Dela','Sungame','Tycoon','VCAsia','W88','Avia','67bet','3star88','SLC88')
 						AND currency = 20
 				)
+	AND (maxpermatch180 <> maxpermatch181
+		or
+		maxpermatch180 <> maxpermatch186
+		)
 GO
 
---6872 customer affected
+
 declare @rowcnt int
 
 while (1=1)
 begin	
-	update TOP (1000) #temp
+	update TOP (5000) #temp
 	set isfinished = 1
 	from #temp
 	where isfinished = 0
@@ -35,14 +42,16 @@ begin
 	select @rowcnt = @@rowcount	
 
 	UPDATE custinfo WITH(UPDLOCK,ROWLOCK)
-	SET maxpermatch181 = maxpermatch180,
-		maxpermatch182 = maxpermatch180,
+	SET maxpermatch181 = maxpermatch180,		
 		maxpermatch186 = maxpermatch180
 	WHERE custid IN (SELECT custid FROM #temp WHERE isfinished = 1)
 	
-	if @rowcnt < 1000 RETURN
+	if @rowcnt < 5000 RETURN
 	
 	DELETE #temp WHERE isfinished = 1
 
-	WAITFOR DELAY '00:00:03'
+	WAITFOR DELAY '00:00:01'
 end
+
+
+

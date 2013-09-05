@@ -12,17 +12,26 @@ SET @maxCustID = xxx
 create table #temp (custid int primary key, isfinished bit)
 
 INSERT INTO #temp (custid, isfinished)
-SELECT DISTINCT custid, 0
-FROM custinfo c WITH(NOLOCK)	
-WHERE	custid < @maxCustID		
+SELECT DISTINCT c.custid, 0
+FROM custinfo c WITH(NOLOCK)
+	inner join Dep_CustSetting3rd vsc with(nolock) on c.custid = vsc.custid and vsc.sporttype = 180 and vsc.bettype = 1201
+	inner join Dep_CustSetting3rd vrc with(nolock) on c.custid = vrc.custid and vrc.sporttype in (182,181,186) and vrc.bettype in (1220,1231)
+WHERE	c.custid < @maxCustID		
 AND srecommend IN (	SELECT custid 
 					FROM Dep_CustSuper WITH(NOLOCK) 
 					WHERE site IN ('12bet','Mansion88','Mayfair','Vwin','Alog','ZZun88','haifa','Bodog','asiabet88','TLC','Dela','Sungame','Tycoon','VCAsia','W88','Avia','67bet','3star88','SLC88')
 						AND currency = 20
 				)
+	and (vsc.apositiontaking <> vrc.apositiontaking
+		 OR vsc.mpositiontaking <> vrc.mpositiontaking
+		 OR vsc.spositiontaking <> vrc.spositiontaking
+		 OR vsc.minbet <> vrc.minbet
+		 OR vsc.maxbet <> vrc.maxbet
+	 )
+
 GO
 
---6872 customer affected
+
 declare @rowcnt int
 
 while (1=1)
@@ -34,7 +43,7 @@ begin
 
 	select @rowcnt = @@rowcount	
 
-	UPDATE vr 
+	UPDATE vr WITH(ROWLOCK,UPDLOCK)
 	SET spositiontaking = vs.spositiontaking
 		,mpositiontaking = vs.mpositiontaking
 		,apositiontaking = vs.apositiontaking
