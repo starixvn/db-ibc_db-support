@@ -38,6 +38,8 @@ BEGIN
 	WHERE custid in (select custid from @res)
 END
  
+GO
+
  -- create a physical table, so that we can see/check the progress from outside
 CREATE TABLE v_tmp_betsetting (currencyname VARCHAR(20),currency INT PRIMARY KEY, maxbet money, maxpermatch money, isfinished bit default(0))
 
