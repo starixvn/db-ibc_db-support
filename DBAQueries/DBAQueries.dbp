@@ -117,6 +117,7 @@ Begin DataProject = "DBAQueries"
          Script = "Sup_20130619_Support2422_Racing_RefundRace.sql"
          Script = "Sup_20130822_Support4790_scr1UpdateMaxbetSetting_AllLicenseeCustomers.sql"
          Script = "Sup_20130822_Support4790_Scr2_UpdateMaxBetSetting_AllCreditCustomers.sql"
+         Script = "Sup_20130906_Suport5386_UpdateMaxbetSetting_AllCreditCustomer.sql"
       End
       Begin Folder = "Settlement"
          Script = "Sup_20130527_Outright_ReSettle.sql"
