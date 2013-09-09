@@ -40,11 +40,16 @@ END
  
 GO
 
- -- create a physical table, so that we can see/check the progress from outside
-CREATE TABLE #tmp_betsetting (currencyname VARCHAR(20),currency INT PRIMARY KEY, maxbet money, maxpermatch money, isfinished bit default(0))
+DECLARE @tmp_betsetting TABLE(currencyname VARCHAR(20),currency INT PRIMARY KEY, maxbet money, maxpermatch money, isfinished bit default(0))
 
+DECLARE @currency INT, @maxbet money, @maxpermatch money, @running_cnt int, @max_custid int
 
-insert into #tmp_Betsetting(currencyname ,currency ,maxbet ,maxpermatch)
+SELECT @max_custid = xxxx
+SELECT @running_cnt = 0
+
+CREATE TABLE #customer (custid int)
+
+insert into @tmp_Betsetting(currencyname ,currency ,maxbet ,maxpermatch)
 		SELECT	'RM'	,	2	,	10000	,	50000
 union SELECT	'$US'	,	35	,	3000	,	15000
 union SELECT	'AUD'	,	9	,	3000	,	15000
@@ -89,21 +94,11 @@ union SELECT	'Y$US'	,	36	,	3000	,	15000
 union SELECT	'Yen'	,	16	,	3000	,	15000
 union SELECT	'ZAR'	,	48	,	16000	,	80000
 
-GO
 
-
-
-
-DECLARE @currency INT, @maxbet money, @maxpermatch money, @running_cnt int, @max_custid int
-
-SELECT @max_custid = xxxx
-SELECT @running_cnt = 0
-
-CREATE TABLE #customer (custid int)
-
+--begin update bet setting
 WHILE (1 = 1)
 BEGIN
-	UPDATE TOP (1) #tmp_betsetting
+	UPDATE TOP (1) @tmp_betsetting
 	SET isfinished = 1
 		,@currency = currency
 		,@maxbet = maxbet
@@ -153,4 +148,3 @@ BEGIN
 END
 
 --DROP TABLE #customer
---DROP TABLE #tmp_betsetting
