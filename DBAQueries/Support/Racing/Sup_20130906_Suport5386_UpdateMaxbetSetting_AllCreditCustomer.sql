@@ -41,10 +41,10 @@ END
 GO
 
  -- create a physical table, so that we can see/check the progress from outside
-CREATE TABLE v_tmp_betsetting (currencyname VARCHAR(20),currency INT PRIMARY KEY, maxbet money, maxpermatch money, isfinished bit default(0))
+CREATE TABLE #tmp_betsetting (currencyname VARCHAR(20),currency INT PRIMARY KEY, maxbet money, maxpermatch money, isfinished bit default(0))
 
 
-insert into v_tmp_Betsetting(currencyname ,currency ,maxbet ,maxpermatch)
+insert into #tmp_Betsetting(currencyname ,currency ,maxbet ,maxpermatch)
 		SELECT	'RM'	,	2	,	10000	,	50000
 union SELECT	'$US'	,	35	,	3000	,	15000
 union SELECT	'AUD'	,	9	,	3000	,	15000
@@ -94,15 +94,16 @@ GO
 
 
 
-DECLARE @currency INT, @maxbet money, @maxpermatch money, @running_cnt int
+DECLARE @currency INT, @maxbet money, @maxpermatch money, @running_cnt int, @max_custid int
 
+SELECT @max_custid = xxxx
 SELECT @running_cnt = 0
 
 CREATE TABLE #customer (custid int)
 
 WHILE (1 = 1)
 BEGIN
-	UPDATE TOP (1) v_tmp_betsetting
+	UPDATE TOP (1) #tmp_betsetting
 	SET isfinished = 1
 		,@currency = currency
 		,@maxbet = maxbet
@@ -118,6 +119,7 @@ BEGIN
 	where srecommend not in (select custid from dbo.Dep_CustSuper with(nolock))
 		and currency = @currency 
 		and roleid <=4
+		and custid <=@max_custid 
 	
 	DECLARE @subtable TABLE(custid int)
 	DECLARE @ids varchar(max)
@@ -149,6 +151,6 @@ BEGIN
 		SET @running_cnt = @running_cnt + 1
 	END	
 END
-DROP TABLE #customer
 
--- DROP TABLE v_tmp_betsetting
+--DROP TABLE #customer
+--DROP TABLE #tmp_betsetting
