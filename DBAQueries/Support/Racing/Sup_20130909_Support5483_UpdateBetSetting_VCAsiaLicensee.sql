@@ -100,7 +100,7 @@ from Dep_CustSetting3rd cs
 WHERE ci.srecommend IN (
 	SELECT custid from Dep_CustSuper with(nolock) where currency in (6,3,9,1,12,13) and site = 'vcasia'
 )
-	AND custid <= @max_custid 
+	AND ci.custid <= @max_custid 
 
 GO
 
@@ -137,4 +137,4 @@ FROM custInfo ci with(UPDLOCK,ROWLOCK)
 WHERE ci.srecommend in (
 	SELECT custid from Dep_CustSuper with(nolock) where currency in (6,3,9,1,12,13) and site = 'vcasia'
 )
-AND custid <= @max_custid 
+AND ci.custid <= @max_custid 
