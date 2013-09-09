@@ -88,7 +88,6 @@ union SELECT	'SEK'	,	53	,	16000	,	80000
 union SELECT	'TB'	,	4	,	100000	,	500000
 union SELECT	'THB'	,	43	,	100000	,	500000
 union SELECT	'US$'	,	3	,	1500	,	15000
-union SELECT	'INH'	,	51	,	8000	,	50000
 union SELECT	'Won'	,	45	,	3200000	,	15000000
 union SELECT	'Y$US'	,	36	,	3000	,	15000
 union SELECT	'Yen'	,	16	,	3000	,	15000
