@@ -219,3 +219,65 @@ WHERE ci.srecommend in (
 )
 AND ci.custid <= @max_custid 
 
+
+
+GO
+
+--update commission for racing
+--AUS 3%
+--Others 4%
+
+UPDATE cs
+set cs.sdiscount = case when cs.bettype in (51,52) then 0.03 else 0.04 end 
+from Dep_CustSetting3rd cs
+inner join custInfo ci with(nolock) on cs.custid = ci.custid and cs.sporttype between 151 and 153
+where ci.srecommend in (select custid from Dep_CustSuper where Site = 'w88')
+and ci.roleid = 4
+
+GO
+
+
+UPDATE cs
+set cs.adiscount = case when cs.bettype in (51,52) then 0.03 else 0.04 end 
+from Dep_CustSetting3rd cs
+inner join custInfo ci with(nolock) on cs.custid = ci.custid and cs.sporttype between 151 and 153
+where ci.srecommend in (select custid from Dep_CustSuper where Site = 'w88')
+and ci.roleid = 3
+AND ci.mrecommend NOT IN (SELECT custid from custInfo with(NOLOCK)
+						WHERE srecommend IN (select custid from Dep_CustSuper where Site = 'w88')
+						AND username LIKE '%Acc%'
+						AND roleid = 3
+				)
+
+GO
+
+UPDATE cs
+set cs.discount = case when cs.bettype in (51,52) then 0.03 else 0.04 end 
+from Dep_CustSetting3rd cs
+inner join custInfo ci with(nolock) on cs.custid = ci.custid and cs.sporttype between 151 and 153
+where ci.srecommend in (select custid from Dep_CustSuper where Site = 'w88')
+and ci.roleid = 2
+AND ci.mrecommend NOT IN (SELECT custid from custInfo with(NOLOCK)
+						WHERE srecommend IN (select custid from Dep_CustSuper where Site = 'w88')
+						AND username LIKE '%Acc%'
+						AND roleid = 3
+				)
+
+GO
+
+UPDATE cs
+set cs.sdiscount = case when cs.bettype in (51,52) then 0.03 else 0.04 end,
+	cs.adiscount = case when cs.bettype in (51,52) then 0.03 else 0.04 end,
+	cs.discount = case when cs.bettype in (51,52) then 0.03 else 0.04 end
+from Dep_CustSetting3rd cs
+inner join custInfo ci with(nolock) on cs.custid = ci.custid and cs.sporttype between 151 and 153
+where ci.srecommend in (select custid from Dep_CustSuper where Site = 'w88')
+and ci.roleid = 1
+AND ci.mrecommend NOT IN (SELECT custid from custInfo with(NOLOCK)
+						WHERE srecommend IN (select custid from Dep_CustSuper where Site = 'w88')
+						AND username LIKE '%Acc%'
+						AND roleid = 3
+				)
+
+GO
+
