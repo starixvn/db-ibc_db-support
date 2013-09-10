@@ -43,6 +43,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130527_Feature1699_AddNSWtoAusRacing.sql"
          Script = "Req_20130814_HotFix4638_CorrectRacingPTSetting.sql"
          Script = "Req_20130906_Feature5386_UpdateMaxbetSetting_AllCreditCustomer.sql"
+         Script = "Req_20130906_Feature5386_UpdateMaxbetSetting_NewCreditCustomer.sql"
          Script = "Req_20130909_Feature5483_UpdateBetSetting_VCAsiaLicensee.sql"
       End
       Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
