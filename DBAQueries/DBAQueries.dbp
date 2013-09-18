@@ -119,6 +119,9 @@ Begin DataProject = "DBAQueries"
    End
    Begin Folder = "Support"
       Script = "000_Sample.sql"
+      Begin Folder = "Currency"
+         Script = "Sup_20130918_Support5824_ChangeCurrencyName.sql"
+      End
       Begin Folder = "Live Casino"
          Script = "Sup_20130826_Support5033_DisableLiveCasinoSuperS8BR.sql"
       End
