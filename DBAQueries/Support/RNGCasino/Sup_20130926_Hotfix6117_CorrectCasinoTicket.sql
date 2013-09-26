@@ -4,7 +4,6 @@
 
 */
 
-
 DECLARE @ErrCode INT
 DECLARE @ErrMsg NVARCHAR(400),
     @custid INT, @refno BIGINT, @sessionid INT, @turnover MONEY
