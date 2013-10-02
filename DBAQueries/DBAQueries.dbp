@@ -137,7 +137,7 @@ Begin DataProject = "DBAQueries"
          Script = "Sup_20130822_Support4790_Scr2_UpdateMaxBetSetting_AllCreditCustomers.sql"
       End
       Begin Folder = "RNGCasino"
-         Script = "Sup_20130926_Hotfix6117_CorrectCasinoTickets.sql"
+         Script = "Sup_20130926_Hotfix6117_CorrectCasinoTicket.sql"
       End
       Begin Folder = "Settlement"
          Script = "Sup_20130527_Outright_ReSettle.sql"
