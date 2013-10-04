@@ -44,6 +44,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130814_HotFix4638_CorrectRacingPTSetting.sql"
       End
       Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
+      Script = "Req_20131002_Feature6131_RecordUsageStatistic.sql"
       Begin Folder = "RMS"
          Script = "Req_20130813_Feature4355_StructureRMSumWinloss_Old2.sql"
          Script = "Req_20130813_Feature4355_StructureRMSumWinloss2.sql"
