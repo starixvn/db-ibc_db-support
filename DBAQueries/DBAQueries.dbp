@@ -36,12 +36,24 @@ Begin DataProject = "DBAQueries"
       Begin Folder = "CreditTerm"
          Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
       End
+      Begin Folder = "Live CS"
+         Script = "Req_20130912_Feature5611_3star88_UpdatePTsettingforUUS.sql"
+         Script = "Req_20130913_Feature5606_VCAsia_UpdatePTSettingForAllCurrencies.sql"
+         Script = "Req_20130913_Feature5617_67Bet_UpdatePTSettingforUUS.sql"
+      End
+      Begin Folder = "Opus CS"
+         Script = "Req_20130926_Feature6078_PrepareStructureforOpusCasino.sql"
+      End
       Begin Folder = "P2P"
          Script = "Req_20130604_Feature1910_Disable_P2P_Product.sql"
       End
       Begin Folder = "Racing"
          Script = "Req_20130527_Feature1699_AddNSWtoAusRacing.sql"
          Script = "Req_20130814_HotFix4638_CorrectRacingPTSetting.sql"
+         Script = "Req_20130906_Feature5386_UpdateMaxbetSetting_AllCreditCustomer.sql"
+         Script = "Req_20130906_Feature5386_UpdateMaxbetSetting_NewCreditCustomer.sql"
+         Script = "Req_20130909_Feature5483_UpdateBetSetting_VCAsiaLicensee.sql"
+         Script = "Req_20130910_Feature5531_UpdateBetSetting_W88Licensee.sql"
       End
       Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
       Script = "Req_20131002_Feature6131_RecordUsageStatistic.sql"
@@ -52,6 +64,8 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130815_Feature4355_CheckDataRMSumWinloss2.sql"
          Script = "Req_20130815_Feature4355_ImportDataRMSumWinloss_Old2.sql"
          Script = "Req_20130815_Feature4355_ImportDataRMSumWinloss2.sql"
+         Script = "Req_20130924_Feature5555_StructureSupportAgentWinloss.sql"
+         Script = "Req_20130924_Feature5555_UpdateRecommendColumn.sql"
       End
       Begin Folder = "RNGCasino"
          Script = "Req_20130708_Feature1940_UpdateMatchidCasino_71.sql"
@@ -102,10 +116,18 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130812_Feature3739_scr3_TLC_UpdateStatus.sql.sql"
          Script = "Req_20130812_Feature3739_TLC_CopyPT_BetSettingFrom_NG.sql"
          Script = "Req_20130828_Featurexxxx_VirtualMotorRacing_AddMaxPerMatch184.sql"
+         Script = "Req_20130901_Feature3739_scr1_W88_CopyPT_BetSettingFrom_NG.sql"
+         Script = "Req_20130901_Feature3739_scr2_W88_CopyMaxPerMatch_FromNG.sql.sql.sql"
+         Script = "Req_20130901_Feature3739_scr3_W88_UpdateStatus.sql.sql.sql"
+         Script = "Req_20130903_Feature5281_CopyPT_BetSettingUUStoVirtualRacingForLicenseesFromSoccer.sql"
+         Script = "Req_20130912_Feature5604_VCAsia_UpdatePT_Bet_Setting.sql"
       End
    End
    Begin Folder = "Support"
       Script = "000_Sample.sql"
+      Begin Folder = "Currency"
+         Script = "Sup_20130918_Support5824_ChangeCurrencyName.sql"
+      End
       Begin Folder = "Live Casino"
          Script = "Sup_20130826_Support5033_DisableLiveCasinoSuperS8BR.sql"
       End
@@ -114,6 +136,9 @@ Begin DataProject = "DBAQueries"
          Script = "Sup_20130619_Support2422_Racing_RefundRace.sql"
          Script = "Sup_20130822_Support4790_scr1UpdateMaxbetSetting_AllLicenseeCustomers.sql"
          Script = "Sup_20130822_Support4790_Scr2_UpdateMaxBetSetting_AllCreditCustomers.sql"
+      End
+      Begin Folder = "RNGCasino"
+         Script = "Sup_20130926_Hotfix6117_CorrectCasinoTicket.sql"
       End
       Begin Folder = "Settlement"
          Script = "Sup_20130527_Outright_ReSettle.sql"
