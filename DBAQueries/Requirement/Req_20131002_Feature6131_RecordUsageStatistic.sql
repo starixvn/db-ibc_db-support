@@ -11,7 +11,7 @@ CREATE TABLE [dbo].[UserLog_UsageStatistic](
 	[ActionID] [int] NOT NULL,
 	[LogDate] [datetime] NOT NULL,
 	[ServerID] [tinyint] NOT NULL,
-	[Device] [nvarchar](10) NULL,
+	[Device] [nvarchar](500) NULL,
  CONSTRAINT [PK_UserLog_UsageStatistic] PRIMARY KEY CLUSTERED 
 (
 	[LogID] ASC
