@@ -31,6 +31,8 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130807_Feature2344_scr03_UpdEnable_EtusHeadline.sql"
       End
       Begin Folder = "Check PT"
+         Script = "Req_40PercentMinPT_Check PT before Update.sql"
+         Script = "Req_40PercentMinPT_CheckPTAfterUpdate.sql"
          Script = "Task_20130816_CheckPTSettingSportbook.sql"
       End
       Begin Folder = "CreditTerm"
