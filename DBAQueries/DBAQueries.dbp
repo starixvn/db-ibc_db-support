@@ -36,6 +36,9 @@ Begin DataProject = "DBAQueries"
       Begin Folder = "CreditTerm"
          Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
       End
+      Begin Folder = "HRFixedOdds"
+         Script = "Req_20131011_Feature6505_PrepareStructureHRFixedOdds.sql"
+      End
       Begin Folder = "Live CS"
          Script = "Req_20130912_Feature5611_3star88_UpdatePTsettingforUUS.sql"
          Script = "Req_20130913_Feature5606_VCAsia_UpdatePTSettingForAllCurrencies.sql"
