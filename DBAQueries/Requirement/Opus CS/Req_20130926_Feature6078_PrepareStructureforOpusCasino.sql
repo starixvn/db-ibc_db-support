@@ -32,7 +32,7 @@ GO
 
 USE master
 GO
-ALTER DATABASE [CustDB] ADD FILEGROUP GameTable_1
+ALTER DATABASE [CustDB] ADD FILEGROUP OpusCasinoTable_1
 GO
 ALTER DATABASE [CustDB] ADD FILEGROUP CustSettingOpusHistory_Table
 GO
@@ -40,8 +40,8 @@ GO
 ALTER DATABASE [CustDB]
 ADD FILE 
 (
-	NAME = N'GameTable_1', 
-	FILENAME = N'E:\IBC_DB\OpusCasino\GameTable_1.ndf' , 
+	NAME = N'OpusCasinoTable_1', 
+	FILENAME = N'E:\IBC_DB\OpusCasino\OpusCasinoTable_1.ndf' , 
 	SIZE = 10240KB , 
 	MAXSIZE = UNLIMITED, 
 	FILEGROWTH = 1024KB 
@@ -64,8 +64,26 @@ GO
 -------------------------------------------------------------------------
 --Add tables GameType,StakeLevel,CustGameType,CustSettingOpus_History----
 -------------------------------------------------------------------------
-USE [custDB]
+
+/****** Object:  Table [dbo].[StakeLevel]    Script Date: 09/30/2013 15:46:09 ******/
+SET ANSI_NULLS ON
 GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[StakeLevel](
+	[StakeLevelID] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[GameTypeID] [int] NULL,
+	[MinLabel] [nvarchar](50) NULL,
+	[MaxLabel] [nvarchar](50) NULL,
+	[MinStake] [decimal](19, 8) NULL,
+	[MaxStake] [decimal](19, 8) NULL,
+	[ExchangeId] [int] NULL,
+ CONSTRAINT [PK_StakeLevel] PRIMARY KEY CLUSTERED 
+(
+	[StakeLevelID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [OpusCasinoTable_1]
+) ON [OpusCasinoTable_1]
+
 /****** Object:  Table [dbo].[GameType]    Script Date: 09/26/2013 14:02:24 ******/
 SET ANSI_NULLS ON
 GO
@@ -79,26 +97,8 @@ CREATE TABLE [dbo].[GameType](
  CONSTRAINT [PK_GameType] PRIMARY KEY CLUSTERED 
 (
 	[GameTypeID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [GameTable_1]
-) ON [GameTable_1]
-
-GO
-
-/****** Object:  Table [dbo].[GameType]    Script Date: 09/26/2013 14:02:24 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[GameType](
-	[GameTypeID] [int] NOT NULL,
-	[GameTypeName] [nvarchar](50) NULL,
-	[IsDisabled] [bit] NOT NULL,
-	[IBCBetTypeID] [int] NULL,
- CONSTRAINT [PK_GameType] PRIMARY KEY CLUSTERED 
-(
-	[GameTypeID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [GameTable_1]
-) ON [GameTable_1]
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON OpusCasinoTable_1
+) ON OpusCasinoTable_1
 
 
 
@@ -118,8 +118,8 @@ CREATE TABLE [dbo].[CustGameType](
  CONSTRAINT [PK_CustGameType] PRIMARY KEY CLUSTERED 
 (
 	[CustGameTypeID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [GameTable_1]
-) ON [GameTable_1]
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON OpusCasinoTable_1
+) ON OpusCasinoTable_1
 
 GO
 SET ANSI_PADDING OFF
