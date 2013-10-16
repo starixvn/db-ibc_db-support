@@ -32,6 +32,7 @@ Begin DataProject = "DBAQueries"
       End
       Begin Folder = "Check PT"
          Script = "Req_40PercentMinPT_Check PT before Update.sql"
+         Script = "Req_40PercentMinPT_CheckPT min AfterUpdate.sql"
          Script = "Req_40PercentMinPT_CheckPTAfterUpdate.sql"
          Script = "Task_20130816_CheckPTSettingSportbook.sql"
       End
