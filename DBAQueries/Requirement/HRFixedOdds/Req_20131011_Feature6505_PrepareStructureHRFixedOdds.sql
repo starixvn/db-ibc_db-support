@@ -7,30 +7,30 @@
 ----------------------------------------------------------------
 --Add new sporttype HR Fixed odds-------------------------------
 ----------------------------------------------------------------
-INSERT INTO Sports (SportType, SportName, SportNameCh, SportNameCs, SportNameJp, SportNameIt, SportNameTh, ParlayMaxPayout, SportNameKo, SportNameES, SportNameVN, SportNameEL) VALUES
-(154, N'HR Fixed Odds', N'HR Fixed Odds', N'HR Fixed Odds', N'HR Fixed Odds',N'HR Fixed Odds',N'HR Fixed Odds', NULL, N'HR Fixed Odds', N'HR Fixed Odds', N'HR Fixed Odds', N'HR Fixed Odds')
+--INSERT INTO Sports (SportType, SportName, SportNameCh, SportNameCs, SportNameJp, SportNameIt, SportNameTh, ParlayMaxPayout, SportNameKo, SportNameES, SportNameVN, SportNameEL) VALUES
+--(154, N'HR Fixed Odds', N'HR Fixed Odds', N'HR Fixed Odds', N'HR Fixed Odds',N'HR Fixed Odds',N'HR Fixed Odds', NULL, N'HR Fixed Odds', N'HR Fixed Odds', N'HR Fixed Odds', N'HR Fixed Odds')
 GO
 
 ----------------------------------------------------------------
---Add new fields to custinfo------------------------------------
+--Add new fields to DBTXN.dbo.custinfo------------------------------------
 ----------------------------------------------------------------
-ALTER TABLE dbo.custInfo ADD DisableHRFixedOdds BIT NOT NULL CONSTRAINT DF_custInfo_DisableHRFixedOdds DEFAULT 0
+ALTER TABLE dbo.custInfo ADD DisableHRFixedOdds BIT NULL CONSTRAINT DF_custInfo_DisableHRFixedOdds DEFAULT 0
 GO
 ALTER TABLE dbo.custInfo ADD maxpermatch154 MONEY NULL CONSTRAINT DF_custInfo_maxpermatch154  DEFAULT 0
 GO
 
 ----------------------------------------------------------------
---Add new fields to DB02.bodb_Customer.dbo.custinfo_old tables--
+--Add new fields to DB05.bodb_Customer.dbo.custinfo_old tables--
 ----------------------------------------------------------------
-ALTER TABLE dbo.custInfo_old ADD DisableHRFixedOdds BIT NOT NULL CONSTRAINT DF_custInfo_DisableHRFixedOdds DEFAULT 0
+ALTER TABLE dbo.custInfo_old ADD DisableHRFixedOdds BIT NULL CONSTRAINT DF_custInfo_DisableHRFixedOdds DEFAULT 0
 GO
 ALTER TABLE dbo.custInfo_old ADD maxpermatch154 MONEY NULL CONSTRAINT DF_custInfo_maxpermatch154  DEFAULT 0
 GO
 
 --------------------------------------------------------------------------
---Add new fields into DB052.bodb_CustomerLog.dbo.custinfo_history tables--
+--Add new fields into DB052/DB054.bodb_CustomerLog.dbo.custinfo_history tables--
 --------------------------------------------------------------------------
-ALTER TABLE dbo.custInfo_history ADD DisableHRFixedOdds BIT NOT NULL CONSTRAINT DF_custInfo_DisableHRFixedOdds DEFAULT 0
+ALTER TABLE dbo.custInfo_history ADD DisableHRFixedOdds BIT NULL CONSTRAINT DF_custInfo_DisableHRFixedOdds DEFAULT 0
 GO
 ALTER TABLE dbo.custInfo_history ADD maxpermatch154 MONEY NULL CONSTRAINT DF_custInfo_maxpermatch154  DEFAULT 0
 GO
