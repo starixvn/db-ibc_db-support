@@ -40,6 +40,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
       End
       Begin Folder = "HRFixedOdds"
+         Script = "Req_20131011_Feature6505_AddLogAction.sql"
          Script = "Req_20131011_Feature6505_PrepareStructureHRFixedOdds.sql"
       End
       Begin Folder = "Live CS"
