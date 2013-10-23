@@ -128,6 +128,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130901_Feature3739_scr3_W88_UpdateStatus.sql.sql.sql"
          Script = "Req_20130903_Feature5281_CopyPT_BetSettingUUStoVirtualRacingForLicenseesFromSoccer.sql"
          Script = "Req_20130912_Feature5604_VCAsia_UpdatePT_Bet_Setting.sql"
+         Script = "Req_20131023_Feature7032_MayFair_CopyBetsettingFom_NG.sql"
       End
    End
    Begin Folder = "Support"
