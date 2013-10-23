@@ -12,8 +12,8 @@
 	UPDATE vs WITH(ROWLOCK,UPDLOCK)
 	SET minbet = ng.minbet
 		,maxbet = ng.maxbet
-	FROM custinfo c WITH(NOLOCK)
-		INNER JOIN Dep_Custsetting3rd vs WITH(NOLOCK) ON c.custid = vs.custid 		
+	FROM Dep_Custsetting3rd vs
+		INNER JOIN custinfo c WITH(NOLOCK) ON c.custid = vs.custid 		
 		INNER JOIN Dep_Custsetting3rd ng WITH(NOLOCK) ON vs.custid = ng.custid
 			AND vs.sporttype = 180 AND vs.bettype = 1201 AND ng.sporttype = 161 AND ng.bettype = 81
 	WHERE vs.custid < @maxCustID
