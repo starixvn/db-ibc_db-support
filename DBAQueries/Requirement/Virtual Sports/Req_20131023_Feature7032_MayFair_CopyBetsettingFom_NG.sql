@@ -10,18 +10,27 @@
 
 	--1149 rows affected
 	UPDATE vs WITH(ROWLOCK,UPDLOCK)
-	SET minbet = ng.minbet
+	SET  minbet = ng.minbet
 		,maxbet = ng.maxbet
+		,vs.apositiontaking = ng.apositiontaking			
+		,vs.mpositiontaking = ng.mpositiontaking
+		,vs.spositiontaking = ng.spositiontaking
 	FROM Dep_Custsetting3rd vs
 		INNER JOIN custinfo c WITH(NOLOCK) ON c.custid = vs.custid 		
 		INNER JOIN Dep_Custsetting3rd ng WITH(NOLOCK) ON vs.custid = ng.custid
 			AND vs.sporttype = 180 AND vs.bettype = 1201 AND ng.sporttype = 161 AND ng.bettype = 81
-	WHERE vs.custid < @maxCustID
+	WHERE vs.custid <= @maxCustID
 		AND
 		(		
 			vs.minbet <> ng.minbet
 			OR
 			vs.maxbet <> ng.maxbet
+			OR
+			vs.apositiontaking <> ng.apositiontaking
+			OR 
+			vs.mpositiontaking <> ng.mpositiontaking
+			OR 
+			vs.spositiontaking <> ng.spositiontaking
 		)
 		AND srecommend IN (SELECT custid 
 							from Dep_CustSuper with(nolock) 
