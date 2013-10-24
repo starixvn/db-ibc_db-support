@@ -8,7 +8,7 @@
 
 	SET @maxCustID = xxx
 
-	--1149 rows affected
+	--1189 rows affected
 	UPDATE vs WITH(ROWLOCK,UPDLOCK)
 	SET  minbet = ng.minbet
 		,maxbet = ng.maxbet
@@ -43,7 +43,7 @@ GO
 
 	SET @maxCustID = xxx		
 	
-	--1149 customers affected
+	--1157 customers affected
 	UPDATE custinfo WITH(ROWLOCK,UPDLOCK)
 	SET maxpermatch180 = maxpermatch161
 	WHERE srecommend IN (SELECT custid 
