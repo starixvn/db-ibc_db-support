@@ -108,7 +108,7 @@ WHERE srecommend IN (SELECT custid
 AND (maxpermatch180 <> maxpermatch161 OR maxpermatch180 IS NULL
 			OR DisableVirtualSports = 1 OR HideVirtualSports = 1
 		)
-AND custid < @maxCustID 	
+AND custid <= @maxCustID 	
 				
 GO
 
