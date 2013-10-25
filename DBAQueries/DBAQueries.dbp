@@ -64,6 +64,7 @@ Begin DataProject = "DBAQueries"
       End
       Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
       Script = "Req_20131002_Feature6131_RecordUsageStatistic.sql"
+      Script = "Req_20131025_Feature5456_CloneSettingSuper.sql"
       Begin Folder = "RMS"
          Script = "Req_20130813_Feature4355_StructureRMSumWinloss_Old2.sql"
          Script = "Req_20130813_Feature4355_StructureRMSumWinloss2.sql"
