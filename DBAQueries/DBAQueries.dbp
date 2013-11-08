@@ -47,6 +47,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130912_Feature5611_3star88_UpdatePTsettingforUUS.sql"
          Script = "Req_20130913_Feature5606_VCAsia_UpdatePTSettingForAllCurrencies.sql"
          Script = "Req_20130913_Feature5617_67Bet_UpdatePTSettingforUUS.sql"
+         Script = "Req_20131108_Feature7596_ZZun88_UpdatePTSettingForAllCurrencies.sql"
       End
       Begin Folder = "Opus CS"
          Script = "Req_20130926_Feature6078_PrepareStructureforOpusCasino.sql"
