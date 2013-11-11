@@ -75,6 +75,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130815_Feature4355_ImportDataRMSumWinloss2.sql"
          Script = "Req_20130924_Feature5555_StructureSupportAgentWinloss.sql"
          Script = "Req_20130924_Feature5555_UpdateRecommendColumn.sql"
+         Script = "Req_20131111_Feature7392_StructureDangerousAgentsManagement.sql"
       End
       Begin Folder = "RNGCasino"
          Script = "Req_20130708_Feature1940_UpdateMatchidCasino_71.sql"
