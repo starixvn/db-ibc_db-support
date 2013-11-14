@@ -57,8 +57,8 @@ INSERT INTO #temp(custid)
 SELECT custid 
 from custinfo with(nolock)
 where srecommend in (
-	179457	,--	ITSA
-	--791080	,--	12BETSuperUS$
+--	179457	,--	ITSA
+	791080	,--	12BETSuperUS$
 	791081	,--	12BETSuperEURO
 	836203	,--	12BETSuperTB
 	836212	,--	12BETSuperGBP
