@@ -135,6 +135,11 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20131023_Feature7032_MayFair_CopyBetsettingFom_NG.sql"
          Script = "Req_20131105_Support7372_EnableVirtualTenis_Racing_UUS_Licensee.sql"
          Script = "Req_20131119_Feature8269_Scr1_SunGame_InsertPTSetting_MinMaxBet.sql"
+         Script = "Req_20131121_Feature7372_12bet_InsertPTSetting_MinMaxBetFromVirtualSoccer.sql"
+         Script = "Req_20131121_Feature7372_Asiabet88_InsertPTSetting_MinMaxBetFromVirtualSoccer.sql"
+         Script = "Req_20131121_Feature7372_TLC_InsertPTSetting_MinMaxBetFromVirtualSoccer.sql"
+         Script = "Req_20131121_Feature7372_VCAsia_InsertPTSetting_MinMaxBetFromVirtualSoccer.sql"
+         Script = "Req_20131121_Feature7372_W88_InsertPTSetting_MinMaxBetFromVirtualSoccer.sql"
       End
    End
    Begin Folder = "Support"

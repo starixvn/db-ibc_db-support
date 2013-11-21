@@ -4,7 +4,7 @@
 	Task: Insert virtual horse racing , virtual tennis setting for SunGame Licensee	
 		Copy minbet, maxbet setting from virtual soccer		
 		PT = 85%
-	DB: DBTNX/bodb02
+	DB: DBTXN/bodb02
  */
  
  --step 1: clear old setting of virtual horse racing, virtual tennis for SUGSuperUUS
@@ -84,6 +84,119 @@ AND mrecommend NOT IN (
 )
 GO
 
+ 
+ --Copy setting from virtual soccer for virtual horse racing
+--6633 rows affected
+
+INSERT INTO [dbo].[Dep_CustSetting3rd]
+           ([custid]
+           ,[bettype]
+           ,[sporttype]
+           ,[islive]
+           ,[apositiontaking]
+           ,[mpositiontaking]
+           ,[spositiontaking]
+           ,[playerdiscount]
+           ,[discount]
+           ,[adiscount]
+           ,[sdiscount]
+           ,[minbet]
+           ,[maxbet]) 
+SELECT cs.[custid]
+           ,1231 as [bettype]
+           ,182 as [sporttype]
+           ,[islive]
+           ,[apositiontaking]
+           ,[mpositiontaking]
+           ,[spositiontaking]
+           ,[playerdiscount]
+           ,[discount]
+           ,[adiscount]
+           ,[sdiscount]
+           ,[minbet]
+           ,[maxbet]
+FROM Dep_CustSetting3rd cs with(nolock)
+	INNER JOIN custInfo ci with(nolock) on cs.custid = ci.custid and sporttype = 180
+WHERE ci.srecommend IN(	
+	3544528	,--	SUGSuperUUS
+	3544695	,--	SUGSuperTB
+	3544783	,--	SUGSuperIN
+	3578505	,--	SUGSuperRM
+	4899808	,--	SUGSuperRMB
+	4899913	,--	SUGSuperUS$
+	4900001	,--	SUGSuperINH
+	7596152	,--	SUGSuperEURO
+	12931098	--	SUGSuperJPY
+)
+AND mrecommend NOT IN (
+	3544588	,--	SUGACCUUS
+	3544751	,--	SUGACCTB
+	3544821	,--	SUGACCIN
+	3544669	,--	SUGACCRM
+	4900819	,--	SUGACCRMB
+	4900864	,--	SUGACCUS$
+	4900911	,--	SUGACCINH
+	7596159	,--	SUGACCEURO
+	12931147	--	SUGACCJPY
+)
+GO
+
+
+ --Copy setting from virtual soccer for virtual horse racing
+--6633 rows affected
+
+INSERT INTO [dbo].[Dep_CustSetting3rd]
+           ([custid]
+           ,[bettype]
+           ,[sporttype]
+           ,[islive]
+           ,[apositiontaking]
+           ,[mpositiontaking]
+           ,[spositiontaking]
+           ,[playerdiscount]
+           ,[discount]
+           ,[adiscount]
+           ,[sdiscount]
+           ,[minbet]
+           ,[maxbet]) 
+SELECT cs.[custid]
+           ,1231 as [bettype]
+           ,184 as [sporttype]
+           ,[islive]
+           ,[apositiontaking]
+           ,[mpositiontaking]
+           ,[spositiontaking]
+           ,[playerdiscount]
+           ,[discount]
+           ,[adiscount]
+           ,[sdiscount]
+           ,[minbet]
+           ,[maxbet]
+FROM Dep_CustSetting3rd cs with(nolock)
+	INNER JOIN custInfo ci with(nolock) on cs.custid = ci.custid and sporttype = 180
+WHERE ci.srecommend IN(	
+	3544528	,--	SUGSuperUUS
+	3544695	,--	SUGSuperTB
+	3544783	,--	SUGSuperIN
+	3578505	,--	SUGSuperRM
+	4899808	,--	SUGSuperRMB
+	4899913	,--	SUGSuperUS$
+	4900001	,--	SUGSuperINH
+	7596152	,--	SUGSuperEURO
+	12931098	--	SUGSuperJPY
+)
+AND mrecommend NOT IN (
+	3544588	,--	SUGACCUUS
+	3544751	,--	SUGACCTB
+	3544821	,--	SUGACCIN
+	3544669	,--	SUGACCRM
+	4900819	,--	SUGACCRMB
+	4900864	,--	SUGACCUS$
+	4900911	,--	SUGACCINH
+	7596159	,--	SUGACCEURO
+	12931147	--	SUGACCJPY
+)
+GO
 
 -- Copy setting from virtual soccer for virtual tennis
 --6633 rows affected
