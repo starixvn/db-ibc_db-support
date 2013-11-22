@@ -1,4 +1,4 @@
-﻿ /*
+﻿/*
 	Created: Johnson
 	Date: 20131121
 	Task: Insert virtual racing , virtual greyhound, virtual motor racing, virtual tennis setting for w88 Licensee	
@@ -8,7 +8,7 @@
  */
  
  --step 1: Delete existing customer setting on virtual racing , virtual greyhound, virtual motor racing, virtual tennis 
- --652 rows on currency uus customers affected
+ --664 rows on currency uus customers affected
 DELETE cs
 FROM Dep_CustSetting3rd cs WITH(UPDLOCK,ROWLOCK)
 	INNER JOIN custInfo ci with(nolock) on cs.custid = ci.custid and cs.sporttype in (181,182,184,186)
@@ -25,12 +25,12 @@ AS
 SET NOCOUNT ON
 
 /*
-	w88 licensee customers 
+	licensee customers 
 	Insert virtual racing, tennis, greyhound, motor racing setting from virtual soccer 
 */
 	
 BEGIN
-	IF (SELECT COUNT(1) FROM sys.objects WHERE name IN ('Dep_Custsetting3rd') AND type = 'U') <> 1
+	IF (SELECT COUNT(1) FROM sys.objects WHERE name IN ('Dep_Custsetting3rd','custInfo') AND type = 'U') <> 2
 		RETURN
 
 	DECLARE @res AS TABLE (custid INT)
@@ -57,9 +57,9 @@ BEGIN
 	INSERT INTO [dbo].[Dep_CustSetting3rd]
 			   ([custid],[bettype],[sporttype],[islive],[apositiontaking],[mpositiontaking]
 			   ,[spositiontaking],[playerdiscount],[discount],[adiscount],[sdiscount],[minbet],[maxbet])
-    SELECT  [custid]
-		   ,1231 as [bettype]
-		   ,181 as [sporttype]
+      SELECT  [custid]
+		   ,t.[bettype]
+		   ,t. [sporttype]
 		   ,[islive]
 		   ,[apositiontaking]
 		   ,[mpositiontaking]
@@ -70,68 +70,18 @@ BEGIN
 		   ,[sdiscount]
 		   ,[minbet]
 		   ,[maxbet]
-	FROM Dep_CustSetting3rd WITH(NOLOCK) 
-	WHERE custid IN (SELECT * FROM @res) AND sporttype = 180 and bettype = 1201			   
-	
-	--virtual greyhounds
-	INSERT INTO [dbo].[Dep_CustSetting3rd]
-		   ([custid],[bettype],[sporttype],[islive],[apositiontaking],[mpositiontaking]
-		   ,[spositiontaking],[playerdiscount],[discount],[adiscount],[sdiscount],[minbet],[maxbet])
-    SELECT  [custid]
-		   ,1231 as [bettype]
-		   ,182 as [sporttype]
-		   ,[islive]
-		   ,[apositiontaking]
-		   ,[mpositiontaking]
-		   ,[spositiontaking]
-		   ,[playerdiscount]
-		   ,[discount]
-		   ,[adiscount]
-		   ,[sdiscount]
-		   ,[minbet]
-		   ,[maxbet]
-	FROM Dep_CustSetting3rd WITH(NOLOCK) 
-	WHERE custid IN (SELECT * FROM @res) AND sporttype = 180 and bettype = 1201	
-
-	--virtual motor racing
-	INSERT INTO [dbo].[Dep_CustSetting3rd]
-		   ([custid],[bettype],[sporttype],[islive],[apositiontaking],[mpositiontaking]
-		   ,[spositiontaking],[playerdiscount],[discount],[adiscount],[sdiscount],[minbet],[maxbet])
-    SELECT  [custid]
-		   ,1231 as [bettype]
-		   ,184 as [sporttype]
-		   ,[islive]
-		   ,[apositiontaking]
-		   ,[mpositiontaking]
-		   ,[spositiontaking]
-		   ,[playerdiscount]
-		   ,[discount]
-		   ,[adiscount]
-		   ,[sdiscount]
-		   ,[minbet]
-		   ,[maxbet]
-	FROM Dep_CustSetting3rd WITH(NOLOCK) 
-	WHERE custid IN (SELECT * FROM @res) AND sporttype = 180 and bettype = 1201	
-	
-	--virtual tennis
-	INSERT INTO [dbo].[Dep_CustSetting3rd]
-		   ([custid],[bettype],[sporttype],[islive],[apositiontaking],[mpositiontaking]
-		   ,[spositiontaking],[playerdiscount],[discount],[adiscount],[sdiscount],[minbet],[maxbet])
-    SELECT  [custid]
-    		   ,1220 as [bettype]
-			   ,186 as [sporttype]
-			   ,[islive]
-			   ,[apositiontaking]
-			   ,[mpositiontaking]
-			   ,[spositiontaking]
-			   ,[playerdiscount]
-			   ,[discount]
-			   ,[adiscount]
-			   ,[sdiscount]
-			   ,[minbet]
-			   ,[maxbet]
-	FROM Dep_CustSetting3rd WITH(NOLOCK) 
-	WHERE custid IN (SELECT * FROM @res) AND sporttype = 180 and bettype = 1201	
+	FROM Dep_CustSetting3rd cs3 WITH(NOLOCK) 
+		CROSS JOIN (
+					SELECT 181 as sporttype, 1231 as bettype 
+					UNION ALL
+					SELECT 182 as sporttype, 1231 as bettype 
+					UNION ALL
+					SELECT 184 as sporttype, 1231 as bettype 
+					UNION ALL 
+					SELECT 186 as sporttype, 1220 as bettype 
+					) t 
+	WHERE cs3.sporttype = 180 and cs3.bettype = 1201	
+		AND custid IN (SELECT * FROM @res)
 	
 	UPDATE custInfo WITH(UPDLOCK,ROWLOCK)
 	SET maxpermatch181 = maxpermatch180,
@@ -147,6 +97,10 @@ GO
 
 
 
+GO
+
+
+
 
 DECLARE @maxCustID INT
 
@@ -154,27 +108,12 @@ SET @maxCustID = xxx
 
 create table #temp (custid int primary key, isfinished bit)
 
---12758 rows affected
+--12965 rows affected
 INSERT INTO #temp (custid, isfinished)
 SELECT cs.custid , 0 
 from Dep_CustSetting3rd cs with(nolock)
 	inner join custInfo ci with(nolock) on cs.custid = ci.custid and cs.sporttype = 180
 where ci.srecommend in (select custid from Dep_CustSuper with(nolock) where site= 'w88')
-	and mrecommend not in (
-		10541908	,--	W88AccUUS
-		10580725	,--	W88ACCRMB
-		10580770	,--	W88ACCTB
-		10580779	,--	W88ACCIN
-		10580788	,--	W88ACCINH
-		10580798	,--	W88ACCRM
-		10580808	,--	W88ACCUS$
-		10580817	,--	W88ACCAUD
-		10580827	,--	W88ACCEURO
-		10580838	,--	W88ACCGBP
-		10580849	,--	W88ACCJPY
-		10580861	,--	W88ACCINR
-		12613224	--	W88ACCWON
-	)
 	AND ci.custid <= @maxCustID
 
 GO
@@ -197,5 +136,5 @@ begin
 
 	if @rowcnt < 10000 RETURN
 
-	WAITFOR DELAY '00:00:02'
+	WAITFOR DELAY '00:00:01'
 end
