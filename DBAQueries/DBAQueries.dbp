@@ -142,6 +142,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20131121_Feature7372_TLC_InsertPTSetting_MinMaxBetFromVirtualSoccer.sql"
          Script = "Req_20131121_Feature7372_VCAsia_InsertPTSetting_MinMaxBetFromVirtualSoccer.sql"
          Script = "Req_20131121_Feature7372_W88_InsertPTSetting_MinMaxBetFromVirtualSoccer.sql"
+         Script = "Req_20131122_Freature_AddColumnForVirtualCycling_and_SpeedWay.sql"
       End
    End
    Begin Folder = "Support"
