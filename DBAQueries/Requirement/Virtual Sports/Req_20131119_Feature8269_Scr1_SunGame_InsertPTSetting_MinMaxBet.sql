@@ -27,7 +27,7 @@ GO
 WHERE custid = 7596152 AND sporttype = 180 AND bettype = 1201
 GO
 
-dba_getpt 7596152
+
 --step 3: Copy setting from virtual soccer for virtual horse racing
 GO
 
@@ -115,7 +115,7 @@ GO
 
 DECLARE @maxCustID INT
 
-SET @maxCustID = 2100000000
+SET @maxCustID = XXX
 
 create table #temp (custid int primary key, isfinished bit)
 
