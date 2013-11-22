@@ -144,7 +144,6 @@ begin
 	select @rowcnt = @@rowcount	
 
 	EXEC [Acc_ExecRep_09] @ids = @ids
-
 	if @rowcnt < 10000 RETURN
 
 	WAITFOR DELAY '00:00:01'
