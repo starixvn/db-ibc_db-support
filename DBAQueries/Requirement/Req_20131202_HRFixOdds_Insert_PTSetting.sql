@@ -101,7 +101,8 @@ BEGIN
 		
 				
 	UPDATE custInfo WITH(UPDLOCK,ROWLOCK)
-	SET	maxpermatch154 = maxpermatch99	
+	SET	maxpermatch154 = maxpermatch99,
+		DisableHRFixedOdds = 0
 	WHERE custid IN (SELECT * FROM @res)					
 	
 END

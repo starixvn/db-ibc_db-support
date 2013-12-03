@@ -11,6 +11,7 @@ Begin DataProject = "DBAQueries"
    End
    Begin Folder = "Queries"
    End
+   Script = "Req_20131202_HRFixOdds_Insert_TheRestOne.sql"
    Begin Folder = "Requirement"
       Script = "000_Sample.sql"
       Script = "000_Sample.sql"
