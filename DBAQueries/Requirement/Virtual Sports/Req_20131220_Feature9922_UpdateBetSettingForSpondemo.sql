@@ -27,8 +27,8 @@ DECLARE	@minbet MONEY,
 		@maxpermatch MONEY,
 		@max_custid INT
 
-SELECT @max_custid = xxx
-		@minbet = 10,
+SELECT @max_custid = xxx,
+		@minbet = 1,
 		@maxbet = 10000,
 		@maxpermatch = 100000
 
