@@ -15,7 +15,7 @@ inner join custInfo ci with(nolock) on ds.custid = ci.custid
  where sporttype between 181  and 186
  and ci.srecommend in (
 	select custid from Dep_CustSuper with(nolock) where site = 'Vwin'
-	and currency IN (2,3,4,13,15,51)
+	and currency IN (2,3,4,13,15,51,20)
 )
 GO
 
