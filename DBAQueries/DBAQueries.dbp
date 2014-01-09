@@ -51,6 +51,7 @@ Begin DataProject = "DBAQueries"
       End
       Begin Folder = "Opus CS"
          Script = "Req_20130926_Feature6078_PrepareStructureforOpusCasino.sql"
+         Script = "Req_20140109_Feature6078_InsertLogActionForOpusCS.sql"
       End
       Begin Folder = "P2P"
          Script = "Req_20130604_Feature1910_Disable_P2P_Product.sql"
