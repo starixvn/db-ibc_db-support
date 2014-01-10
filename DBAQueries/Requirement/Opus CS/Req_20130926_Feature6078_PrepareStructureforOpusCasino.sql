@@ -111,7 +111,7 @@ GO
 SET ANSI_PADDING ON
 GO
 CREATE TABLE [dbo].[CustGameType](
-	[CustGameTypeID] [int] NOT NULL,
+	[CustGameTypeID] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
 	[GameTypeID] [int] NULL,
 	[CustID] [int] NULL,
 	[StakeLevelList] [varchar](50) NULL,
