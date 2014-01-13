@@ -104,27 +104,35 @@ CREATE TABLE [dbo].[GameType](
 
 GO
 /****** Object:  Table [dbo].[CustGameType]    Script Date: 09/26/2013 14:02:52 ******/
+
+
+/****** Object:  Table [dbo].[CustGameType]    Script Date: 1/13/2014 4:24:40 PM ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 SET ANSI_PADDING ON
 GO
+
 CREATE TABLE [dbo].[CustGameType](
-	[CustGameTypeID] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-	[GameTypeID] [int] NULL,
-	[CustID] [int] NULL,
+	[GameTypeID] [int] NOT NULL,
+	[CustID] [int] NOT NULL,
 	[StakeLevelList] [varchar](50) NULL,
  CONSTRAINT [PK_CustGameType] PRIMARY KEY CLUSTERED 
 (
-	[CustGameTypeID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON OpusCasinoTable_1
-) ON OpusCasinoTable_1
+	[GameTypeID] ASC,
+	[CustID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [OpusCasinoTable_1]
+) ON [OpusCasinoTable_1]
 
 GO
+
 SET ANSI_PADDING OFF
-
 GO
+
+
 
 
 
