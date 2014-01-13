@@ -24,7 +24,7 @@ BEGIN
 	FROM @xml.nodes('//root/r') AS RECORDS(r)
 	
 	
-	INSERT INTO [CustDB].[dbo].[Dep_CustSetting]
+	INSERT INTO [dbo].[Dep_CustSetting]
            ([custid]
            ,[bettype]
            ,[sporttype]
