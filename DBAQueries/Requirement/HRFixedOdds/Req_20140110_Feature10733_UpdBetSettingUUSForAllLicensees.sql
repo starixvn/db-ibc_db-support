@@ -12,7 +12,7 @@ AS
 BEGIN
 	SET NOCOUNT ON
 
-	IF (SELECT count(1) FROM dbo.sysobjects WHERE name IN('Custinfo','CustSetting')) <> 2 RETURN
+	IF (SELECT count(1) FROM dbo.sysobjects WHERE name IN('Custinfo','Dep_CustSetting')) <> 2 RETURN
 
 	declare @string varchar(max), @splitter char(1), @xml XML
 	select @splitter = ',' ,@string = @ids
@@ -24,12 +24,40 @@ BEGIN
 	FROM @xml.nodes('//root/r') AS RECORDS(r)
 	
 	
-	 UPDATE CustSetting WITH(UPDLOCK,ROWLOCK)
-	 SET minbet = 1,
-		maxbet = 100000 
-	 WHERE custid IN( SELECT custid FROM @res)
-		 AND sporttype = 154
+	INSERT INTO [CustDB].[dbo].[Dep_CustSetting]
+           ([custid]
+           ,[bettype]
+           ,[sporttype]
+           ,[islive]
+           ,[apositiontaking]
+           ,[mpositiontaking]
+           ,[spositiontaking]
+           ,[playerdiscount]
+           ,[discount]
+           ,[adiscount]
+           ,[sdiscount]
+           ,[minbet]
+           ,[maxbet])
+     
+     SELECT 
+		[custid]
+	   ,20 as [bettype]
+	   ,154 as [sporttype]
+	   ,[islive]
+	   ,[apositiontaking]
+	   ,[mpositiontaking]
+	   ,[spositiontaking]
+	   ,[playerdiscount]
+	   ,[discount]
+	   ,[adiscount]
+	   ,[sdiscount]
+	   ,1 as [minbet]
+	   ,100000 as [maxbet]
+     FROM Dep_CustSetting WITH(NOLOCK)
+     WHERE custid IN( SELECT custid FROM @res)
+		 AND sporttype = 99
 		 AND bettype = 20
+	
 
 	UPDATE CustInfo WITH(UPDLOCK,ROWLOCK)
 	SET maxpermatch154 = 1000000
@@ -44,7 +72,7 @@ GO
  SELECT @max_custid = xxx
  
  --17466 rows affected
- INSERT INTO #temp
+ INSERT INTO #temp(custid)
  SELECT custid
  FROM custinfo with(NOLOCK)
  WHERE srecommend IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK) WHERE currency = 20)
