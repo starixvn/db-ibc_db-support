@@ -90,6 +90,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130719_Feature1164_ApplyProgressiveCasinoBonus.sql"
          Script = "Req_20130722_Feature1164_ScriptEnableProgessiveBonus.sql"
          Script = "Req_20131114_Feature7619_12bet_EnableRNGCasino.sql"
+         Script = "Req_20140113_Feature10758_EnableRNGForSalonCSandSalon365.sql"
       End
       Begin Folder = "Settings"
          Script = "Req_20130620_Support2395_ Update Min bet for Supers.sql"
