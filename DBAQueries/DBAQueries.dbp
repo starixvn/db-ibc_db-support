@@ -67,6 +67,9 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20140115_Feature10888_UpdateBetSetting_AllCreditCustomer.sql"
          Script = "Req_20140117_Feature11046_UpdateBetSetting_VipSuperTHAUS.sql"
       End
+      Begin Folder = "Reports"
+         Script = "Req_20140122_Feature11152__UpdateDataForCategoryLeague.sql"
+      End
       Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
       Script = "Req_20131002_Feature6131_RecordUsageStatistic.sql"
       Script = "Req_20131025_Feature5456_CloneSettingSuper.sql"
