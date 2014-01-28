@@ -190,4 +190,6 @@ Begin DataProject = "DBAQueries"
          Script = "Sup_20130527_Outright_ReSettle.sql"
       End
    End
+   Script = "template_01.sql"
+   Script = "template_02.sql"
 End
