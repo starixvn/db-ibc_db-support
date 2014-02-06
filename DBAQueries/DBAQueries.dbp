@@ -43,6 +43,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20131011_Feature6505_AddLogAction.sql"
          Script = "Req_20131011_Feature6505_PrepareStructureHRFixedOdds.sql"
          Script = "Req_20140110_Feature10733_UpdBetSettingUUSForAllLicensees.sql"
+         Script = "Req_20140206_Feature10922_UpdSettingsForAllLicensees.sql"
       End
       Begin Folder = "Live CS"
          Script = "Req_20130912_Feature5611_3star88_UpdatePTsettingforUUS.sql"

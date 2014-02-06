@@ -14,7 +14,7 @@ INSERT INTO [dbo].[rmTransaction]
            ,[refno]
            ,[custid]
            ,[combo])
- SELECT s.transid,s.refno,s.custid,LEN(s.betteam))
+ SELECT s.transid,s.refno,s.custid,LEN(s.betteam)
  FROM rmBettrans with(NOLOCK)
  WHERE matchid = 29
  and transid <= @max_transid 
