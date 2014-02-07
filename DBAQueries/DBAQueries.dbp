@@ -169,6 +169,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20131219_Feature9871_UpdateBetSettingsForVwin.sql"
          Script = "Req_20131219_Feature9887_UpdateBetSettingsForZzun88.sql"
          Script = "Req_20131220_Feature9922_UpdateBetSettingForSpondemo.sql"
+         Script = "Req_20140207_Feature11612_DisableVirtualSportsForTHAUS.sql"
       End
    End
    Begin Folder = "Support"
