@@ -44,6 +44,9 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20131011_Feature6505_PrepareStructureHRFixedOdds.sql"
          Script = "Req_20140110_Feature10733_UpdBetSettingUUSForAllLicensees.sql"
       End
+      Begin Folder = "LAS"
+         Script = "Req_20140210_Feature10701_AddLogActionForLAS_SpecialDelete.sql"
+      End
       Begin Folder = "Live CS"
          Script = "Req_20130912_Feature5611_3star88_UpdatePTsettingforUUS.sql"
          Script = "Req_20130913_Feature5606_VCAsia_UpdatePTSettingForAllCurrencies.sql"
