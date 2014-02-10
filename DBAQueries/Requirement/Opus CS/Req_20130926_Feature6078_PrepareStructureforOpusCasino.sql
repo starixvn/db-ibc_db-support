@@ -34,8 +34,7 @@ USE master
 GO
 ALTER DATABASE [CustDB] ADD FILEGROUP OpusCasinoTable_1
 GO
-ALTER DATABASE [CustDB] ADD FILEGROUP CustSettingOpusHistory_Table
-GO
+
 
 ALTER DATABASE [CustDB]
 ADD FILE 
@@ -46,23 +45,12 @@ ADD FILE
 	MAXSIZE = UNLIMITED, 
 	FILEGROWTH = 1024KB 
 )
-TO FILEGROUP GameTable_1
+TO FILEGROUP OpusCasinoTable_1
 GO
 
-ALTER DATABASE [CustDB]
-ADD FILE 
-(
-	NAME = N'CustSettingOpusHistory_Table', 
-	FILENAME = N'E:\IBC_DB\OpusCasino\CustSettingOpusHistory_Table.ndf' , 
-	SIZE = 10240KB , 
-	MAXSIZE = UNLIMITED, 
-	FILEGROWTH = 1024KB 
-)
-TO FILEGROUP CustSettingOpusHistory_Table
-GO
 
 -------------------------------------------------------------------------
---Add tables GameType,StakeLevel,CustGameType,CustSettingOpus_History----
+--Add tables GameType,StakeLevel,CustGameType,CustSettingOpusHistory----
 -------------------------------------------------------------------------
 
 /****** Object:  Table [dbo].[StakeLevel]    Script Date: 09/30/2013 15:46:09 ******/
@@ -135,28 +123,88 @@ GO
 
 
 
+--------------------------------------------------------
+---create table custSettingOpusHistory on bodb_CustomerLog
+--------------------------------------------------------
+ALTER DATABASE [bodb_CustomerLog] ADD FILEGROUP CustSettingOpusHistory_Table
+GO
 
-/****** Object:  Table [dbo].[CustSettingOpus_History]    Script Date: 09/26/2013 14:03:12 ******/
+ALTER DATABASE [bodb_CustomerLog]
+ADD FILE 
+(
+	NAME = N'CustSettingOpusHistory_Table', 
+	FILENAME = N'E:\IBC_DB\bodb_CustomerLog\CustSettingOpusHistory_Table.ndf' , 
+	SIZE = 10240KB , 
+	MAXSIZE = UNLIMITED, 
+	FILEGROWTH = 1024KB 
+)
+TO FILEGROUP CustSettingOpusHistory_Table
+GO
+
+/****** Object:  Table [dbo].[CustSettingOpusHistory]    Script Date: 09/26/2013 14:03:12 ******/
+USE [bodb_CustomerLog]
+GO
+
+
+/****** Object:  Table [dbo].[CustSettingOpusHistory]    Script Date: 2/7/2014 1:59:11 PM ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[CustSettingOpus_History](
+
+CREATE TABLE [dbo].[CustSettingOpusHistory](
 	[CustID] [int] NOT NULL,
 	[Bettype] [smallint] NOT NULL,
 	[Sporttype] [smallint] NOT NULL,
-	[apositiontaking] [smallmoney] NOT NULL CONSTRAINT [DF_CustSettingOpus_History_apositiontaking]  DEFAULT ((0)),
-	[mpositiontaking] [smallmoney] NOT NULL CONSTRAINT [DF_CustSettingOpus_History_mpositiontaking]  DEFAULT ((0)),
-	[spositiontaking] [smallmoney] NOT NULL CONSTRAINT [DF_CustSettingOpus_History_spositiontaking]  DEFAULT ((0)),
-	[playerdiscount] [decimal](9, 8) NOT NULL CONSTRAINT [DF_CustSettingOpus_History_playerdiscount]  DEFAULT ((0)),
-	[discount] [decimal](9, 8) NOT NULL CONSTRAINT [DF_CustSettingOpus_History_discount]  DEFAULT ((0)),
-	[adiscount] [decimal](9, 8) NOT NULL CONSTRAINT [DF_CustSettingOpus_History_adiscount]  DEFAULT ((0)),
-	[sdiscount] [decimal](9, 8) NOT NULL CONSTRAINT [DF_CustSettingOpus_History_sdiscount]  DEFAULT ((0)),
-	[UpdatedTime] [datetime] NOT NULL,
- CONSTRAINT [PK_CustSettingOpus_History] PRIMARY KEY CLUSTERED 
+	[apositiontaking] [smallmoney] NOT NULL,
+	[mpositiontaking] [smallmoney] NOT NULL,
+	[spositiontaking] [smallmoney] NOT NULL,
+	[playerdiscount] [decimal](9, 8) NOT NULL,
+	[discount] [decimal](9, 8) NOT NULL,
+	[adiscount] [decimal](9, 8) NOT NULL,
+	[sdiscount] [decimal](9, 8) NOT NULL,
+	[UpdatedTime] [datetime] NOT NULL
+) ON [CustSettingOpusHistory_Table]
+
+GO
+
+ALTER TABLE [dbo].[CustSettingOpusHistory] ADD  CONSTRAINT [DF_CustSettingOpusHistory_apositiontaking]  DEFAULT ((0)) FOR [apositiontaking]
+GO
+
+ALTER TABLE [dbo].[CustSettingOpusHistory] ADD  CONSTRAINT [DF_CustSettingOpusHistory_mpositiontaking]  DEFAULT ((0)) FOR [mpositiontaking]
+GO
+
+ALTER TABLE [dbo].[CustSettingOpusHistory] ADD  CONSTRAINT [DF_CustSettingOpusHistory_spositiontaking]  DEFAULT ((0)) FOR [spositiontaking]
+GO
+
+ALTER TABLE [dbo].[CustSettingOpusHistory] ADD  CONSTRAINT [DF_CustSettingOpusHistory_playerdiscount]  DEFAULT ((0)) FOR [playerdiscount]
+GO
+
+ALTER TABLE [dbo].[CustSettingOpusHistory] ADD  CONSTRAINT [DF_CustSettingOpusHistory_discount]  DEFAULT ((0)) FOR [discount]
+GO
+
+ALTER TABLE [dbo].[CustSettingOpusHistory] ADD  CONSTRAINT [DF_CustSettingOpusHistory_adiscount]  DEFAULT ((0)) FOR [adiscount]
+GO
+
+ALTER TABLE [dbo].[CustSettingOpusHistory] ADD  CONSTRAINT [DF_CustSettingOpusHistory_sdiscount]  DEFAULT ((0)) FOR [sdiscount]
+GO
+
+ALTER TABLE [dbo].[CustSettingOpusHistory] ADD  CONSTRAINT [DF_CustSettingOpusHistory_UpdatedTime]  DEFAULT (getdate()) FOR [UpdatedTime]
+GO
+
+USE [bodb_CustomerLog]
+GO
+
+/****** Object:  Index [CIX_custid_sporttype_bettype]    Script Date: 2/7/2014 2:01:13 PM ******/
+CREATE CLUSTERED INDEX [CIX_custid_sporttype_bettype] ON [dbo].[CustSettingOpusHistory]
 (
 	[CustID] ASC,
 	[Bettype] ASC,
 	[Sporttype] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [CustSettingOpusHistory_Table]
-) ON [CustSettingOpusHistory_Table]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CustSettingOpusHistory_Table]
+GO
+
+
+
+

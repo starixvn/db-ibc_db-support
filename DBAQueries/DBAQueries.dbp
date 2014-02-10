@@ -43,6 +43,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20131011_Feature6505_AddLogAction.sql"
          Script = "Req_20131011_Feature6505_PrepareStructureHRFixedOdds.sql"
          Script = "Req_20140110_Feature10733_UpdBetSettingUUSForAllLicensees.sql"
+         Script = "Req_20140206_Feature10922_UpdSettingsForAllLicensees.sql"
       End
       Begin Folder = "LAS"
          Script = "Req_20140210_Feature10701_AddLogActionForLAS_SpecialDelete.sql"
@@ -171,6 +172,8 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20131219_Feature9871_UpdateBetSettingsForVwin.sql"
          Script = "Req_20131219_Feature9887_UpdateBetSettingsForZzun88.sql"
          Script = "Req_20131220_Feature9922_UpdateBetSettingForSpondemo.sql"
+         Script = "Req_20140207_Feature11612_DisableVirtualSportsForTHAUS.sql"
+         Script = "Req_20140209_EnableVirtualSportSuperOnly_THAUS.sql"
       End
    End
    Begin Folder = "Support"
