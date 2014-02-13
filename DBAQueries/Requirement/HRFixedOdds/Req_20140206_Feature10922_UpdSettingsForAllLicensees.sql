@@ -79,7 +79,8 @@ BEGIN
 		AND bettype = 20
 		
 	UPDATE custinfo WITH(UPDLOCK,ROWLOCK)
-	SET maxpermatch154 = maxpermatch99
+	SET maxpermatch154 = maxpermatch99,
+		DisableHRFixedOdds = 1
 	WHERE srecommend = @srecommend 
 		AND custid <= @maxcustid		 
    
