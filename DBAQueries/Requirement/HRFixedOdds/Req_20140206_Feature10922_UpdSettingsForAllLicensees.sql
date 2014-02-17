@@ -4,7 +4,27 @@
 	Task: Update Settings for all licensees
 	DB: DBTXN/CustDB
  */
- 
+ --STEP 0: remove settings of all UUS licensees
+ --17525 rows
+ ALTER PROCEDURE [dbo].[Acc_ExecRep_Cust_09]
+AS
+BEGIN
+	IF (SELECT COUNT(1)
+		FROM sys.objects
+		WHERE NAME IN ('Dep_CustSetting', 'custinfo','Dep_CustSuper') AND type = 'U'
+		) <> 3 RETURN	
+		
+	 DELETE Dep_CustSetting WITH(UPDLOCK,ROWLOCK)
+	 WHERE custid IN (SELECT custid FROM custinfo WITH(NOLOCK) 
+						WHERE srecommend IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK) WHERE currency = 20)
+					)
+		AND sporttype = 154
+		AND bettype = 20
+END 
+GO
+
+
+
   -- BEGIN STEP 1: DEPLOY THIS SP @ DBTRANS.CustDB -----
 ------------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_ExecRep_Cust_09]
@@ -59,7 +79,8 @@ BEGIN
 		AND bettype = 20
 		
 	UPDATE custinfo WITH(UPDLOCK,ROWLOCK)
-	SET maxpermatch154 = maxpermatch99
+	SET maxpermatch154 = maxpermatch99,
+		DisableHRFixedOdds = 1
 	WHERE srecommend = @srecommend 
 		AND custid <= @maxcustid		 
    
@@ -80,7 +101,6 @@ CREATE TABLE #Supers (custid INT PRIMARY KEY, isfinished bit default(0))
 INSERT INTO #Supers(custid)
 SELECT custid 
 FROM Dep_CustSuper with(NOLOCK)
-WHERE currency <> 20
 
 DECLARE @max_custid INT, @srecommend INT
 SET @max_custid = xxx 
@@ -115,7 +135,6 @@ CREATE TABLE #Supers (custid INT PRIMARY KEY, isfinished bit default(0))
 INSERT INTO #Supers(custid)
 SELECT custid 
 FROM Dep_CustSuper with(NOLOCK)
-WHERE currency <> 20
 
 DECLARE @max_custid INT, @srecommend INT
 SET @max_custid = xxx 

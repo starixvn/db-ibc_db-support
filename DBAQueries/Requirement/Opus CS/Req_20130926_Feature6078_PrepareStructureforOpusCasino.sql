@@ -27,16 +27,16 @@ ALTER table exchange ADD MaxTransferOpusCasino MONEY NULL
 GO
 
 ----------------------------------------------------------------
---Create table on database CustDB-------------------------------
+--Create table on database BODB02-------------------------------
 ----------------------------------------------------------------
 
 USE master
 GO
-ALTER DATABASE [CustDB] ADD FILEGROUP OpusCasinoTable_1
+ALTER DATABASE [BODB02] ADD FILEGROUP OpusCasino_Table
 GO
 
 
-ALTER DATABASE [CustDB]
+ALTER DATABASE [BODB02]
 ADD FILE 
 (
 	NAME = N'OpusCasinoTable_1', 
@@ -45,12 +45,12 @@ ADD FILE
 	MAXSIZE = UNLIMITED, 
 	FILEGROWTH = 1024KB 
 )
-TO FILEGROUP OpusCasinoTable_1
+TO FILEGROUP OpusCasino_Table
 GO
 
 
 -------------------------------------------------------------------------
---Add tables GameType,StakeLevel,CustGameType,CustSettingOpusHistory----
+--Add tables GameType,StakeLevel-----------------------------------------
 -------------------------------------------------------------------------
 
 /****** Object:  Table [dbo].[StakeLevel]    Script Date: 09/30/2013 15:46:09 ******/
@@ -69,8 +69,8 @@ CREATE TABLE [dbo].[StakeLevel](
  CONSTRAINT [PK_StakeLevel] PRIMARY KEY CLUSTERED 
 (
 	[StakeLevelID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [OpusCasinoTable_1]
-) ON [OpusCasinoTable_1]
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [OpusCasino_Table]
+) ON [OpusCasino_Table]
 
 /****** Object:  Table [dbo].[GameType]    Script Date: 09/26/2013 14:02:24 ******/
 SET ANSI_NULLS ON
@@ -85,19 +85,37 @@ CREATE TABLE [dbo].[GameType](
  CONSTRAINT [PK_GameType] PRIMARY KEY CLUSTERED 
 (
 	[GameTypeID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON OpusCasinoTable_1
-) ON OpusCasinoTable_1
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON OpusCasino_Table
+) ON OpusCasino_Table
 
 
 
 GO
+
+-------------------------------------------------------------------------
+-----Add table CustGameType on CustDB------------------------------------
+-------------------------------------------------------------------------
+ALTER DATABASE [CustDB] ADD FILEGROUP CustGameType_Table
+GO
+
+ALTER DATABASE [CustDB]
+ADD FILE 
+(
+	NAME = N'CustGameType_Table', 
+	FILENAME = N'E:\custdb\CustGameTypeTable_1.ndf' , 
+	SIZE = 102400KB , 
+	MAXSIZE = UNLIMITED, 
+	FILEGROWTH = 1024KB 
+)
+TO FILEGROUP CustGameType_Table
+GO
+
 /****** Object:  Table [dbo].[CustGameType]    Script Date: 09/26/2013 14:02:52 ******/
 
 
 /****** Object:  Table [dbo].[CustGameType]    Script Date: 1/13/2014 4:24:40 PM ******/
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -112,8 +130,8 @@ CREATE TABLE [dbo].[CustGameType](
 (
 	[GameTypeID] ASC,
 	[CustID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [OpusCasinoTable_1]
-) ON [OpusCasinoTable_1]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CustGameType_Table]
+) ON [CustGameType_Table]
 
 GO
 
@@ -123,9 +141,9 @@ GO
 
 
 
---------------------------------------------------------
+---------------------------------------------------------------
 ---create table custSettingOpusHistory on bodb_CustomerLog
---------------------------------------------------------
+---------------------------------------------------------------
 ALTER DATABASE [bodb_CustomerLog] ADD FILEGROUP CustSettingOpusHistory_Table
 GO
 
@@ -133,7 +151,7 @@ ALTER DATABASE [bodb_CustomerLog]
 ADD FILE 
 (
 	NAME = N'CustSettingOpusHistory_Table', 
-	FILENAME = N'E:\IBC_DB\bodb_CustomerLog\CustSettingOpusHistory_Table.ndf' , 
+	FILENAME = N'E:\IBC_DB\bodb_CustomerLog\CustSettingOpusHistoryTable_1.ndf' , 
 	SIZE = 10240KB , 
 	MAXSIZE = UNLIMITED, 
 	FILEGROWTH = 1024KB 
