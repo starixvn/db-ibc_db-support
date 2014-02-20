@@ -13,6 +13,7 @@ CREATE TABLE [dbo].[UserLog_SettleOutright](
 	[LeagueID] [int] NULL,
 	[MatchID] [int] NULL,
 	[EventDate] [datetime] NULL,
+	[Result] [varchar](500) NULL,
 	[Remark] [varchar](500) NULL
 ) ON [MATCH]
 
