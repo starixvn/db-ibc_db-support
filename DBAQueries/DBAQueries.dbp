@@ -197,6 +197,7 @@ Begin DataProject = "DBAQueries"
          Script = "Sup_20130926_Hotfix6117_CorrectCasinoTicket.sql"
       End
       Begin Folder = "Settlement"
+         Script = "Feature12073_Sup_CreateDataForNegativeBalance_Outright.sql"
          Script = "Sup_20130527_Outright_ReSettle.sql"
       End
    End
