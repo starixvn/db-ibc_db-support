@@ -36,11 +36,22 @@ BEGIN
 	SET NOCOUNT ON;
 	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBTRANS') RETURN	-- run at all replicated servers
 	IF (@target = 'DBTRANS' AND @@SERVERNAME <> 'DBTRANS') RETURN -- run at dbtrans only
-		
+	
 	IF (SELECT COUNT(1)
 		FROM sys.objects
-		WHERE NAME IN ('Dep_CustSetting', 'custinfo') AND type = 'U'
-		) <> 2 RETURN	
+		WHERE NAME IN ('custinfo') AND type = 'U'
+		) <> 1 RETURN 
+	 					
+	UPDATE custinfo WITH(UPDLOCK,ROWLOCK)
+	SET maxpermatch154 = maxpermatch99,
+		DisableHRFixedOdds = 1
+	WHERE srecommend = @srecommend 
+		AND custid <= @maxcustid
+						
+	IF (SELECT COUNT(1)
+		FROM sys.objects
+		WHERE NAME IN ('Dep_CustSetting') AND type = 'U'
+		) <> 1 RETURN	
 
 	INSERT INTO [dbo].[Dep_CustSetting]
 			   ([custid]
@@ -77,12 +88,7 @@ BEGIN
 				)	
 		AND sporttype = 99
 		AND bettype = 20
-		
-	UPDATE custinfo WITH(UPDLOCK,ROWLOCK)
-	SET maxpermatch154 = maxpermatch99,
-		DisableHRFixedOdds = 1
-	WHERE srecommend = @srecommend 
-		AND custid <= @maxcustid		 
+			 
    
 END
 GO
@@ -155,3 +161,51 @@ BEGIN
 	WAITFOR DELAY '00:00:00.280'
 END
 GO
+
+--STEP 4: UPDATE SETTINGs FOR NEW CUSTOMERs
+DECLARE @max_custid INT
+SET @max_custid = xxx
+
+--73 rows affected
+UPDATE custinfo WITH(UPDLOCK,ROWLOCK)
+SET maxpermatch154 = maxpermatch99,
+	DisableHRFixedOdds = 1
+WHERE srecommend IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+	AND custid > @max_custid
+	
+
+INSERT INTO [dbo].[Dep_CustSetting]
+			   ([custid]
+			   ,[bettype]
+			   ,[sporttype]
+			   ,[islive]
+			   ,[apositiontaking]
+			   ,[mpositiontaking]
+			   ,[spositiontaking]
+			   ,[playerdiscount]
+			   ,[discount]
+			   ,[adiscount]
+			   ,[sdiscount]
+			   ,[minbet]
+			   ,[maxbet])
+SELECT [custid]
+	   ,20 as [bettype]
+	   ,154 as [sporttype]
+	   ,[islive]
+	   ,[apositiontaking]
+	   ,[mpositiontaking]
+	   ,[spositiontaking]
+	   ,[playerdiscount]
+	   ,[discount]
+	   ,[adiscount]
+	   ,[sdiscount]
+	   ,[minbet]
+	   ,[maxbet]
+FROM Dep_CustSetting with(NOLOCK)
+WHERE custid IN (SELECT custid 
+				FROM custinfo with(NOLOCK)
+				WHERE srecommend IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+					AND custid > @max_custid
+			)	
+	AND sporttype = 99
+	AND bettype = 20	
