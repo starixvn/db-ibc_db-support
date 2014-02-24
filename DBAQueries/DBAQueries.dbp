@@ -45,6 +45,9 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20140110_Feature10733_UpdBetSettingUUSForAllLicensees.sql"
          Script = "Req_20140206_Feature10922_UpdSettingsForAllLicensees.sql"
       End
+      Begin Folder = "Keno"
+         Script = "Req_20140224_Feature11658_PrepareStructureForKeno.sql"
+      End
       Begin Folder = "LAS"
          Script = "Req_20140210_Feature10701_AddLogActionForLAS_SpecialDelete.sql"
       End
