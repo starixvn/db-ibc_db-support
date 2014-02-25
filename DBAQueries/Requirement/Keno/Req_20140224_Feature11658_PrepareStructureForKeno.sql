@@ -14,19 +14,19 @@ GO
 ----------------------------------------------------------------
 --Add new fields to DBTXN.dbo.custinfo------------------------------------
 ----------------------------------------------------------------
-ALTER TABLE dbo.custInfo ADD HideKeno BIT NULL CONSTRAINT DF_custInfo_HideKeno DEFAULT 1
+ALTER TABLE dbo.custInfo ADD HideKeno BIT NOT NULL CONSTRAINT DF_custInfo_HideKeno DEFAULT 0
 GO
 
 ----------------------------------------------------------------
 --Add new fields to DB05.bodb_Customer.dbo.custinfo_old tables--
 ----------------------------------------------------------------
-ALTER TABLE dbo.custInfo_old ADD HideKeno BIT NULL CONSTRAINT DF_custInfo_HideKeno DEFAULT 1
+ALTER TABLE dbo.custInfo_old ADD HideKeno BIT NOT NULL CONSTRAINT DF_custInfo_HideKeno DEFAULT 0
 GO
 
 --------------------------------------------------------------------------
 --Add new fields into DB052/DB054.bodb_CustomerLog.dbo.custinfo_history tables--
 --------------------------------------------------------------------------
-ALTER TABLE dbo.custInfo_history ADD HideKeno BIT NULL CONSTRAINT DF_custInfo_HideKeno DEFAULT 1
+ALTER TABLE dbo.custInfo_history ADD HideKeno BIT NOT NULL CONSTRAINT DF_custInfo_HideKeno DEFAULT 0
 GO
 
 ----------------------------------------------------------------
@@ -128,4 +128,127 @@ SELECT
 				  ,HideKeno
 FROM [DELETED]
 
- 
+GO
+CREATE TABLE [dbo].[TransLog](
+
+           [translogid] [bigint] IDENTITY(1,1) NOT NULL,
+
+           [custid] [int] NOT NULL,
+
+           [transdate] [datetime] NOT NULL,
+
+           [odds] [smallmoney] NULL,
+
+           [stake] [money] NOT NULL,
+
+           [status] [nvarchar](10) NULL,
+
+           [apositiontaking] [smallmoney] NULL,
+
+           [mpositiontaking] [smallmoney] NULL,
+
+           [tpositiontaking] [smallmoney] NULL,
+
+           [spositiontaking] [smallmoney] NULL,
+
+           [playerdiscount] [decimal](9, 8) NULL,
+
+           [discount] [decimal](9, 8) NULL,
+
+           [adiscount] [decimal](9, 8) NULL,
+
+           [sdiscount] [decimal](9, 8) NULL,
+
+           [creator] [int] NOT NULL,
+
+           [winlostdate] [smalldatetime] NULL,
+
+           [betfrom] [nvarchar](1) NULL,
+
+           [virtualrate] [float] NOT NULL,
+
+           [actualrate] [float] NULL,
+
+           [actual_stake] [money] NULL,
+
+           [currency] [tinyint] NULL,
+
+           [CurrencyName] [nvarchar](50) NULL,
+
+           [recommend] [int] NOT NULL,
+
+           [mrecommend] [int] NOT NULL,
+
+           [srecommend] [int] NOT NULL,
+
+           [ip] [nvarchar](15) NULL,
+
+           [statusID] [tinyint] NULL,
+
+           [balance] [money] NULL,
+
+           [Username] [nvarchar](50) NULL,
+
+           [transdesc] [nvarchar](300) NULL,
+
+           [productID] [int] NOT NULL,
+
+           [gameID] [int] NOT NULL,
+
+           [eventID] [int] NOT NULL,
+
+           [vendorID] [int] NOT NULL,
+
+CONSTRAINT [PK_translog] PRIMARY KEY NONCLUSTERED
+(
+           [translogid] ASC
+
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Bettrans_index3]
+
+) ON [Bettrans_table]
+GO
+
+ALTER TABLE [dbo].[translog] ADD  CONSTRAINT [DF_translog_transdate]  DEFAULT (getdate()) FOR [transdate]
+GO
+
+ALTER TABLE [dbo].[translog] ADD  CONSTRAINT [DF_translog_odds]  DEFAULT ((0)) FOR [odds]
+GO
+
+ALTER TABLE [dbo].[translog] ADD  CONSTRAINT [DF_translog_stake]  DEFAULT ((0)) FOR [stake]
+GO
+
+ALTER TABLE [dbo].[translog] ADD  CONSTRAINT [DF_translog_apositiontaking]  DEFAULT ((0)) FOR [apositiontaking]
+GO
+
+ALTER TABLE [dbo].[translog] ADD  CONSTRAINT [DF_translog_mpositiontaking]  DEFAULT ((0)) FOR [mpositiontaking]
+GO
+
+ALTER TABLE [dbo].[translog] ADD  CONSTRAINT [DF_translog_tpositiontaking]  DEFAULT ((0)) FOR [tpositiontaking]
+GO
+
+ALTER TABLE [dbo].[translog] ADD  CONSTRAINT [DF_translog_spositiontaking]  DEFAULT ((0)) FOR [spositiontaking]
+GO
+
+ALTER TABLE [dbo].[translog] ADD  CONSTRAINT [DF_translog_playerdiscount]  DEFAULT ((0)) FOR [playerdiscount]
+GO
+
+ALTER TABLE [dbo].[translog] ADD  CONSTRAINT [DF_translog_discount]  DEFAULT ((0)) FOR [discount]
+GO
+
+ALTER TABLE [dbo].[translog] ADD  CONSTRAINT [DF_translog_adiscount]  DEFAULT ((0)) FOR [adiscount]
+GO
+
+ALTER TABLE [dbo].[translog] ADD  CONSTRAINT [DF_translog_sdiscount]  DEFAULT ((0)) FOR [sdiscount]
+GO
+
+ALTER TABLE [dbo].[translog] ADD  CONSTRAINT [DF_translog_creator]  DEFAULT ((0)) FOR [creator]
+GO
+
+ALTER TABLE [dbo].[translog] ADD  CONSTRAINT [DF_translog_betfrom]  DEFAULT ('i') FOR [betfrom]
+GO
+
+ALTER TABLE [dbo].[translog] ADD  CONSTRAINT [DF_translog_virtualrate]  DEFAULT ((0)) FOR [virtualrate]
+GO
+
+ALTER TABLE [dbo].[translog] ADD  CONSTRAINT [DF_translog_actual_stake]  DEFAULT ((0)) FOR [actual_stake]
+GO
