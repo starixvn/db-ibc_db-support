@@ -128,6 +128,7 @@ SELECT
 				  ,HideKeno
 FROM [DELETED]
 
+--Create table TransLog
 GO
 CREATE TABLE [dbo].[TransLog](
 
@@ -252,3 +253,39 @@ GO
 
 ALTER TABLE [dbo].[translog] ADD  CONSTRAINT [DF_translog_actual_stake]  DEFAULT ((0)) FOR [actual_stake]
 GO
+
+--Create table CustGameType
+GO
+CREATE TABLE [dbo].[CustGameType](
+           [CustID] [int] NOT NULL,
+           [GameTypeID] [int] NOT NULL,
+           [StakeLevelList] [varchar](50) NULL,       -- keno project: this field will be null
+           [MaxPerGameType] [money] NULL,
+           [MinBet] [money] NULL,
+           [MaxBet] [money] NULL,
+           [IsDisabled] [bit] NOT NULL,
+CONSTRAINT [PK_CustGameType] PRIMARY KEY NONCLUSTERED
+(
+           [CustID] ASC,
+           [GameTypeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CustGameType_table]
+) ON [CustGameType_table]
+GO
+SET ANSI_PADDING OFF
+GO
+ALTER TABLE [dbo].[CustGameType] ADD  CONSTRAINT [DF_CustGameType_IsDisabled]  DEFAULT ((0)) FOR [IsDisabled]
+
+--Create table GameType
+GO
+CREATE TABLE [dbo].[GameType](
+           [GameTypeID] [int] NOT NULL,
+           [GameTypeName] [nvarchar](50) NULL,
+           [IsDisabled] [bit] NULL,
+           [IBCBetTypeID] [int] NULL,
+CONSTRAINT [PK_GameType] PRIMARY KEY CLUSTERED
+(
+           [GameTypeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
+) ON [DATA]
+GO
+ALTER TABLE [dbo].[GameType] ADD  CONSTRAINT [DF_GameType_IsDisabled]  DEFAULT ((0)) FOR [IsDisabled]
