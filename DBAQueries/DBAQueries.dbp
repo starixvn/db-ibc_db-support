@@ -61,6 +61,9 @@ Begin DataProject = "DBAQueries"
       Begin Folder = "LogSettleOutright"
          Script = "Req_20140217_Feature12703_LogSettleOutright.sql"
       End
+      Begin Folder = "NumberGame"
+         Script = "Req_20140228_Feature_UpdateBetSettingForCreditCustomers.sql"
+      End
       Begin Folder = "Opus CS"
          Script = "Req_20130926_Feature6078_PrepareStructureforOpusCasino.sql"
          Script = "Req_20140109_Feature6078_InsertLogActionForOpusCS.sql"
