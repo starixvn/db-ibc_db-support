@@ -9,7 +9,7 @@
 ----------------------------------------------------------------
 USE bodb02
 INSERT INTO Sports (SportType, SportName, SportNameCh, SportNameCs, SportNameJp, SportNameIt, SportNameTh, ParlayMaxPayout, SportNameKo, SportNameES, SportNameVN, SportNameEL) VALUES
-(202, N'Keno', N'Keno', N'Keno', N'Keno',N'Keno',N'Keno', NULL, N'Keno', N'Keno', N'Keno', N'Keno')
+(202, N'Keno', N'Keno', N'Keno', N'Keno',N'Keno',N'Keno', NULL, N'Keno', N'Keno', N'Keno', N'Keno', N'Keno', N'Keno')
 GO
 
 --Add new bettype Keno to DBPRO.bodb02.dbo.Bettype-------------------------------
