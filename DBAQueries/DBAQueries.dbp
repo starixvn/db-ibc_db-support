@@ -52,6 +52,7 @@ Begin DataProject = "DBAQueries"
       End
       Begin Folder = "LAS"
          Script = "Req_20140210_Feature10701_AddLogActionForLAS_SpecialDelete.sql"
+         Script = "Req_20140305_Feature10701_PrepareStructureLogForLas.sql"
       End
       Begin Folder = "Live CS"
          Script = "Req_20130912_Feature5611_3star88_UpdatePTsettingforUUS.sql"
