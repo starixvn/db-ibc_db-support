@@ -1,34 +1,37 @@
 ﻿/*
 	Created by: Elodie
 	Date: 2014-03-03
-	Task: Prepare structure for Keno in phrase 1 [Redmine:#11658]
-	DB: DBTXN, DBPRO
+	Task: Prepare structure for Keno in phrase 1 [Redmine:#11658]	
 */ 
 ----------------------------------------------------------------
 --Add new fields to DBTXN.CustDB.dbo.custinfo------------------------------------
 ----------------------------------------------------------------
 USE CustDB
-ALTER TABLE dbo.custInfo ADD HideKeno BIT NOT NULL CONSTRAINT DF_custInfo_HideKeno DEFAULT 0
+GO
+ALTER TABLE dbo.custInfo ADD HideKeno BIT NULL CONSTRAINT DF_custInfo_HideKeno DEFAULT 0
 GO
 
 ----------------------------------------------------------------
 --Add new fields to DB05.bodb_Customer.dbo.custinfo_old tables--
 ----------------------------------------------------------------
 USE bodb_Customer
-ALTER TABLE dbo.custInfo_old ADD HideKeno BIT NOT NULL CONSTRAINT DF_custInfo_HideKeno DEFAULT 0
+GO
+ALTER TABLE dbo.custInfo_old ADD HideKeno BIT NULL CONSTRAINT DF_custInfo_HideKeno DEFAULT 0
 GO
 
 --------------------------------------------------------------------------
 --Add new fields into DB052/DB054.bodb_CustomerLog.dbo.custinfo_history tables--
 --------------------------------------------------------------------------
 USE bodb_CustomerLog
-ALTER TABLE dbo.custInfo_history ADD HideKeno BIT NOT NULL CONSTRAINT DF_custInfo_HideKeno DEFAULT 0
+GO
+ALTER TABLE dbo.custInfo_history ADD HideKeno BIT NULL CONSTRAINT DF_custInfo_HideKeno DEFAULT 0
 GO
 
 ----------------------------------------------------------------
 --Modify trigger DB052.bodb02.dbo.CustInfo_update---------------
 ----------------------------------------------------------------
 USE bodb02
+GO
 ALTER TRIGGER [dbo].[CustInfo_update] ON [dbo].[custInfo] AFTER UPDATE
 AS
 /*
