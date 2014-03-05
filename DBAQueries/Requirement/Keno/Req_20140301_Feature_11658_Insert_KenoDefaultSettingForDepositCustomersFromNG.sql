@@ -19,9 +19,9 @@ BEGIN
 	IF (
 			SELECT COUNT(1)
 			FROM sys.objects
-			WHERE NAME IN ('CustOverride3rd', 'custInfo')
+			WHERE NAME IN ('Dep_CustSetting3rd', 'custInfo', 'CustGameType', 'CustSettingGame')
 				AND type = 'U'
-			) <> 2 RETURN
+			) <> 4 RETURN
 
 	DECLARE @res AS TABLE (custid INT)
 	DECLARE @splitter CHAR(1)
@@ -124,28 +124,22 @@ BEGIN
 		WHERE cs.[sporttype] = 161
 			AND cs.[bettype] = 81
 	)
-	--SELECT * FROM kenoCustGameType
-	MERGE INTO [dbo].[CustGameType] AS cust
-	USING kenoCustGameType AS tmp
-		ON cust.custid			= tmp.custid 
-			AND cust.gametypeid = tmp.gametypeid
-	WHEN NOT MATCHED BY TARGET THEN
-		INSERT([GameTypeID]
-			,[CustID]
-			,[StakeLevelList]
-			,[MaxPerGameType]
-			,[MinBet]
-			,[MaxBet]
-			,[IsDisabled]
-			)
-		VALUES(tmp.[GameTypeID]
-			,tmp.[CustID]
-			,tmp.[StakeLevelList]
-			,tmp.[MaxPerGameType]
-			,tmp.[MinBet]
-			,tmp.[MaxBet]
-			,tmp.[IsDisabled]
+	INSERT INTO [dbo].[CustGameType]([GameTypeID]
+		,[CustID]
+		,[StakeLevelList]
+		,[MaxPerGameType]
+		,[MinBet]
+		,[MaxBet]
+		,[IsDisabled]
 		)
+	SELECT tmp.[GameTypeID]
+		,tmp.[CustID]
+		,tmp.[StakeLevelList]
+		,tmp.[MaxPerGameType]
+		,tmp.[MinBet]
+		,tmp.[MaxBet]
+		,tmp.[IsDisabled]
+	FROM kenoCustGameType tmp
 	;
 	WITH kenoCustSettingGame AS 
 	(
@@ -170,46 +164,37 @@ BEGIN
 		WHERE cust.[sporttype] = 161
 			AND cust.[bettype] = 81
 	)
-	--SELECT * FROM kenoCustSettingGame
-	MERGE INTO [dbo].[CustSettingGame] AS cust
-	USING kenoCustSettingGame AS tmp
-		ON cust.custid				= tmp.custid 
-			AND cust.[Sporttype]	= tmp.[Sporttype]
-			AND cust.[Bettype]		= tmp.[Bettype]
-	WHEN NOT MATCHED BY TARGET THEN
-		INSERT([CustID]
-           ,[Bettype]
-           ,[Sporttype]
-           ,[apositiontaking]
-           ,[mpositiontaking]
-           ,[spositiontaking]
-           ,[playerdiscount]
-           ,[discount]
-           ,[adiscount]
-           ,[sdiscount]
-           --,[autopositiontaking]
-           --,[isautopositiontaking]
-           --,[autompositiontaking]
-           --,[isautompositiontaking]
-		)
-		VALUES(tmp.[CustID]
-           ,tmp.[Bettype]
-           ,tmp.[Sporttype]
-           ,tmp.[apositiontaking]
-           ,tmp.[mpositiontaking]
-           ,tmp.[spositiontaking]
-           ,tmp.[playerdiscount]
-           ,tmp.[discount]
-           ,tmp.[adiscount]
-           ,tmp.[sdiscount]
-           --,tmp.[autopositiontaking]
-           --,tmp.[isautopositiontaking]
-           --,tmp.[autompositiontaking]
-           --,tmp.[isautompositiontaking]
-		)
+	INSERT INTO [dbo].[CustSettingGame]([CustID]
+	   ,[Bettype]
+	   ,[Sporttype]
+	   ,[apositiontaking]
+	   ,[mpositiontaking]
+	   ,[spositiontaking]
+	   ,[playerdiscount]
+	   ,[discount]
+	   ,[adiscount]
+	   ,[sdiscount]
+	)
+	SELECT tmp.[CustID]
+	   ,tmp.[Bettype]
+	   ,tmp.[Sporttype]
+	   ,tmp.[apositiontaking]
+	   ,tmp.[mpositiontaking]
+	   ,tmp.[spositiontaking]
+	   ,tmp.[playerdiscount]
+	   ,tmp.[discount]
+	   ,tmp.[adiscount]
+	   ,tmp.[sdiscount]
+	 FROM kenoCustSettingGame tmp
 	;
 
 	DROP TABLE #kenoBetType;
+	
+	--update hidekeno
+	UPDATE c
+		SET HideKeno = 1
+	FROM dbo.custinfo c WITH(ROWLOCK, UPDLOCK)
+	INNER JOIN @res res on c.custid = res.custid
 END
 GO
 
@@ -223,7 +208,7 @@ GO
 --GO
 
 DECLARE @maxCustID INT
-	, @IsDisable BIT = 0
+	, @IsDisable BIT = 1
 
 SELECT @maxCustID = 1000000--MAX(CustId) FROM dbo.custInfo WITH (NOLOCK)
 
@@ -250,6 +235,18 @@ WHERE ci.srecommend IN (
 	AND ci.roleid IN (2, 3, 4)
 	AND ci.custid <= @maxCustID
 
+--delete [CustGameType]
+delete g
+from [dbo].[CustGameType] g
+inner join #temp t on g.CustID = t.custid
+
+--delete [CustSettingGame]
+delete s
+from [dbo].[CustSettingGame] s
+inner join #temp t on s.CustID = t.custid
+where s.sporttype = 202
+
+	
 DECLARE @ids VARCHAR(max)
 	,@rowcnt INT
 	,@rowTotal INT = 0

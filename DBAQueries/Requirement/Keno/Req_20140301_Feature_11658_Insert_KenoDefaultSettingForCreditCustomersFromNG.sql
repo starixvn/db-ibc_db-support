@@ -19,7 +19,7 @@ BEGIN
 	IF (
 			SELECT COUNT(1)
 			FROM sys.objects
-			WHERE NAME IN ('CustOverride3rd', 'custInfo')
+			WHERE NAME IN ('CustGameType', 'custInfo')
 				AND type = 'U'
 			) <> 2 RETURN
 
@@ -114,29 +114,28 @@ BEGIN
 		FROM @res res
 		CROSS JOIN kenoBetType t
 	)
-	SELECT * FROM kenoSetting
-	MERGE INTO [dbo].[CustGameType] AS cust
-	USING kenoSetting AS tmp
-		ON cust.custid = tmp.custid 
-			AND cust.gametypeid = tmp.gametypeid
-	WHEN NOT MATCHED BY TARGET THEN
-		INSERT([GameTypeID]
-			,[CustID]
-			,[StakeLevelList]
-			,[MaxPerGameType]
-			,[MinBet]
-			,[MaxBet]
-			,[IsDisabled]
-			)
-		VALUES(tmp.[GameTypeID]
-			,tmp.[CustID]
-			,tmp.[StakeLevelList]
-			,tmp.[MaxPerGameType]
-			,tmp.[MinBet]
-			,tmp.[MaxBet]
-			,tmp.[IsDisabled]
+	INSERT INTO [dbo].[CustGameType]([GameTypeID]
+		,[CustID]
+		,[StakeLevelList]
+		,[MaxPerGameType]
+		,[MinBet]
+		,[MaxBet]
+		,[IsDisabled]
 		)
+	SELECT tmp.[GameTypeID]
+		,tmp.[CustID]
+		,tmp.[StakeLevelList]
+		,tmp.[MaxPerGameType]
+		,tmp.[MinBet]
+		,tmp.[MaxBet]
+		,tmp.[IsDisabled]
+	FROM kenoSetting tmp
 	;
+	--update hidekeno
+	UPDATE cust
+		SET HideKeno = 1
+	FROM dbo.custinfo cust WITH(ROWLOCK, UPDLOCK)
+	INNER JOIN @res res on cust.custid = res.custid
 END
 GO
 
@@ -150,7 +149,7 @@ GO
 --GO
 
 DECLARE @maxCustID INT
-	, @IsDisable BIT = 0
+	, @IsDisable BIT = 1
 
 SELECT @maxCustID = 1000 --MAX(CustId) FROM dbo.custInfo WITH (NOLOCK)
 
@@ -176,6 +175,11 @@ WHERE ci.srecommend NOT IN (
 		)
 	AND ci.roleid IN (2, 3, 4)
 	AND ci.custid <= @maxCustID
+
+--delete [CustGameType]
+delete g
+from [dbo].[CustGameType] g
+inner join #temp t on g.CustID = t.custid
 
 DECLARE @ids VARCHAR(max)
 	,@rowcnt INT
