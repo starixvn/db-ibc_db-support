@@ -65,6 +65,8 @@ Begin DataProject = "DBAQueries"
       End
       Begin Folder = "NumberGame"
          Script = "Req_20140228_Feature_UpdateBetSettingForCreditCustomers.sql"
+         Script = "Req_20140305_Feature_Scr1_UpdateBetSettingForAllSMA.sql"
+         Script = "Req_20140305_Feature_Scr2_UpdatebetsettingsForTHAUS.sql"
       End
       Begin Folder = "Opus CS"
          Script = "Req_20130926_Feature6078_PrepareStructureforOpusCasino.sql"
