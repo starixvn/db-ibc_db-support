@@ -4,7 +4,7 @@
 	Task: Add new error message for Keno [Redmine:#11658]	
 */ 
 ----------------------------------------------------------------
---Add new error message to DBTXN.CustDB.dbo.MsgError------------
+--Add new error message to DBTXN.bodb02.dbo.MsgError------------
 ----------------------------------------------------------------
 USE bodb02
 GO
@@ -13,7 +13,7 @@ SELECT 60030,7,'Account disabled for Keno. Unable to edit downlines', N'Account 
 GO
 
 ----------------------------------------------------------------
---Add new error message to DBTXN.bodb02.dbo.MsgError------------
+--Add new error message to DBTXN.CustDB.dbo.MsgError------------
 ----------------------------------------------------------------
 USE CustDB
 GO
