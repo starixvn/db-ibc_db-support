@@ -226,7 +226,7 @@ INSERT INTO #temp (
 	)
 SELECT cs.custid
 	,0
-FROM dbo.CustOverride3rd cs WITH (NOLOCK)
+FROM dbo.[Dep_CustSetting3rd] cs WITH (NOLOCK)
 	INNER JOIN dbo.custInfo ci WITH (NOLOCK)
 	ON cs.custid = ci.custid
 		AND cs.sporttype = 161 -- Number Game 
