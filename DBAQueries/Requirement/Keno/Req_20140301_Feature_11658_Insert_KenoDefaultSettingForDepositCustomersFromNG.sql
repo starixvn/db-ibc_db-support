@@ -235,7 +235,6 @@ WHERE ci.srecommend IN (
 		SELECT custid
 		FROM dbo.Dep_CustSuper WITH (NOLOCK) where site = 'spondemo'
 		)
-	AND ci.roleid IN (2, 3, 4)
 	AND ci.custid <= @maxCustID
 
 --delete [CustGameType]
