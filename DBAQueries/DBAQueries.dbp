@@ -47,6 +47,8 @@ Begin DataProject = "DBAQueries"
       End
       Begin Folder = "Keno"
          Script = "Req_20140227_Feature11658_AddLogActionForKeno.sql"
+         Script = "Req_20140301_Feature_11658_Insert_KenoDefaultSettingForCreditCustomersFromNG.sql"
+         Script = "Req_20140301_Feature_11658_Insert_KenoDefaultSettingForDepositCustomersFromNG.sql"
          Script = "Req_20140303_Feature_AddLogActionForKeno_P1.sql"
          Script = "Req_20140303_Feature11658_PrepareStructureForKeno.sql"
          Script = "Req_20140307_Feature11658_AddErrorMsgForKeno.sql"
