@@ -158,10 +158,10 @@ BEGIN
            ,cust.[discount]
            ,cust.[adiscount]
            ,cust.[sdiscount]
-           ,NULL AS [autopositiontaking]
-           ,NULL AS [isautopositiontaking]
-           ,NULL AS [autompositiontaking]
-           ,NULL AS [isautompositiontaking]
+           ,0 AS [autopositiontaking]
+           ,0 AS [isautopositiontaking]
+           ,0 AS [autompositiontaking]
+           ,0 AS [isautompositiontaking]
 		FROM dbo.[Dep_CustSetting3rd] cust WITH(NOLOCK)
 		INNER JOIN @res AS res ON cust.custid = res.custid
 		WHERE cust.[sporttype] = 161
