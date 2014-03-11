@@ -52,6 +52,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20140303_Feature_AddLogActionForKeno_P1.sql"
          Script = "Req_20140303_Feature11658_PrepareStructureForKeno.sql"
          Script = "Req_20140307_Feature11658_AddErrorMsgForKeno.sql"
+         Script = "Req_20140311_Feature11658_UpdateErrorMsg_LogAction_Keno.sql"
       End
       Begin Folder = "LAS"
          Script = "Req_20140210_Feature10701_AddLogActionForLAS_SpecialDelete.sql"
