@@ -133,7 +133,7 @@ BEGIN
 	;
 	--update hidekeno
 	UPDATE cust
-		SET HideKeno = 1
+		SET HideKeno = @IsDisable
 	FROM dbo.custinfo cust WITH(ROWLOCK, UPDLOCK)
 	INNER JOIN @res res on cust.custid = res.custid
 END
