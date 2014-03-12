@@ -39,6 +39,9 @@ Begin DataProject = "DBAQueries"
       Begin Folder = "CreditTerm"
          Script = "Req_20130611_Feature1923_IntegrateGroupHeadLineFromCreditTermToConsolidationReport.sql"
       End
+      Begin Folder = "Customer"
+         Script = "Req_20140312_Feature13230_RemoveunUsedAdminUsers.sql"
+      End
       Begin Folder = "HRFixedOdds"
          Script = "Req_20131011_Feature6505_AddLogAction.sql"
          Script = "Req_20131011_Feature6505_PrepareStructureHRFixedOdds.sql"
