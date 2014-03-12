@@ -15,12 +15,12 @@
 
 ---DBA_AccAdminPolicyDel
 
-DELETE FROM Acc_MemberPolicy_1 WITH(ROWLOCK) WHERE Custid IN (SELECT custid FROM #tempUsers)
-DELETE FROM AccCustomer_1 WITH(ROWLOCK) WHERE Custid IN (SELECT custid FROM #tempUsers)
+DELETE FROM DBPOLICY.bodb02.dboAcc_MemberPolicy_1 WITH(ROWLOCK) WHERE Custid IN (SELECT custid FROM #tempUsers)
+DELETE FROM DBPOLICY.bodb02.dboAccCustomer_1 WITH(ROWLOCK) WHERE Custid IN (SELECT custid FROM #tempUsers)
 
 --DBA_AccAdminPolicyDel_RMS
-DELETE FROM rmUserInfo WITH(ROWLOCK) WHERE userid IN (SELECT custid FROM #tempUsers)
-DELETE FROM rmUserPolicy WITH(ROWLOCK) WHERE userid IN (SELECT custid FROM #tempUsers)
+DELETE FROM DBRMS.bodb_RMS.dbo.rmUserInfo WITH(ROWLOCK) WHERE userid IN (SELECT custid FROM #tempUsers)
+DELETE FROM DBRMS.bodb_RMS.dbo.rmUserPolicy WITH(ROWLOCK) WHERE userid IN (SELECT custid FROM #tempUsers)
 
 --Delete IBC tables
 DELETE FROM dbo.CustInfo WITH(ROWLOCK) WHERE Custid IN (SELECT custid FROM #tempUsers)
