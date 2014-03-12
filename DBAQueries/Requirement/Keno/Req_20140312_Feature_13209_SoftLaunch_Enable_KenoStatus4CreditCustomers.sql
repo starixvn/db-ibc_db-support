@@ -5,8 +5,8 @@ ALTER PROCEDURE [dbo].[Acc_ExecRep_Cust_09]
 AS
 /*
 	Created: Bobby
-	Date: 20140303
-	Task: Insert default setting of Keno game for credit customers
+	Date: 20140312
+	Task: Enable default setting of Keno game for credit customers
 	DB: DBTRANS/CustDB
 
 	Param's Explanation:
@@ -56,80 +56,29 @@ BEGIN
 
 	--re-check @IsDisable value
 	SET @IsDisable = ISNULL(@IsDisable, 0)
+
 	;WITH kenoBetType AS 
 	(
 		SELECT 202 AS sporttype
-			,1501 AS bettype
-			,1 AS gametypeid -- Australia Acttab
-		
-		UNION ALL
-		SELECT 202 AS sporttype
-			,1502 AS bettype
-			,2 AS gametypeid -- Bejing Keno 8
-		
-		UNION ALL
-		SELECT 202 AS sporttype
-			,1503 AS bettype
-			,3 AS gametypeid -- Slovakia Eklub
-
-		UNION ALL
-		SELECT 202 AS sporttype
-			,1504 AS bettype
-			,4 AS gametypeid -- Canada Keno
-
-		UNION ALL
-		SELECT 202 AS sporttype
-			,1505 AS bettype
-			,5 AS gametypeid -- West Canada Keno
-
-		UNION ALL
-		SELECT 202 AS sporttype
-			,1506 AS bettype
-			,6 AS gametypeid -- Taiwan Bingo Bingo
-
-		UNION ALL
-		SELECT 202 AS sporttype
-			,1507 AS bettype
-			,7 AS gametypeid -- Massac
-
-		UNION ALL
-		SELECT 202 AS sporttype
-			,1508 AS bettype
-			,8 AS gametypeid -- Ohio
-
-		UNION ALL
-		SELECT 202 AS sporttype
-			,1509 AS bettype
-			,9 AS gametypeid -- Malta
+			, IBCBetTypeID AS bettype
+			, GameTypeID
+		FROM DBPRO.bodb02.dbo.GameType WITH(NOLOCK)
+		WHERE [IBCBetTypeID] >=  1501 AND [IBCBetTypeID] <= 1509
+		AND IsDisabled = 0
 	)
-	,kenoSetting AS
+	,kenoEnableSetting AS
 	(
-		SELECT t.[gametypeid]
-			, res.custid
-			, '' [StakeLevelList]
-			, 0.00 [MaxPerGameType]
-			, 0.00 [MinBet]
-			, 0.00 [MaxBet]
+		SELECT res.custid
+			, t.[gametypeid]
 			, @IsDisable [IsDisabled] 
 		FROM @res res
 		CROSS JOIN kenoBetType t
 	)
-	INSERT INTO [dbo].[CustGameType]([GameTypeID]
-		,[CustID]
-		,[StakeLevelList]
-		,[MaxPerGameType]
-		,[MinBet]
-		,[MaxBet]
-		,[IsDisabled]
-		)
-	SELECT tmp.[GameTypeID]
-		,tmp.[CustID]
-		,tmp.[StakeLevelList]
-		,tmp.[MaxPerGameType]
-		,tmp.[MinBet]
-		,tmp.[MaxBet]
-		,tmp.[IsDisabled]
-	FROM kenoSetting tmp
+	UPDATE cg
+	SET [IsDisabled] = tmp.[IsDisabled]
+	FROM [dbo].[CustGameType] cg WITH(ROWLOCK, UPDLOCK)
+	INNER JOIN kenoEnableSetting tmp
+		ON cg.custid = tmp.custid AND cg.gametypeid = tmp.gametypeid
 	;
 	--update hidekeno
 	UPDATE cust
@@ -149,7 +98,7 @@ GO
 --GO
 
 DECLARE @maxCustID INT
-	, @IsDisable BIT = 1
+	, @IsDisable BIT = 0
 
 --SELECT @maxCustID = MAX(CustId) FROM dbo.custInfo WITH (NOLOCK)
 
@@ -158,418 +107,62 @@ CREATE TABLE #temp (
 	,isfinished BIT
 	)
 
+;
+
+WITH custInit
+AS (
+	SELECT c1.custid
+		,c1.roleid
+	FROM dbo.custInfo c1 WITH (NOLOCK)
+	WHERE username IN (
+			'302RM', 'M32RM', 'M32M', 'S32M', 'S32AM', 'S32BM', '92RM', 'MGRM', 'SGM', 'SG1M', 'SG2M', 'SG3M', 'SG5M', 'SG6M', 'SG7M', 'SG8M', 'sg9m', 'D922RM', 'M922M', 'S922M', 'S922N', 'S922MA', '359RM', '359SD', 'HD359', 'M359RM', 'M359SD', 'M359ARM', 'M359ASD', 'S359CM', 'SKM', 'PHRM', 'phsd', 'MPHSD', 'SPHM', 'SPKM', 'SPKR', 'TKRM', 'MYRM', 'MYMRM', 'MYSD', 'SYM', 'JMRM', 'S35M', 'S35RM', 'MMMRM', 'MMPRM', 'SMM', 'SMSM', 'MMSD', 'SMMS', 'SSMS', 'MKKRM', 'M7RM', 'M7ARM', 'M7SD', 'M7BRM', 'M7CRM', 'ywrm', '1158RM', 'M58SD', 'S58RM', '659RM', '6599RM', 'MALM', 'M12RM', 'S12M', 'SGS', 'SGSM', 'SGSN', 'SGMM', 'MAMRM', 'M96RM', '2588RM', 'M258RM', '2588SD', 'MHOSD', 'MHORM', 'MHO1SD', 'MHO2SD', 'MHOASD', 'M25RM', 'S25RM', 'L25RM', 'S09M', 'MQRM', 'MQARM', 'MMYBRM', 'BYS', '3SEXT', 'S33M', 'S33SM', 'S33S', '33RM', 'PTM', 'M26RM', 'M26SD', 'M26ARM', 'SVM', 'SVS', 'M11SD', 'S5S', 'S5M', '330SD', 'M1169RM', 'M116RM', 'M116ARM', 'M169RM', 'SCM', 'SCS', 'SCSM', 'HIS', 'HIM', '69SD', 'S69SD', 'S69RM', 'S7RM', 'S56RM', 'S56ARM', 'S56BRM', 'S56CRM', 'S56DRM', 'S56SD', '346RM', 'S36RM', '79RM', 'S79RM', 'WD', 'WC', 
+			'M51SD', 'TAS51S', 'S51SM', 'S47SD', 'S47RM', 'SMORM', 'SMOM', 'SMOG', 'SS31S', 'S31SD', 'S31ARM', 'SAPM', 'A31M', 'S116SD', 'S31RRM', 'S31ASD', 'S31BSD', 'SPA1M', 'M3CRM', 'SPA2M', 'SPA3M ', 'A31AP', 'B31BP', 'M50RM', 'M53SD', 'S53S', 'S49RM', 'S91RM', 'SSTMM', 'S3ARM', 'M83RM', 'M83ARM', 'S31M', 'M98RM', 'SDRM', 'SDSD', 'SDARM', '1188RM', 'S188RM', 'S188ARM', 'M188SD', 'M90RM', 'S90RM', 'M6SD', 'M6RM', 'M73SD', 'M73ASD', 'M73BSD', 'M73CSD', 'M73DSD', 'M73ESD', 'S11S', 'S11SM', 'S11M', 'S11M1', 'S11M2', 'S11M4', 'S11M5', 'S11M6', 'S11M7', 'S11M8', 'S11N', 'M88SD', 'M88ASD', 'S88M', 'M88M', 'M553M', 'S70M', 'SOGO', 'SOGA', 'SEM', 'SEMA', 'SJM', 'SJSD', 'S93RM', 'S93M', 'S93S', 'M93S', 'S93D', 'S305RM', 'S31RM', 'S31BRM', '31bsd', 'SHSD', 'hhm', 'hhma', 'HHN', 'SBS', 'SBM', 'SCES', 'M222M', '2MM', '2MN', '2RM', '2NN', '2RR', '688rm', 'S688M', 'SAKM', 'SORM', 'MKM', 'MKS', 'MKM1', 'THM', 'JCM', 'MKM2', 'MKS1', 'HM', 'DKD', 'KYM', 'MKYM', '085RM', 'S85S', 'S85M', 's66s', 'JES', 'TH8m', 'SBSD', 'D2RM', 'DDT', 'SPSD', 'SWM', 'D3RM', '42rm', '42sd', 'S42RM', 'S42S', 'M42M', 'S42ARM', 'S42M', 'S2M', 'S2MM', 
+			'STPM', 'MKWRM', 'SRRMB', 'SKWRMB', 'SRH', 'SRHK', 'SRMA', 'JAS', 'JAM', 'JAU', 'S99M', 'M797M', 'M797AM', 'M797RM', 'wm', 'S797S', 'WMA', 'WMB', 'DDS', 's45m', 'S45AM', 'KJM', 'KJMB', 'KJMC', 'KJMA', 'KJMD', 'KJME', 'AHM', 'AHT', 'AHV', 'AHZ', 'DKS', '415NSD', 'S41S', 'S41M', 'S43S', 'JAD', 'SZM', 'MA', 'YKM', 'CYKM', 'M822M', 'S822M', 'S822MA', 'D5RM', 'HPM', 'HPN', 'HPMM', 'SMY', 'HPD', 'SLM', 'SSSD', 'S23S', 'SLLM', 'SATS', 'SATM', 'AHS', 'AHSD', 'SFS', 'JM', 'SJS', 'JS9', 'SYSM', 'JMA', 'M95RM', 'S95M', 'S95RM', 'S95AM', '95RMOLD', 'PPM', '3008RM', '3008ARM', 'HS', 'SYLRM', 'SYLSD', 'SYLM', 'S71RM', 'S71M', 'S71MA', 'SSM', 'SCLM', 'HHBS', 'SBTN', 'BTRM', 'SBTL', 'M62SD', 'S62M', 'KM6', 'KS6', '113SD', 'SKMM', 'CCM', 'PKRM', 'MPKS', 'PKO', 'FYS', 'KPM', 'WVW', 'LHM', 'LHM1', 'LHM2', 'LHS ', 'JJM', 'AX', 'AXA', 'SVVG', 'S359M', 'S359S', 'S359am', 'S359bm', 'SLP', 'SLG', 'SLQ', 'SLR', 'LGA', 'QQMZ', 'QQMW', 'QQMY', 'QQMA', 'TP', 'KKM', 'KKMA', 'KKS', 'KKC', 'KKD', 'KKE', 'KKJ', 'KKN', 'KKF', 'KKL', 'KAA', 'XKM', 'cks', 'C2', 'C3', 'C12', 'KP', 'YUM', 'FJM', 'SAZM', 'A68M', 'FFM', '21M', 'BPK'
+			)
+	)
+	,custAgent
+AS (
+	SELECT recommend AS custid
+	FROM custInfo cs WITH (NOLOCK)
+		INNER JOIN custInit ci ON cs.custid = ci.custid
+	WHERE ci.roleid = 1
+	)
+	,custMaster
+AS (
+	SELECT mrecommend AS custid
+	FROM custInfo cs WITH (NOLOCK)
+		INNER JOIN custInit ci ON cs.custid = ci.custid
+	WHERE ci.roleid = 2
+	)
+	,custSuper
+AS (
+	SELECT srecommend AS custid
+	FROM custInfo cs WITH (NOLOCK)
+		INNER JOIN custInit ci ON cs.custid = ci.custid
+	WHERE ci.roleid = 3
+	)
 INSERT INTO #temp (
 	custid
 	,isfinished
 	)
-SELECT cs.custid
+SELECT t.custid
 	,0
-FROM dbo.custInfo ci WITH (NOLOCK)
-WHERE username IN ('302RM',
-'M32RM',
-'M32M',
-'S32M',
-'S32AM',
-'S32BM',
-'92RM',
-'MGRM',
-'SGM',
-'SG1M',
-'SG2M',
-'SG3M',
-'SG5M',
-'SG6M',
-'SG7M',
-'SG8M',
-'sg9m',
-'D922RM',
-'M922M',
-'S922M',
-'S922N',
-'S922MA',
-'359RM',
-'359SD',
-'HD359',
-'M359RM',
-'M359SD',
-'M359ARM',
-'M359ASD',
-'S359CM',
-'SKM',
-'PHRM',
-'phsd',
-'MPHSD',
-'SPHM',
-'SPKM',
-'SPKR',
-'TKRM',
-'MYRM',
-'MYMRM',
-'MYSD',
-'SYM',
-'JMRM',
-'S35M',
-'S35RM',
-'MMMRM',
-'MMPRM',
-'SMM',
-'SMSM',
-'MMSD',
-'SMMS',
-'SSMS',
-'MKKRM',
-'M7RM',
-'M7ARM',
-'M7SD',
-'M7BRM',
-'M7CRM',
-'ywrm',
-'1158RM',
-'M58SD',
-'S58RM',
-'659RM',
-'6599RM',
-'MALM',
-'M12RM',
-'S12M',
-'SGS',
-'SGSM',
-'SGSN',
-'SGMM',
-'MAMRM',
-'M96RM',
-'2588RM',
-'M258RM',
-'2588SD',
-'MHOSD',
-'MHORM',
-'MHO1SD',
-'MHO2SD',
-'MHOASD',
-'M25RM',
-'S25RM',
-'L25RM',
-'S09M',
-'MQRM',
-'MQARM',
-'MMYBRM',
-'BYS',
-'3SEXT',
-'S33M',
-'S33SM',
-'S33S',
-'33RM',
-'PTM',
-'M26RM',
-'M26SD',
-'M26ARM',
-'SVM',
-'SVS',
-'M11SD',
-'S5S',
-'S5M',
-'330SD',
-'M1169RM',
-'M116RM',
-'M116ARM',
-'M169RM',
-'SCM',
-'SCS',
-'SCSM',
-'HIS',
-'HIM',
-'69SD',
-'S69SD',
-'S69RM',
-'S7RM',
-'S56RM',
-'S56ARM',
-'S56BRM',
-'S56CRM',
-'S56DRM',
-'S56SD',
-'346RM',
-'S36RM',
-'79RM',
-'S79RM',
-'WD',
-'WC',
-'M51SD',
-'TAS51S',
-'S51SM',
-'S47SD',
-'S47RM',
-'SMORM',
-'SMOM',
-'SMOG',
-'SS31S',
-'S31SD',
-'S31ARM',
-'SAPM',
-'A31M',
-'S116SD',
-'S31RRM',
-'S31ASD',
-'S31BSD',
-'SPA1M',
-'M3CRM',
-'SPA2M',
-'SPA3M ',
-'A31AP',
-'B31BP',
-'M50RM',
-'M53SD',
-'S53S',
-'S49RM',
-'S91RM',
-'SSTMM',
-'S3ARM',
-'M83RM',
-'M83ARM',
-'S31M',
-'M98RM',
-'SDRM',
-'SDSD',
-'SDARM',
-'1188RM',
-'S188RM',
-'S188ARM',
-'M188SD',
-'M90RM',
-'S90RM',
-'M6SD',
-'M6RM',
-'M73SD',
-'M73ASD',
-'M73BSD',
-'M73CSD',
-'M73DSD',
-'M73ESD',
-'S11S',
-'S11SM',
-'S11M',
-'S11M1',
-'S11M2',
-'S11M4',
-'S11M5',
-'S11M6',
-'S11M7',
-'S11M8',
-'S11N',
-'M88SD',
-'M88ASD',
-'S88M',
-'M88M',
-'M553M',
-'S70M',
-'SOGO',
-'SOGA',
-'SEM',
-'SEMA',
-'SJM',
-'SJSD',
-'S93RM',
-'S93M',
-'S93S',
-'M93S',
-'S93D',
-'S305RM',
-'S31RM',
-'S31BRM',
-'31bsd',
-'SHSD',
-'hhm',
-'hhma',
-'HHN',
-'SBS',
-'SBM',
-'SCES',
-'M222M',
-'2MM',
-'2MN',
-'2RM',
-'2NN',
-'2RR',
-'688rm',
-'S688M',
-'SAKM',
-'SORM',
-'MKM',
-'MKS',
-'MKM1',
-'THM',
-'JCM',
-'MKM2',
-'MKS1',
-'HM',
-'DKD',
-'KYM',
-'MKYM',
-'085RM',
-'S85S',
-'S85M',
-'s66s',
-'JES',
-'TH8m',
-'SBSD',
-'D2RM',
-'DDT',
-'SPSD',
-'SWM',
-'D3RM',
-'42rm',
-'42sd',
-'S42RM',
-'S42S',
-'M42M',
-'S42ARM',
-'S42M',
-'S2M',
-'S2MM',
-'STPM',
-'MKWRM',
-'SRRMB',
-'SKWRMB',
-'SRH',
-'SRHK',
-'SRMA',
-'JAS',
-'JAM',
-'JAU',
-'S99M',
-'M797M',
-'M797AM',
-'M797RM',
-'wm',
-'S797S',
-'WMA',
-'WMB',
-'DDS',
-'s45m',
-'S45AM',
-'KJM',
-'KJMB',
-'KJMC',
-'KJMA',
-'KJMD',
-'KJME',
-'AHM',
-'AHT',
-'AHV',
-'AHZ',
-'DKS',
-'415NSD',
-'S41S',
-'S41M',
-'S43S',
-'JAD',
-'SZM',
-'MA',
-'YKM',
-'CYKM',
-'M822M',
-'S822M',
-'S822MA',
-'D5RM',
-'HPM',
-'HPN',
-'HPMM',
-'SMY',
-'HPD',
-'SLM',
-'SSSD',
-'S23S',
-'SLLM',
-'SATS',
-'SATM',
-'AHS',
-'AHSD',
-'SFS',
-'JM',
-'SJS',
-'JS9',
-'SYSM',
-'JMA',
-'M95RM',
-'S95M',
-'S95RM',
-'S95AM',
-'95RMOLD',
-'PPM',
-'3008RM',
-'3008ARM',
-'HS',
-'SYLRM',
-'SYLSD',
-'SYLM',
-'S71RM',
-'S71M',
-'S71MA',
-'SSM',
-'SCLM',
-'HHBS',
-'SBTN',
-'BTRM',
-'SBTL',
-'M62SD',
-'S62M',
-'KM6',
-'KS6',
-'113SD',
-'SKMM',
-'CCM',
-'PKRM',
-'MPKS',
-'PKO',
-'FYS',
-'KPM',
-'WVW',
-'LHM',
-'LHM1',
-'LHM2',
-'LHS ',
-'JJM',
-'AX',
-'AXA',
-'SVVG',
-'S359M',
-'S359S',
-'S359am',
-'S359bm',
-'SLP',
-'SLG',
-'SLQ',
-'SLR',
-'LGA',
-'QQMZ',
-'QQMW',
-'QQMY',
-'QQMA',
-'TP',
-'KKM',
-'KKMA',
-'KKS',
-'KKC',
-'KKD',
-'KKE',
-'KKJ',
-'KKN',
-'KKF',
-'KKL',
-'KAA',
-'XKM',
-'cks',
-'C2',
-'C3',
-'C12',
-'KP',
-'YUM',
-'FJM',
-'SAZM',
-'A68M',
-'FFM',
-'21M',
-'BPK')
+FROM (
+	SELECT custid
+	FROM custInit
+	
+	UNION
+	SELECT custid
+	FROM custAgent
+	
+	UNION
+	SELECT custid
+	FROM custMaster
+	
+	UNION
+	SELECT custid
+	FROM custSuper
+	) t;
 
 DECLARE @ids VARCHAR(max)
 	,@rowcnt INT
@@ -606,5 +199,5 @@ END
 
 INS_COMPLETED:
 	DROP TABLE #temp
-	PRINT 'Keno- (CustGameType) - insert completed - ' + CAST((@rowTotal*9) AS VARCHAR(20)) + 'rows'
+	PRINT 'Keno- (CustGameType) - update completed - ' + CAST((@rowTotal*7) AS VARCHAR(20)) + 'rows'
 GO
