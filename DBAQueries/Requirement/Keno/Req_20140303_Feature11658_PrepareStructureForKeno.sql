@@ -128,3 +128,15 @@ SELECT
 				  ,HideKeno
 FROM [DELETED]
 GO
+
+----------------------------------------------------------------
+--Grant permission select on DBTXN.bodb02.dbo.GameType for all web account
+----------------------------------------------------------------
+USE bodb02
+GO
+GRANT SELECT ON GameType TO [bodbAdminNet]
+GRANT SELECT ON GameType TO [bodbDownlineNet]
+GRANT SELECT ON GameType TO [bodbDownlineNetView]
+GRANT SELECT ON GameType TO [bodbExtAccNet]
+GRANT SELECT ON GameType TO [Dot_Member]
+GO

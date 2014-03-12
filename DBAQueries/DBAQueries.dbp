@@ -47,11 +47,16 @@ Begin DataProject = "DBAQueries"
       End
       Begin Folder = "Keno"
          Script = "Req_20140227_Feature11658_AddLogActionForKeno.sql"
+         Script = "Req_20140301_Feature_11658_Insert_KenoDefaultSettingForCreditCustomersFromNG.sql"
+         Script = "Req_20140301_Feature_11658_Insert_KenoDefaultSettingForDepositCustomersFromNG.sql"
          Script = "Req_20140303_Feature_AddLogActionForKeno_P1.sql"
          Script = "Req_20140303_Feature11658_PrepareStructureForKeno.sql"
+         Script = "Req_20140307_Feature11658_AddErrorMsgForKeno.sql"
+         Script = "Req_20140311_Feature11658_UpdateErrorMsg_LogAction_Keno.sql"
       End
       Begin Folder = "LAS"
          Script = "Req_20140210_Feature10701_AddLogActionForLAS_SpecialDelete.sql"
+         Script = "Req_20140305_Feature10701_PrepareStructureLogForLas.sql"
       End
       Begin Folder = "Live CS"
          Script = "Req_20130912_Feature5611_3star88_UpdatePTsettingforUUS.sql"
@@ -64,6 +69,8 @@ Begin DataProject = "DBAQueries"
       End
       Begin Folder = "NumberGame"
          Script = "Req_20140228_Feature_UpdateBetSettingForCreditCustomers.sql"
+         Script = "Req_20140305_Feature_Scr1_UpdateBetSettingForAllSMA.sql"
+         Script = "Req_20140305_Feature_Scr2_UpdatebetsettingsForTHAUS.sql"
       End
       Begin Folder = "Opus CS"
          Script = "Req_20130926_Feature6078_PrepareStructureforOpusCasino.sql"

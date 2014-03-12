@@ -44,5 +44,5 @@ INSERT INTO [dbo].[LogAction]
  SELECT  505, 1, 'Acc_CustOverrideUpdOpusCS', N'Update Opus Casino Min Position Taking', N'Update Opus Casino Min Position Taking', N'Update Opus Casino Min Position Taking', N'Update Opus Casino Min Position Taking', N'Update Opus Casino Min Position Taking', N'Update Opus Casino Min Position Taking', N'Update Opus Casino Min Position Taking', N'Update Opus Casino Min Position Taking', 0
  
  UNION ALL
- SELECT  1146, NULL, 'Acc_CustomerUpdDisableCSOpus', N'Update enable/disable Opus Casino', N'Update enable/disable Opus Casino', N'Update enable/disable Opus Casino', N'Update enable/disable Opus Casino', N'Update enable/disable Opus Casino', N'Update enable/disable Opus Casino', N'Update enable/disable Opus Casino', N'Update enable/disable Opus Casino', 0
+ SELECT  1146, NULL, 'Acc_CustomerUpdDisableCSOpus', N'Update enable/disable Opus Casino status', N'Update enable/disable Opus Casino status', N'Update enable/disable Opus Casino status', N'Update enable/disable Opus Casino status', N'Update enable/disable Opus Casino status', N'Update enable/disable Opus Casino status', N'Update enable/disable Opus Casino status', N'Update enable/disable Opus Casino status', 0
  
