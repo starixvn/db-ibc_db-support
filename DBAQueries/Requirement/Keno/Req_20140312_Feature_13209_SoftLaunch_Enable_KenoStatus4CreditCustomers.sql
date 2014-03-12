@@ -60,11 +60,38 @@ BEGIN
 	;WITH kenoBetType AS 
 	(
 		SELECT 202 AS sporttype
-			, IBCBetTypeID AS bettype
-			, GameTypeID
-		FROM DBPRO.bodb02.dbo.GameType WITH(NOLOCK)
-		WHERE [IBCBetTypeID] >=  1501 AND [IBCBetTypeID] <= 1509
-		AND IsDisabled = 0
+			,1501 AS bettype
+			,1 AS gametypeid -- Australia Acttab
+		
+		UNION ALL
+		SELECT 202 AS sporttype
+			,1503 AS bettype
+			,3 AS gametypeid -- Slovakia Eklub
+
+		UNION ALL
+		SELECT 202 AS sporttype
+			,1504 AS bettype
+			,4 AS gametypeid -- Canada Keno
+
+		UNION ALL
+		SELECT 202 AS sporttype
+			,1505 AS bettype
+			,5 AS gametypeid -- West Canada Keno
+
+		UNION ALL
+		SELECT 202 AS sporttype
+			,1507 AS bettype
+			,7 AS gametypeid -- Massac
+
+		UNION ALL
+		SELECT 202 AS sporttype
+			,1508 AS bettype
+			,8 AS gametypeid -- Ohio
+
+		UNION ALL
+		SELECT 202 AS sporttype
+			,1509 AS bettype
+			,9 AS gametypeid -- Malta
 	)
 	,kenoEnableSetting AS
 	(
