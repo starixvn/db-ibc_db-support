@@ -164,22 +164,22 @@ INSERT INTO #temp (
 	)
 SELECT cs.custid
 	,0
-FROM dbo.CustOverride3rd cs WITH (NOLOCK)
+FROM dbo.CustSetting3rd cs WITH (NOLOCK)
 	INNER JOIN dbo.custInfo ci WITH (NOLOCK)
 	ON cs.custid = ci.custid
-		AND cs.sporttype = 161 -- Number Game 
-		AND cs.bettype = 81
 WHERE ci.srecommend NOT IN (
 		SELECT custid
 		FROM dbo.Dep_CustSuper WITH (NOLOCK)
 		)
+	AND cs.sporttype = 161 -- Number Game 
+	AND cs.bettype = 81
 	AND ci.roleid IN (2, 3, 4)
 	AND ci.custid <= @maxCustID
 
 --delete [CustGameType]
-delete g
-from [dbo].[CustGameType] g
-inner join #temp t on g.CustID = t.custid
+--delete g
+--from [dbo].[CustGameType] g
+--inner join #temp t on g.CustID = t.custid
 
 DECLARE @ids VARCHAR(max)
 	,@rowcnt INT
