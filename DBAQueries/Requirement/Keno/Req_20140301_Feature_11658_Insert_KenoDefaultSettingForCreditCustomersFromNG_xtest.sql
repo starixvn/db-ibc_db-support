@@ -1,4 +1,4 @@
-/** SP to insert default setting of Keno game **/
+/** SP to insert default setting of Keno game - deposit customers **/
 ALTER PROCEDURE [dbo].[Acc_ExecRep_Cust_09] 
 	@ids VARCHAR(MAX)
 	, @IsDisable BIT = 0 
