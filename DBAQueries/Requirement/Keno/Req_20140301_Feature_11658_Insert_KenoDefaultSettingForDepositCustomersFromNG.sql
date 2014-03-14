@@ -1,34 +1,20 @@
-﻿/** SP to insert default setting for deposit customer of Keno game **/
+﻿/** SP to insert default setting of Keno game - deposit customers **/
 ALTER PROCEDURE [dbo].[Acc_ExecRep_Cust_09] 
-	@ids VARCHAR(MAX), 
-	@IsDisable BIT = 0 
+	@ids VARCHAR(MAX)
+	, @IsDisable BIT = 0 
 AS
 /*
-	Created: Elodie
-	Date: 20140310
-	Task: Insert default setting of Keno game for deposit customers
-	DB: DBTXN/CustDB
+	Created: Bobby
+	Date: 20140303
+	Task: Insert default setting of Keno game for credit customers
+	DB: DBTRANS/CustDB
 
 	Param's Explanation:
 		• @ids: list custid
-		• @IsDisable: 0:enable|1:disable
+		• @IsDisable: 0:active|1:inactive
 */
 BEGIN
 	SET NOCOUNT ON
-
-	IF ((
-			SELECT COUNT(1)
-			FROM sys.objects
-			WHERE NAME IN ('Dep_CustSetting3rd', 'custInfo', 'CustSettingGame')
-				AND type = 'U'
-			) <> 3 
-		OR (SELECT COUNT(1)
-			FROM sys.objects
-			WHERE NAME IN ('CustGameType') 
-			and @@SERVERNAME not in ('DBBingoAdmin','DBLVCasino','DBBingo01','DBCasinoAdmin','DBCasinoQA1','DBCasinoQA2')
-			AND type = 'U') <> 1)
-
-			RETURN
 
 	DECLARE @res AS TABLE (custid INT)
 	DECLARE @splitter CHAR(1)
@@ -61,11 +47,22 @@ BEGIN
 		SET @i = @i + 1
 	END
 
-	--re-check @IsDisable value
-	SET @IsDisable = ISNULL(@IsDisable, 0)
+	SET @IsDisable = ISNULL(@IsDisable, 1)
 
-	SELECT *
-	INTO #kenoBetType 
+	IF NOT EXISTS ( SELECT * FROM sys.objects WHERE NAME IN ('custInfo') AND type = 'U')
+		RETURN
+
+	--update hidekeno
+	UPDATE c
+	SET HideKeno = @IsDisable
+	FROM dbo.custinfo c WITH(ROWLOCK, UPDLOCK)
+	INNER JOIN @res res on c.custid = res.custid
+
+	--create gametype data
+	DECLARE @kenoBetType AS TABLE (sporttype INT, bettype INT, gametypeid INT)
+
+	INSERT INTO @kenoBetType(sporttype, bettype, gametypeid)
+	SELECT sporttype, bettype, gametypeid
 	FROM
 	(
 		SELECT 202 AS sporttype
@@ -113,6 +110,11 @@ BEGIN
 			,9 AS gametypeid -- Malta
 	) tmp
 
+	IF NOT EXISTS ( SELECT * FROM sys.objects WHERE NAME = 'custgametype' AND type = 'U' )
+		OR @@SERVERNAME IN ('DBBingoAdmin','DBLVCasino','DBBingo01','DBCasinoAdmin','DBCasinoQA1','DBCasinoQA2','LiveCasinoAdminDB')
+		RETURN
+
+	--insert into CustGameType
 	;WITH kenoCustGameType AS
 	(
 		SELECT t.[gametypeid]
@@ -121,11 +123,13 @@ BEGIN
 			, c.maxpermatch161 AS [MaxPerGameType]
 			, cs.[MinBet]
 			, cs.[MaxBet]
-			, case when t.bettype in (1502, 1506) then 1 else @IsDisable END as [IsDisabled] 
+			, @IsDisable [IsDisabled] 
 		FROM @res AS res 
-		INNER JOIN dbo.Dep_CustSetting3rd cs WITH(NOLOCK) ON res.custid = cs.custid
-		INNER JOIN dbo.custinfo c WITH(NOLOCK) ON res.custid = c.custid
-		CROSS JOIN #kenoBetType t
+		INNER JOIN dbo.Dep_CustSetting3rd cs WITH(NOLOCK)
+			ON res.custid = cs.custid
+		INNER JOIN dbo.custinfo c WITH(NOLOCK)
+			ON res.custid = c.custid
+		CROSS JOIN @kenoBetType t
 		WHERE cs.[sporttype] = 161
 			AND cs.[bettype] = 81
 	)
@@ -146,26 +150,43 @@ BEGIN
 		,tmp.[IsDisabled]
 	FROM kenoCustGameType tmp
 	;
-	WITH kenoCustSettingGame AS 
+
+	IF NOT EXISTS ( SELECT * FROM sys.objects WHERE NAME = 'CustSettingGame' AND type = 'U' )
+		RETURN
+
+	--insert into CustSettingGame
+	;WITH kenoCustSettingGame AS 
 	(
 		SELECT cust.[CustID]
-           ,1501 as [Bettype]
-           ,202 as [Sporttype]
-           ,cust.[apositiontaking]
-           ,cust.[mpositiontaking]
-           ,cust.[spositiontaking]
-           ,cust.[playerdiscount]
-           ,cust.[discount]
-           ,cust.[adiscount]
-           ,cust.[sdiscount]
-           ,0 AS [autopositiontaking]
-           ,0 AS [isautopositiontaking]
-           ,0 AS [autompositiontaking]
-           ,0 AS [isautompositiontaking]
-		FROM dbo.[Dep_CustSetting3rd] cust WITH(NOLOCK)
-		INNER JOIN @res AS res ON cust.custid = res.custid
-		WHERE cust.[sporttype] = 161
-			AND cust.[bettype] = 81
+		,t.[Bettype]
+		,t.[Sporttype]
+		,case c.roleid --agent/member
+			when 4 then 0.85 
+			when 2 then 0.85 
+			when 1 then 0.85 
+			else 0 
+			end AS [apositiontaking]
+		,case c.roleid ----master
+			when 4 then 0.85 
+			when 3 then 0.85 
+			else 0 
+			end AS [mpositiontaking]
+		,case c.roleid --super
+			when 4 then 0.85 
+			else 0 
+			end AS [spositiontaking]
+		,0 AS [playerdiscount]
+		,0 AS [discount]
+		,0 AS [adiscount]
+		,0 AS [sdiscount]
+		,0.00 AS [autopositiontaking]
+		,0 AS [isautopositiontaking]
+		,0.00 AS [autompositiontaking]
+		,0 AS [isautompositiontaking]
+		FROM @res AS res 
+		INNER JOIN dbo.custinfo c WITH(NOLOCK)
+			ON res.custid = c.custid
+		CROSS JOIN (select top 1 * from @kenoBetType where bettype=1501) t
 	)
 	INSERT INTO [dbo].[CustSettingGame]([CustID]
 	   ,[Bettype]
@@ -177,6 +198,10 @@ BEGIN
 	   ,[discount]
 	   ,[adiscount]
 	   ,[sdiscount]
+	   ,[autopositiontaking]
+	   ,[isautopositiontaking]
+	   ,[autompositiontaking]
+	   ,[isautompositiontaking]
 	)
 	SELECT tmp.[CustID]
 	   ,tmp.[Bettype]
@@ -188,32 +213,28 @@ BEGIN
 	   ,tmp.[discount]
 	   ,tmp.[adiscount]
 	   ,tmp.[sdiscount]
-	 FROM kenoCustSettingGame tmp
+	   ,tmp.[autopositiontaking]
+	   ,tmp.[isautopositiontaking]
+	   ,tmp.[autompositiontaking]
+	   ,tmp.[isautompositiontaking]
+	FROM kenoCustSettingGame tmp
 	;
-
-	DROP TABLE #kenoBetType;
-	
-	--update hidekeno
-	UPDATE c
-		SET HideKeno = 0
-	FROM dbo.custinfo c WITH(ROWLOCK, UPDLOCK)
-	INNER JOIN @res res on c.custid = res.custid
 END
 GO
 
 /*
-	Created: Elodie
-	Date: 20140310
+	Created: Bobby
+	Date: 20140303
 	Task: Insert default setting of Keno game for deposit customers
-	DB: DBTXN/CustDB
+	DB: DBTRANS/CustDB
 */
 --USE CustDB
 --GO
 
 DECLARE @maxCustID INT
-	, @IsDisable BIT = 0
+	, @IsDisable BIT = 1
 
-SELECT @maxCustID = 1000000--MAX(CustId) FROM dbo.custInfo WITH (NOLOCK)
+--SELECT @maxCustID = MAX(CustId) FROM dbo.custInfo WITH (NOLOCK)
 
 CREATE TABLE #temp (
 	custid INT PRIMARY KEY
@@ -224,29 +245,15 @@ INSERT INTO #temp (
 	custid
 	,isfinished
 	)
-SELECT cs.custid
+SELECT ci.custid
 	,0
-FROM dbo.[Dep_CustSetting3rd] cs WITH (NOLOCK)
-	INNER JOIN dbo.custInfo ci WITH (NOLOCK)
-	ON cs.custid = ci.custid
-		AND cs.sporttype = 161 -- Number Game 
-		AND cs.bettype = 81
+FROM dbo.custInfo ci WITH (NOLOCK)
 WHERE ci.srecommend IN (
 		SELECT custid
-		FROM dbo.Dep_CustSuper WITH (NOLOCK) where site = 'spondemo'
-		)
-	AND ci.custid <= @maxCustID
-
---delete [CustGameType]
-delete g
-from [dbo].[CustGameType] g
-inner join #temp t on g.CustID = t.custid
-
---delete [CustSettingGame]
-delete s
-from [dbo].[CustSettingGame] s
-inner join #temp t on s.CustID = t.custid
-where s.sporttype = 202
+		FROM dbo.Dep_CustSuper WITH (NOLOCK)
+	)
+	AND ci.roleid IN (1,2,3,4)
+	--AND ci.custid <= @maxCustID
 
 	
 DECLARE @ids VARCHAR(max)

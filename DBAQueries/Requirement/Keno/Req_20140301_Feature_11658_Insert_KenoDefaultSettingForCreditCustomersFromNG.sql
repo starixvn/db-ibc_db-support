@@ -1,4 +1,4 @@
-﻿/** SP to insert default setting of Keno game **/
+﻿/** SP to insert default setting of Keno game - credit customers **/
 ALTER PROCEDURE [dbo].[Acc_ExecRep_Cust_09] 
 	@ids VARCHAR(MAX)
 	, @IsDisable BIT = 0 
@@ -16,12 +16,7 @@ AS
 BEGIN
 	SET NOCOUNT ON
 
-	IF (
-			SELECT COUNT(1)
-			FROM sys.objects
-			WHERE NAME IN ('CustGameType', 'custInfo')
-				AND type = 'U'
-			) <> 2 RETURN
+	
 
 	DECLARE @res AS TABLE (custid INT)
 	DECLARE @splitter CHAR(1)
@@ -53,6 +48,19 @@ BEGIN
 
 		SET @i = @i + 1
 	END
+
+	IF NOT EXISTS ( SELECT * FROM sys.objects WHERE NAME IN ('custInfo') AND type = 'U')
+		RETURN
+
+	--update hidekeno
+	UPDATE cust
+		SET HideKeno = @IsDisable
+	FROM dbo.custinfo cust WITH(ROWLOCK, UPDLOCK)
+	INNER JOIN @res res on cust.custid = res.custid
+
+	IF NOT EXISTS ( SELECT * FROM sys.objects WHERE NAME = 'custgametype' AND type = 'U' )
+		OR @@SERVERNAME IN ('DBBingoAdmin','DBLVCasino','DBBingo01','DBCasinoAdmin','DBCasinoQA1','DBCasinoQA2','LiveCasinoAdminDB')
+		RETURN
 
 	--re-check @IsDisable value
 	SET @IsDisable = ISNULL(@IsDisable, 0)
@@ -130,12 +138,7 @@ BEGIN
 		,tmp.[MaxBet]
 		,tmp.[IsDisabled]
 	FROM kenoSetting tmp
-	;
-	--update hidekeno
-	UPDATE cust
-		SET HideKeno = 1
-	FROM dbo.custinfo cust WITH(ROWLOCK, UPDLOCK)
-	INNER JOIN @res res on cust.custid = res.custid
+	
 END
 GO
 
@@ -162,24 +165,15 @@ INSERT INTO #temp (
 	custid
 	,isfinished
 	)
-SELECT cs.custid
+SELECT ci.custid
 	,0
-FROM dbo.CustOverride3rd cs WITH (NOLOCK)
-	INNER JOIN dbo.custInfo ci WITH (NOLOCK)
-	ON cs.custid = ci.custid
-		AND cs.sporttype = 161 -- Number Game 
-		AND cs.bettype = 81
+FROM dbo.custInfo ci WITH (NOLOCK)
 WHERE ci.srecommend NOT IN (
 		SELECT custid
 		FROM dbo.Dep_CustSuper WITH (NOLOCK)
 		)
-	AND ci.roleid IN (2, 3, 4)
+	AND roleid IN (1,2,3,4)
 	AND ci.custid <= @maxCustID
-
---delete [CustGameType]
-delete g
-from [dbo].[CustGameType] g
-inner join #temp t on g.CustID = t.custid
 
 DECLARE @ids VARCHAR(max)
 	,@rowcnt INT
