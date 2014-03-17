@@ -49,7 +49,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20140206_Feature10922_UpdSettingsForAllLicensees.sql"
       End
       Begin Folder = "Keno"
-         Script = "Req_20140227_Feature11658_AddLogActionForKeno.sql"
+         Script = "Req_20140227_Feature11658_AddLogActionForKeno_P2.sql"
          Script = "Req_20140301_Feature_11658_Insert_KenoDefaultSettingForCreditCustomersFromNG.sql"
          Script = "Req_20140301_Feature_11658_Insert_KenoDefaultSettingForDepositCustomersFromNG.sql"
          Script = "Req_20140303_Feature_AddLogActionForKeno_P1.sql"
