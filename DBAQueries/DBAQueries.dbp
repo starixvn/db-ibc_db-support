@@ -29,6 +29,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130807_Feature_scr02_UpdEnable789y_ExceptEtus.sql"
          Script = "Req_20130807_Feature2344_scr01_UpdEnableForIndo_75555.sql"
          Script = "Req_20130807_Feature2344_scr03_UpdEnable_EtusHeadline.sql"
+         Script = "Req_20140318_Feature_UpdateDisableBingoStatus.sql"
       End
       Begin Folder = "Check PT"
          Script = "Req_40PercentMinPT_Check PT before Update.sql"
