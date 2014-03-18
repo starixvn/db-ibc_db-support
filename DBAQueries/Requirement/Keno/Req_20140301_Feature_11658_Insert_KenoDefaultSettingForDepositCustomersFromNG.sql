@@ -157,7 +157,7 @@ BEGIN
 	--insert into CustSettingGame
 	;WITH kenoCustSettingGame AS 
 	(
-		SELECT cust.[CustID]
+		SELECT c.[CustID]
 		,t.[Bettype]
 		,t.[Sporttype]
 		,case c.roleid --agent/member
