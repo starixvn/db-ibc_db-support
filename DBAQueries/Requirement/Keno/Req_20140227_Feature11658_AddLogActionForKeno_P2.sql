@@ -14,8 +14,12 @@ INSERT INTO [dbo].[LogAction]
            ,[ActionNameKO]           
            ,[ActionNameVI]		   
            ,[IsInternal])
+SELECT  446, NULL, 'Acc_CustomerUpdMemberKeno_MAg', N'Update Master''s Keno Position Taking for member', N'Update Master''s Keno Position Taking for member', N'Update Master''s Keno Position Taking for member', N'Update Master''s Keno Position Taking for member', N'Update Master''s Keno Position Taking for member', N'Update Master''s Keno Position Taking for member', N'Update Master''s Keno Position Taking for member', N'Update Master''s Keno Position Taking for member', 0
+UNION ALL
+SELECT  447, NULL, 'Acc_CustomerUpdMemberKeno_SAg', N'Update Super''s Keno Position Taking for member', N'Update Super''s Keno Position Taking for member', N'Update Super''s Keno Position Taking for member', N'Update Super''s Keno Position Taking for member', N'Update Super''s Keno Position Taking for member', N'Update Super''s Keno Position Taking for member', N'Update Super''s Keno Position Taking for member', N'Update Super''s Keno Position Taking for member', 0
+UNION ALL
 SELECT  442, NULL, 'Acc_CustomerUpdSuperKeno_Positiontaking', N'Update Keno Position Taking for super', N'Update Keno Position Taking for super', N'Update Keno Position Taking for super', N'Update Keno Position Taking for super', N'Update Keno Position Taking for super', N'Update Keno Position Taking for super', N'Update Keno Position Taking for super', N'Update Keno Position Taking for super', 0
- UNION ALL
+UNION ALL
 SELECT  443, NULL, 'Acc_CustomerUpdMasterKeno_Positiontaking', N'Update Keno Position Taking for master', N'Update Keno Position Taking for master', N'Update Keno Position Taking for master', N'Update Keno Position Taking for master', N'Update Keno Position Taking for master', N'Update Keno Position Taking for master', N'Update Keno Position Taking for master', N'Update Keno Position Taking for master', 0
 UNION ALL
 SELECT  444, NULL, 'Acc_CustomerUpdAgentKeno_Positiontaking', N'Update Keno Position Taking for agent', N'Update Keno Position Taking for agent', N'Update Keno Position Taking for agent', N'Update Keno Position Taking for agent', N'Update Keno Position Taking for agent', N'Update Keno Position Taking for agent', N'Update Keno Position Taking for agent', N'Update Keno Position Taking for agent', 0
