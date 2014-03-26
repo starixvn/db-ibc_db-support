@@ -14,6 +14,14 @@ INSERT INTO [dbo].[LogAction]
            ,[ActionNameKO]           
            ,[ActionNameVI]		   
            ,[IsInternal])
+SELECT  233, NULL, 'Acc_CustomerUpdSuperKeno_Commission', N'Update Keno Commission for super', N'Update Keno Commission for super', N'Update Keno Commission for super', N'Update Keno Commission for super', N'Update Keno Commission for super', N'Update Keno Commission for super', N'Update Keno Commission for super', N'Update Keno Commission for super', 0
+UNION ALL
+SELECT  234, NULL, 'Acc_CustomerUpdMasterKeno_Commission', N'Update Keno Commission for master', N'Update Keno Commission for master', N'Update Keno Commission for master', N'Update Keno Commission for master', N'Update Keno Commission for master', N'Update Keno Commission for master', N'Update Keno Commission for master', N'Update Keno Commission for master', 0
+UNION ALL
+SELECT  235, NULL, 'Acc_CustomerUpdAgentKeno_Commission', N'Update Keno Commission for agent', N'Update Keno Commission for agent', N'Update Keno Commission for agent', N'Update Keno Commission for agent', N'Update Keno Commission for agent', N'Update Keno Commission for agent', N'Update Keno Commission for agent', N'Update Keno Commission for agent', 0
+UNION ALL
+SELECT  236, NULL, 'Acc_CustomerUpdMemberKeno_Commission', N'Update Keno Commission for member', N'Update Keno Commission for member', N'Update Keno Commission for member', N'Update Keno Commission for member', N'Update Keno Commission for member', N'Update Keno Commission for member', N'Update Keno Commission for member', N'Update Keno Commission for member', 0
+UNION ALL
 SELECT  446, NULL, 'Acc_CustomerUpdMemberKeno_MAg', N'Update Master''s Keno Position Taking for member', N'Update Master''s Keno Position Taking for member', N'Update Master''s Keno Position Taking for member', N'Update Master''s Keno Position Taking for member', N'Update Master''s Keno Position Taking for member', N'Update Master''s Keno Position Taking for member', N'Update Master''s Keno Position Taking for member', N'Update Master''s Keno Position Taking for member', 0
 UNION ALL
 SELECT  447, NULL, 'Acc_CustomerUpdMemberKeno_SAg', N'Update Super''s Keno Position Taking for member', N'Update Super''s Keno Position Taking for member', N'Update Super''s Keno Position Taking for member', N'Update Super''s Keno Position Taking for member', N'Update Super''s Keno Position Taking for member', N'Update Super''s Keno Position Taking for member', N'Update Super''s Keno Position Taking for member', N'Update Super''s Keno Position Taking for member', 0
