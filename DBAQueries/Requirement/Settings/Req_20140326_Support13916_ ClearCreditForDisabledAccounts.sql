@@ -34,7 +34,7 @@ SELECT custid
 from custInfo with(nolock)
 where srecommend not in (select custid from dbo.Dep_CustSuper with(nolock))
 	and enabled = 0 and credit > 0
-	and roleid <=4
+	and roleid <=2
 	and custid <=@max_custid 
 
 DECLARE @subtable TABLE(custid int)

@@ -62,6 +62,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20140318_Feature11658_PrepareStructureForKeno_P2.sql"
          Script = "Req_20140324_Feature_EnableKenoFor12betCustomers.sql"
          Script = "Req_20140324_Feature_Scr2_EnableHideKenoFor12betCustomers.sql"
+         Script = "Req_20140327_Feature11658_AddPermissionEnableKenoForExtAcc.sql"
       End
       Begin Folder = "LAS"
          Script = "Req_20140210_Feature10701_AddLogActionForLAS_SpecialDelete.sql"
