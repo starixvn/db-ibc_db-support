@@ -1,0 +1,1136 @@
+﻿ /*
+	Created: Johnson
+	Date: 2014-03-27
+	Task: Enable keno's games on CustGameType for Others group credit customers 
+	DB: DBTXN/CustDB
+*/ 
+
+ALTER PROCEDURE [dbo].[Acc_CustSetting_03]
+	@custid INT
+	,@roleid INT	
+	,@maxcustid INT
+	,@target VARCHAR(20)
+AS
+BEGIN
+	SET NOCOUNT ON
+	
+	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBTRANS') RETURN	-- run at all replicated servers
+	IF (@target = 'DBTRANS' AND @@SERVERNAME <> 'DBTRANS') RETURN -- run at dbtrans only
+	
+	IF ( SELECT COUNT(1) FROM sys.objects WHERE NAME IN ('Custinfo','CustGameType') AND type = 'U' ) <> 2
+		RETURN
+	
+	DECLARE @srecommend INT, @mrecommend INT, @recommend INT
+		
+	IF @roleid = 4
+	BEGIN
+		--enable keno's games super & all downlines
+		UPDATE cg
+		SET cg.IsDisabled = 0
+		FROM CustGameType cg WITH(UPDLOCK,ROWLOCK)
+			INNER JOIN CustInfo ci WITH(NOLOCK) ON cg.custid = ci.custid
+		WHERE ci.srecommend = @custid
+			AND ci.custid <= @maxcustid
+			AND cg.gametypeid NOT IN (2,6)
+	END
+	ELSE IF @roleid = 3
+	BEGIN
+		SELECT @srecommend = srecommend FROM CustInfo WITH(NOLOCK) WHERE custid = @custid
+		
+		--update upline & all downlines of master
+		UPDATE cg
+		SET cg.IsDisabled = 0
+		FROM CustGameType cg WITH(UPDLOCK,ROWLOCK)
+			INNER JOIN CustInfo ci WITH(NOLOCK) ON cg.custid = ci.custid
+		WHERE ( ci.mrecommend = @custid OR ci.custid = @srecommend)
+			AND ci.custid <= @maxcustid
+			AND cg.gametypeid NOT IN (2,6)					
+	END
+	ELSE IF @roleid = 2
+	BEGIN
+		SELECT @srecommend = srecommend, @mrecommend = mrecommend FROM CustInfo WITH(NOLOCK) WHERE custid = @custid
+		
+		--update uplines & all downlines of agent
+		UPDATE cg
+		SET cg.IsDisabled = 0
+		FROM CustGameType cg WITH(UPDLOCK,ROWLOCK)
+			INNER JOIN CustInfo ci WITH(NOLOCK) ON cg.custid = ci.custid
+		WHERE ( ci.recommend = @custid OR ci.custid IN (@srecommend,@mrecommend))
+			AND ci.custid <= @maxcustid
+			AND cg.gametypeid NOT IN (2,6)
+	END
+	ELSE IF @roleid = 1
+	BEGIN
+		SELECT @srecommend = srecommend, @mrecommend = mrecommend, @recommend = recommend FROM CustInfo WITH(NOLOCK) WHERE custid = @custid
+		
+		UPDATE cg
+		SET cg.IsDisabled = 0
+		FROM CustGameType cg WITH(UPDLOCK,ROWLOCK)
+		WHERE cg.custid IN (@srecommend, @mrecommend, @recommend, @custid)
+			AND gametypeid NOT IN (2,6)
+	END		
+END	
+GO
+-- END STEP 1: DEPLOY THIS SP @ DBTRANS.CustDB -------
+------------------------------------------------------
+
+
+---
+---
+-- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/053/054/06 -----
+--------------------------------------------------------------------------------------
+CREATE TABLE #tmpCust(custid INT PRIMARY KEY, roleid INT, isfinished bit default(0))
+
+DECLARE @max_custid INT, @custid INT, @roleid INT
+
+SET @max_custid = xxx 
+
+--494 SMA affected and 1 million downlines will be updated
+INSERT INTO #tmpCust(custid, roleid)
+	 select 	13338988	,	3	--	DJHK
+union select 	916947	,	2	--	02R
+union select 	3802	,	2	--	266HK
+union select 	1414	,	1	--	239HK
+union select 	1686	,	1	--	239RMB
+union select 	15515	,	3	--	M39IRMB
+union select 	344472	,	4	--	S39R
+union select 	2601912	,	4	--	S39RR
+union select 	1280	,	1	--	312rmb
+union select 	1241353	,	1	--	315RMB
+union select 	1981797	,	1	--	318RMB
+union select 	2398557	,	4	--	M312T
+union select 	2421139	,	3	--	M312TA
+union select 	2831919	,	2	--	312BP
+union select 	2969567	,	4	--	S312R
+union select 	4020626	,	3	--	M312RR
+union select 	8243036	,	4	--	R312R
+union select 	9672019	,	4	--	S312C
+union select 	12589170	,	4	--	S312RMB
+union select 	3821	,	1	--	339RMB
+union select 	30354	,	2	--	3S100
+union select 	261425	,	4	--	SPR
+union select 	301152	,	4	--	SPH
+union select 	1358274	,	4	--	SSR
+union select 	6032879	,	4	--	PPB
+union select 	6032912	,	4	--	PPR
+union select 	734658	,	2	--	3KHK
+union select 	16129	,	2	--	7899HK
+union select 	1371264	,	2	--	7899R
+union select 	4521616	,	2	--	789R
+union select 	37415	,	1	--	818BP
+union select 	122300	,	2	--	8188BP
+union select 	1004318	,	4	--	S87R
+union select 	9905998	,	4	--	AC1
+union select 	9906062	,	4	--	AC2
+union select 	12168675	,	4	--	ACK
+union select 	13290701	,	4	--	ACH
+union select 	13562677	,	4	--	ACH1
+union select 	13563191	,	4	--	ACH2
+union select 	13863347	,	4	--	ACH3
+union select 	13991545	,	4	--	AC3
+union select 	14132819	,	4	--	AC4
+union select 	11028100	,	4	--	AHMA
+union select 	1190555	,	4	--	SBT
+union select 	1358405	,	4	--	BBBU
+union select 	1558372	,	4	--	SBBT
+union select 	1795270	,	4	--	SBBR
+union select 	2272187	,	4	--	SBCT
+union select 	1385	,	1	--	CHAITB
+union select 	4318	,	1	--	CHAIRMB
+union select 	5994	,	3	--	CHTB
+union select 	17742	,	3	--	CHITB
+union select 	199094	,	4	--	ST
+union select 	487415	,	4	--	STT
+union select 	641140	,	4	--	ST1T
+union select 	641144	,	4	--	ST2T
+union select 	641145	,	4	--	ST3T
+union select 	641148	,	4	--	ST4T
+union select 	901858	,	4	--	ST5T
+union select 	901862	,	4	--	ST6T
+union select 	901864	,	4	--	ST7T
+union select 	1099499	,	4	--	ST8T
+union select 	1101895	,	4	--	ST9T
+union select 	1517030	,	4	--	BT
+union select 	1517951	,	4	--	B5T
+union select 	1521065	,	1	--	BCWL
+union select 	1523261	,	4	--	B1T
+union select 	1528410	,	4	--	B2T
+union select 	1528411	,	4	--	B3T
+union select 	1528413	,	4	--	B4T
+union select 	1528414	,	4	--	B6T
+union select 	1528418	,	4	--	B7T
+union select 	1528419	,	4	--	B8T
+union select 	1528420	,	4	--	B9T
+union select 	1528421	,	4	--	B10T
+union select 	1528422	,	4	--	B11T
+union select 	1536432	,	4	--	B12T
+union select 	1538057	,	4	--	B13T
+union select 	1538175	,	4	--	B14T
+union select 	1538183	,	4	--	B15T
+union select 	1538997	,	4	--	B16T
+union select 	1539009	,	4	--	B17T
+union select 	1539693	,	4	--	B18T
+union select 	1539698	,	4	--	B19T
+union select 	1539699	,	4	--	B20T
+union select 	1539700	,	4	--	B21T
+union select 	1540216	,	4	--	B22T
+union select 	1540217	,	4	--	B23T
+union select 	1588140	,	4	--	B24T
+union select 	1588145	,	4	--	B25T
+union select 	2388779	,	4	--	STEB
+union select 	2421122	,	4	--	SABT
+union select 	2508822	,	4	--	B26T
+union select 	2541779	,	4	--	B27T
+union select 	2957769	,	1	--	BTACC
+union select 	7424748	,	4	--	B28t
+union select 	7815141	,	4	--	B29T
+union select 	8458736	,	4	--	B30T
+union select 	9664861	,	4	--	B31T
+union select 	9669693	,	4	--	B32T
+union select 	9933863	,	4	--	B33T
+union select 	9933940	,	4	--	B35T
+union select 	9934001	,	4	--	B34T
+union select 	9934027	,	4	--	B36T
+union select 	9934190	,	4	--	B37T
+union select 	9934210	,	4	--	B38T
+union select 	9934227	,	4	--	B39T
+union select 	12285527	,	4	--	B40T
+union select 	210710	,	2	--	CJEU
+union select 	1382183	,	3	--	FBR
+union select 	2209358	,	3	--	FBM
+union select 	2327638	,	4	--	SFB
+union select 	4604381	,	4	--	FBH
+union select 	6150551	,	4	--	FBB
+union select 	5061500	,	4	--	GHK
+union select 	3824490	,	4	--	GN
+union select 	7881154	,	4	--	GX
+union select 	11579803	,	4	--	GC
+union select 	8551148	,	3	--	GT
+union select 	9931047	,	4	--	HT1
+union select 	9933782	,	4	--	HT2
+union select 	11306634	,	4	--	HT3
+union select 	5086318	,	3	--	JGBP
+union select 	7141855	,	3	--	JTRIHK
+union select 	8218187	,	3	--	JTRIEU
+union select 	8218288	,	3	--	JTRIUSD
+union select 	8218228	,	3	--	JTRIGBP
+union select 	5453438	,	4	--	K9
+union select 	12264821	,	4	--	K8
+union select 	1088459	,	4	--	KYH
+union select 	2026798	,	4	--	KYM
+union select 	2026854	,	3	--	MKYM
+union select 	2075688	,	4	--	LJ
+union select 	2749224	,	4	--	LH
+union select 	2835363	,	4	--	LU
+union select 	3539862	,	4	--	LY
+union select 	3556221	,	4	--	LL
+union select 	3770553	,	4	--	LB
+union select 	3810488	,	4	--	LC
+union select 	3954915	,	4	--	LD
+union select 	3973944	,	4	--	LE
+union select 	4006796	,	4	--	LV
+union select 	4189499	,	4	--	LF
+union select 	4367748	,	4	--	LT
+union select 	4792246	,	4	--	KD
+union select 	5055525	,	4	--	KL
+union select 	5420391	,	4	--	HA
+union select 	5473265	,	4	--	LS
+union select 	5771986	,	4	--	LA
+union select 	7680679	,	4	--	LG
+union select 	7680792	,	4	--	LM
+union select 	13835899	,	4	--	LZ
+union select 	8035161	,	4	--	LII
+union select 	724768	,	3	--	M033R
+union select 	1870568	,	3	--	M033H
+union select 	1068024	,	3	--	M113H
+union select 	3712	,	2	--	166HK
+union select 	115799	,	2	--	166AHK
+union select 	262188	,	3	--	M16RMB
+union select 	371646	,	3	--	M252RMB
+union select 	861326	,	3	--	M252H
+union select 	97430	,	3	--	M28RMB
+union select 	973550	,	3	--	M28H
+union select 	7870	,	2	--	3188HK
+union select 	37457	,	3	--	M318HK
+union select 	664858	,	3	--	M318RMB
+union select 	4305839	,	4	--	S318U
+union select 	48410	,	3	--	M57HK
+union select 	277503	,	2	--	c9009
+union select 	687425	,	4	--	S57R
+union select 	2766194	,	4	--	S57H
+union select 	865472	,	3	--	M606HK
+union select 	41722	,	3	--	M63RMB
+union select 	42603	,	3	--	M63ARMB
+union select 	59725	,	3	--	M63BRMB
+union select 	62832	,	3	--	M63CRMB
+union select 	68407	,	3	--	M63DRMB
+union select 	887185	,	3	--	M63H
+union select 	1044110	,	3	--	M63IRMB
+union select 	1075622	,	3	--	M63IHK
+union select 	3127387	,	4	--	S63H
+union select 	1347767	,	3	--	M270H
+union select 	1407713	,	3	--	M72H
+union select 	1075213	,	3	--	M79BR
+union select 	1114738	,	3	--	M79CR
+union select 	819161	,	3	--	M79AH
+union select 	4204225	,	4	--	79AH
+union select 	4204369	,	4	--	79AR
+union select 	905394	,	3	--	M818H
+union select 	2002448	,	3	--	M818R
+union select 	3686314	,	3	--	M818RA
+union select 	6446813	,	1	--	a818hwrong
+union select 	6448184	,	2	--	A818H
+union select 	78703	,	3	--	M863HK
+union select 	4138910	,	4	--	S863R
+union select 	1111628	,	3	--	M8H
+union select 	1398	,	1	--	733HK
+union select 	8009	,	3	--	M8HK
+union select 	160633	,	3	--	M8RMB
+union select 	1773803	,	4	--	MC
+union select 	1773805	,	4	--	MC1
+union select 	2308589	,	4	--	MC2
+union select 	4144525	,	4	--	MCR
+union select 	10506715	,	4	--	MC3
+union select 	8550141	,	4	--	MLH
+union select 	10457685	,	4	--	MLI
+union select 	128964	,	3	--	MMYNT
+union select 	1609929	,	3	--	MR
+union select 	6321	,	3	--	MSRMB
+union select 	536556	,	1	--	903EU
+union select 	1166414	,	3	--	MTRE
+union select 	4708570	,	3	--	MTRU
+union select 	7765833	,	4	--	POS
+union select 	9513012	,	4	--	POE
+union select 	5340162	,	4	--	POR
+union select 	5340166	,	4	--	POT
+union select 	7945498	,	4	--	U311
+union select 	8488565	,	4	--	POK
+union select 	8621974	,	4	--	POY
+union select 	9934460	,	4	--	POB
+union select 	12300617	,	4	--	POW
+union select 	13543345	,	4	--	KTV
+union select 	14063528	,	4	--	KTW
+union select 	8095139	,	4	--	Pyy
+union select 	9525991	,	4	--	PYH
+union select 	13338762	,	4	--	PYT
+union select 	10231287	,	2	--	REU
+union select 	1435492	,	4	--	S120R
+union select 	3391041	,	4	--	S121R
+union select 	8145099	,	4	--	S122R
+union select 	10447182	,	4	--	S120H
+union select 	12545786	,	4	--	S123R
+union select 	13885989	,	4	--	S124R
+union select 	524760	,	4	--	S16RUP
+union select 	550945	,	4	--	S18RUP
+union select 	1025079	,	4	--	S26AH
+union select 	506062	,	4	--	S27RMB
+union select 	1001999	,	4	--	S27HK
+union select 	2180945	,	4	--	S27H
+union select 	3752852	,	4	--	S27A
+union select 	4744473	,	4	--	SADA
+union select 	7945539	,	4	--	S27TK
+union select 	882346	,	4	--	S2R
+union select 	1045966	,	4	--	S2T
+union select 	1277857	,	4	--	S2AR
+union select 	1335887	,	4	--	S2BR
+union select 	1517541	,	4	--	S2TB
+union select 	4910597	,	4	--	S555
+union select 	4910667	,	4	--	S666
+union select 	800262	,	4	--	S57AR
+union select 	800275	,	3	--	M57AHK
+union select 	942131	,	4	--	S59BR
+union select 	2869345	,	4	--	S989R
+union select 	7817620	,	4	--	S989M
+union select 	10599405	,	4	--	S989H
+union select 	510159	,	4	--	S60RUP
+union select 	1576179	,	4	--	S60AR
+union select 	4419846	,	4	--	D60
+union select 	11748799	,	4	--	E60
+union select 	356942	,	4	--	S80R
+union select 	1598401	,	4	--	S80U
+union select 	3671274	,	4	--	S80H
+union select 	587827	,	3	--	M81ARMB
+union select 	2162072	,	4	--	S81R
+union select 	5402183	,	4	--	S81RA
+union select 	7247970	,	4	--	S81RB
+union select 	1004318	,	4	--	S87R
+union select 	1346	,	1	--	8000HK
+union select 	17623	,	1	--	8000AHK
+union select 	200032	,	4	--	S8T
+union select 	220846	,	4	--	S8R
+union select 	368537	,	4	--	S8U
+union select 	495306	,	4	--	S8KT
+union select 	657896	,	4	--	S8H
+union select 	1841983	,	4	--	S8AR
+union select 	2853838	,	4	--	S8AH
+union select 	3491753	,	4	--	S8BR
+union select 	3494465	,	4	--	S8BH
+union select 	4554012	,	4	--	S9H
+union select 	2383816	,	4	--	SAS
+union select 	2457435	,	1	--	D-SASUS
+union select 	2460833	,	2	--	ASA
+union select 	10321289	,	4	--	SAE
+union select 	13752690	,	4	--	SAI
+union select 	1571570	,	4	--	SB2R
+union select 	2094401	,	4	--	SB3R
+union select 	5088978	,	4	--	SBOK
+union select 	7439977	,	4	--	SB22R
+union select 	944721	,	4	--	SB6R
+union select 	2459722	,	4	--	SB6C
+union select 	955286	,	4	--	SB8R
+union select 	805450	,	4	--	SBHK
+union select 	5266935	,	4	--	SBKK
+union select 	13325186	,	4	--	SBKA
+union select 	2214708	,	4	--	SBRR
+union select 	838365	,	4	--	SBSR
+union select 	932905	,	4	--	SBH
+union select 	1211012	,	4	--	SBSU
+union select 	1593254	,	4	--	SBS
+union select 	1604404	,	4	--	SBM
+union select 	5551985	,	4	--	SBU
+union select 	6418627	,	4	--	SBHA
+union select 	7669811	,	4	--	SBHB
+union select 	7694778	,	4	--	SBHC
+union select 	8017299	,	4	--	SBC
+union select 	8907700	,	4	--	SBHD
+union select 	11581838	,	4	--	MYM
+union select 	11734366	,	4	--	SSF
+union select 	12968884	,	4	--	SBHF
+union select 	12742869	,	4	--	SBHE
+union select 	13549891	,	4	--	SBHG
+union select 	1721616	,	4	--	SBZR
+union select 	7711724	,	4	--	SBZ
+union select 	4283123	,	4	--	SEA
+union select 	7410076	,	4	--	SEB
+union select 	13802900	,	4	--	SEC
+union select 	3139575	,	4	--	SF8
+union select 	5382	,	1	--	305CRMB
+union select 	356937	,	4	--	S305CRMB
+union select 	404941	,	4	--	S305RM
+union select 	408317	,	4	--	S31RM
+union select 	478396	,	4	--	S31RMB
+union select 	752203	,	4	--	S305R
+union select 	771942	,	4	--	S31ARMB
+union select 	837904	,	4	--	SSFH
+union select 	837905	,	4	--	SSF1H
+union select 	972747	,	4	--	S3H
+union select 	1013342	,	4	--	SSF2H
+union select 	2332356	,	4	--	SSF3H
+union select 	2486485	,	3	--	MSFR
+union select 	2823274	,	4	--	SSFK
+union select 	3560324	,	4	--	S3HH
+union select 	4362130	,	4	--	SSF5H
+union select 	7754654	,	4	--	S31BRM
+union select 	7763508	,	4	--	S3HK
+union select 	14084516	,	4	--	S305M
+union select 	11024893	,	1	--	31bsd
+union select 	63254	,	1	--	INDORUP
+union select 	185849	,	4	--	SI
+union select 	641835	,	1	--	WLRUP
+union select 	847386	,	1	--	WLARUP
+union select 	3909347	,	4	--	UU
+union select 	3919061	,	4	--	WH
+union select 	3965567	,	4	--	UT
+union select 	3965614	,	4	--	D8G
+union select 	4048531	,	4	--	UK
+union select 	4100592	,	4	--	IB
+union select 	4100631	,	4	--	LK
+union select 	4152553	,	4	--	JA
+union select 	4212172	,	4	--	AS
+union select 	4253707	,	4	--	UM
+union select 	4314665	,	4	--	AP
+union select 	4320374	,	4	--	SB
+union select 	4320399	,	4	--	UN
+union select 	4323575	,	4	--	UL
+union select 	4378806	,	4	--	IM
+union select 	4404031	,	4	--	AJ
+union select 	4404067	,	4	--	JB
+union select 	4404078	,	4	--	IN
+union select 	4437168	,	4	--	JC
+union select 	4622387	,	4	--	YN
+union select 	4663772	,	4	--	CL
+union select 	4677011	,	4	--	UA
+union select 	4677048	,	4	--	UB
+union select 	4739346	,	4	--	WB
+union select 	4802250	,	4	--	IK
+union select 	4828744	,	4	--	IJ
+union select 	5086616	,	4	--	AN
+union select 	5325470	,	4	--	WU
+union select 	5528833	,	4	--	AT
+union select 	5532706	,	4	--	ZZ
+union select 	5544601	,	4	--	UC
+union select 	5551373	,	4	--	LN
+union select 	5590466	,	4	--	KK
+union select 	5600955	,	4	--	VB
+union select 	5716059	,	4	--	YY
+union select 	5773292	,	4	--	UE
+union select 	5880048	,	4	--	IF
+union select 	6097796	,	4	--	BB
+union select 	6210213	,	4	--	HO
+union select 	6465457	,	4	--	HU
+union select 	6591004	,	4	--	SL
+union select 	6660386	,	4	--	UD
+union select 	6706058	,	4	--	IZ
+union select 	6855660	,	4	--	JK
+union select 	7176459	,	4	--	HW
+union select 	7177766	,	4	--	UW
+union select 	7216279	,	4	--	CX
+union select 	7277118	,	4	--	UV
+union select 	7741414	,	4	--	AK
+union select 	8066804	,	4	--	AZ
+union select 	9412566	,	4	--	JN
+union select 	9670181	,	4	--	AI
+union select 	10064280	,	4	--	JT
+union select 	10278914	,	4	--	UF
+union select 	10792955	,	4	--	CY
+union select 	10797628	,	4	--	UZ
+union select 	11010588	,	4	--	UH
+union select 	11548722	,	4	--	MH
+union select 	14118357	,	4	--	UG
+union select 	13792957	,	4	--	AH
+union select 	641918	,	4	--	HI
+union select 	642291	,	4	--	BI
+union select 	13934944	,	4	--	BJ
+union select 	643456	,	4	--	LI
+union select 	656135	,	4	--	UI
+union select 	689767	,	4	--	II
+union select 	14011590	,	4	--	IA
+union select 	712439	,	4	--	HP
+union select 	747037	,	4	--	GI
+union select 	867735	,	4	--	SW
+union select 	897588	,	4	--	DI
+union select 	1124040	,	4	--	WI
+union select 	1349398	,	4	--	QQ
+union select 	1372998	,	4	--	DW
+union select 	1373748	,	4	--	FF
+union select 	1386293	,	4	--	TI
+union select 	1563928	,	4	--	CI
+union select 	1564982	,	4	--	IP
+union select 	1586764	,	4	--	RR
+union select 	1716173	,	4	--	IC
+union select 	1812820	,	4	--	AW
+union select 	13744152	,	4	--	AG
+union select 	2083036	,	4	--	CO
+union select 	2103376	,	4	--	CU
+union select 	2131553	,	4	--	CS
+union select 	2270259	,	4	--	YI
+union select 	2302419	,	4	--	JJ
+union select 	2831595	,	4	--	IR
+union select 	3216947	,	4	--	VV
+union select 	3526034	,	4	--	ID
+union select 	720475	,	4	--	WW
+union select 	919892	,	4	--	MW
+union select 	1581733	,	4	--	MM
+union select 	3977088	,	4	--	AL
+union select 	13063323	,	4	--	DB
+union select 	13638910	,	4	--	SD
+union select 	1374344	,	4	--	SMQARMB
+union select 	3938541	,	4	--	SSYR
+union select 	4601030	,	4	--	SYI
+union select 	356948	,	4	--	SYLHK
+union select 	409412	,	4	--	SYLRM
+union select 	409422	,	4	--	SYLSD
+union select 	2453866	,	4	--	SYLM
+union select 	4155328	,	4	--	SYLH
+union select 	5049084	,	4	--	SYLHZ
+union select 	7714466	,	4	--	SYLK
+union select 	11400410	,	4	--	SYLG
+union select 	877377	,	3	--	TPBP
+union select 	10398791	,	4	--	VKH
+union select 	12545925	,	4	--	VKS
+union select 	14078197	,	4	--	VKD
+union select 	5867	,	1	--	WE339
+union select 	30168	,	3	--	WBRMB
+union select 	3411725	,	3	--	WBR
+union select 	4348440	,	3	--	WBRR
+union select 	4673332	,	3	--	WBRA
+union select 	6853841	,	3	--	wbrf
+union select 	11485599	,	3	--	WBRG
+union select 	11485623	,	3	--	WBRH
+union select 	11485641	,	3	--	WBRI
+union select 	11485655	,	3	--	WBRJ
+union select 	6853836	,	3	--	wbre
+union select 	4673339	,	3	--	WBRB
+union select 	6853789	,	3	--	WBRC
+union select 	6853827	,	3	--	WBRD
+union select 	1457236	,	4	--	WKH
+union select 	2556663	,	2	--	WKM
+union select 	11761289	,	4	--	WPR
+union select 	1131889	,	4	--	WWR
+union select 	2925993	,	4	--	WKR
+union select 	14015187	,	4	--	XCN
+union select 	10401583	,	4	--	KO
+union select 	2229262	,	4	--	SATU
+union select 	5283781	,	4	--	SATE
+union select 	5395663	,	4	--	SATS
+union select 	7781015	,	4	--	SATM
+union select 	3046451	,	4	--	SCLH
+union select 	3090145	,	4	--	SCLM
+union select 	7756563	,	4	--	QQMZ
+union select 	7756567	,	4	--	QQKR
+union select 	7756579	,	4	--	QQKA
+union select 	7756603	,	4	--	QQMW
+union select 	7756631	,	4	--	QQMY
+union select 	7756637	,	4	--	QQMA
+union select 	7757433	,	4	--	QQKU
+union select 	7763719	,	4	--	QQK3
+union select 	9934169	,	4	--	QQTB
+union select 	10507224	,	4	--	QQUS
+union select 	10848683	,	4	--	QQMR
+union select 	11322574	,	4	--	QQMD
+union select 	11884796	,	4	--	QQHK
+union select 	12957917	,	4	--	QQBS
+union select 	12573245	,	4	--	QQKY
+
+
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #tmpCust
+	SET isfinished = 1
+		,@custid = custid	
+		,@roleid = roleid
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+			
+	EXEC dbo.[Acc_CustSetting_03] @custid = @custid
+		,@roleid = @roleid
+		,@maxcustid = @max_custid
+		,@target = 'REPLICATED'
+		
+	WAITFOR DELAY '00:00:00.280'
+END
+GO
+
+-- END STEP 2: DEPLOY THIS SP @ DBTRANS.CustDB -------
+------------------------------------------------------
+---
+---
+-- BEGIN STEP 3: RUN THIS SCRIPT AT DBTRANS -----
+-------------------------------------------------
+CREATE TABLE #tmpCust(custid INT PRIMARY KEY, roleid INT, isfinished bit default(0))
+
+DECLARE @max_custid INT, @custid INT, @roleid INT
+
+SET @max_custid = xxx 
+
+--494 SMA affected and 1 million downlines will be updated
+INSERT INTO #tmpCust(custid, roleid)
+	 select 	13338988	,	3	--	DJHK
+union select 	916947	,	2	--	02R
+union select 	3802	,	2	--	266HK
+union select 	1414	,	1	--	239HK
+union select 	1686	,	1	--	239RMB
+union select 	15515	,	3	--	M39IRMB
+union select 	344472	,	4	--	S39R
+union select 	2601912	,	4	--	S39RR
+union select 	1280	,	1	--	312rmb
+union select 	1241353	,	1	--	315RMB
+union select 	1981797	,	1	--	318RMB
+union select 	2398557	,	4	--	M312T
+union select 	2421139	,	3	--	M312TA
+union select 	2831919	,	2	--	312BP
+union select 	2969567	,	4	--	S312R
+union select 	4020626	,	3	--	M312RR
+union select 	8243036	,	4	--	R312R
+union select 	9672019	,	4	--	S312C
+union select 	12589170	,	4	--	S312RMB
+union select 	3821	,	1	--	339RMB
+union select 	30354	,	2	--	3S100
+union select 	261425	,	4	--	SPR
+union select 	301152	,	4	--	SPH
+union select 	1358274	,	4	--	SSR
+union select 	6032879	,	4	--	PPB
+union select 	6032912	,	4	--	PPR
+union select 	734658	,	2	--	3KHK
+union select 	16129	,	2	--	7899HK
+union select 	1371264	,	2	--	7899R
+union select 	4521616	,	2	--	789R
+union select 	37415	,	1	--	818BP
+union select 	122300	,	2	--	8188BP
+union select 	1004318	,	4	--	S87R
+union select 	9905998	,	4	--	AC1
+union select 	9906062	,	4	--	AC2
+union select 	12168675	,	4	--	ACK
+union select 	13290701	,	4	--	ACH
+union select 	13562677	,	4	--	ACH1
+union select 	13563191	,	4	--	ACH2
+union select 	13863347	,	4	--	ACH3
+union select 	13991545	,	4	--	AC3
+union select 	14132819	,	4	--	AC4
+union select 	11028100	,	4	--	AHMA
+union select 	1190555	,	4	--	SBT
+union select 	1358405	,	4	--	BBBU
+union select 	1558372	,	4	--	SBBT
+union select 	1795270	,	4	--	SBBR
+union select 	2272187	,	4	--	SBCT
+union select 	1385	,	1	--	CHAITB
+union select 	4318	,	1	--	CHAIRMB
+union select 	5994	,	3	--	CHTB
+union select 	17742	,	3	--	CHITB
+union select 	199094	,	4	--	ST
+union select 	487415	,	4	--	STT
+union select 	641140	,	4	--	ST1T
+union select 	641144	,	4	--	ST2T
+union select 	641145	,	4	--	ST3T
+union select 	641148	,	4	--	ST4T
+union select 	901858	,	4	--	ST5T
+union select 	901862	,	4	--	ST6T
+union select 	901864	,	4	--	ST7T
+union select 	1099499	,	4	--	ST8T
+union select 	1101895	,	4	--	ST9T
+union select 	1517030	,	4	--	BT
+union select 	1517951	,	4	--	B5T
+union select 	1521065	,	1	--	BCWL
+union select 	1523261	,	4	--	B1T
+union select 	1528410	,	4	--	B2T
+union select 	1528411	,	4	--	B3T
+union select 	1528413	,	4	--	B4T
+union select 	1528414	,	4	--	B6T
+union select 	1528418	,	4	--	B7T
+union select 	1528419	,	4	--	B8T
+union select 	1528420	,	4	--	B9T
+union select 	1528421	,	4	--	B10T
+union select 	1528422	,	4	--	B11T
+union select 	1536432	,	4	--	B12T
+union select 	1538057	,	4	--	B13T
+union select 	1538175	,	4	--	B14T
+union select 	1538183	,	4	--	B15T
+union select 	1538997	,	4	--	B16T
+union select 	1539009	,	4	--	B17T
+union select 	1539693	,	4	--	B18T
+union select 	1539698	,	4	--	B19T
+union select 	1539699	,	4	--	B20T
+union select 	1539700	,	4	--	B21T
+union select 	1540216	,	4	--	B22T
+union select 	1540217	,	4	--	B23T
+union select 	1588140	,	4	--	B24T
+union select 	1588145	,	4	--	B25T
+union select 	2388779	,	4	--	STEB
+union select 	2421122	,	4	--	SABT
+union select 	2508822	,	4	--	B26T
+union select 	2541779	,	4	--	B27T
+union select 	2957769	,	1	--	BTACC
+union select 	7424748	,	4	--	B28t
+union select 	7815141	,	4	--	B29T
+union select 	8458736	,	4	--	B30T
+union select 	9664861	,	4	--	B31T
+union select 	9669693	,	4	--	B32T
+union select 	9933863	,	4	--	B33T
+union select 	9933940	,	4	--	B35T
+union select 	9934001	,	4	--	B34T
+union select 	9934027	,	4	--	B36T
+union select 	9934190	,	4	--	B37T
+union select 	9934210	,	4	--	B38T
+union select 	9934227	,	4	--	B39T
+union select 	12285527	,	4	--	B40T
+union select 	210710	,	2	--	CJEU
+union select 	1382183	,	3	--	FBR
+union select 	2209358	,	3	--	FBM
+union select 	2327638	,	4	--	SFB
+union select 	4604381	,	4	--	FBH
+union select 	6150551	,	4	--	FBB
+union select 	5061500	,	4	--	GHK
+union select 	3824490	,	4	--	GN
+union select 	7881154	,	4	--	GX
+union select 	11579803	,	4	--	GC
+union select 	8551148	,	3	--	GT
+union select 	9931047	,	4	--	HT1
+union select 	9933782	,	4	--	HT2
+union select 	11306634	,	4	--	HT3
+union select 	5086318	,	3	--	JGBP
+union select 	7141855	,	3	--	JTRIHK
+union select 	8218187	,	3	--	JTRIEU
+union select 	8218288	,	3	--	JTRIUSD
+union select 	8218228	,	3	--	JTRIGBP
+union select 	5453438	,	4	--	K9
+union select 	12264821	,	4	--	K8
+union select 	1088459	,	4	--	KYH
+union select 	2026798	,	4	--	KYM
+union select 	2026854	,	3	--	MKYM
+union select 	2075688	,	4	--	LJ
+union select 	2749224	,	4	--	LH
+union select 	2835363	,	4	--	LU
+union select 	3539862	,	4	--	LY
+union select 	3556221	,	4	--	LL
+union select 	3770553	,	4	--	LB
+union select 	3810488	,	4	--	LC
+union select 	3954915	,	4	--	LD
+union select 	3973944	,	4	--	LE
+union select 	4006796	,	4	--	LV
+union select 	4189499	,	4	--	LF
+union select 	4367748	,	4	--	LT
+union select 	4792246	,	4	--	KD
+union select 	5055525	,	4	--	KL
+union select 	5420391	,	4	--	HA
+union select 	5473265	,	4	--	LS
+union select 	5771986	,	4	--	LA
+union select 	7680679	,	4	--	LG
+union select 	7680792	,	4	--	LM
+union select 	13835899	,	4	--	LZ
+union select 	8035161	,	4	--	LII
+union select 	724768	,	3	--	M033R
+union select 	1870568	,	3	--	M033H
+union select 	1068024	,	3	--	M113H
+union select 	3712	,	2	--	166HK
+union select 	115799	,	2	--	166AHK
+union select 	262188	,	3	--	M16RMB
+union select 	371646	,	3	--	M252RMB
+union select 	861326	,	3	--	M252H
+union select 	97430	,	3	--	M28RMB
+union select 	973550	,	3	--	M28H
+union select 	7870	,	2	--	3188HK
+union select 	37457	,	3	--	M318HK
+union select 	664858	,	3	--	M318RMB
+union select 	4305839	,	4	--	S318U
+union select 	48410	,	3	--	M57HK
+union select 	277503	,	2	--	c9009
+union select 	687425	,	4	--	S57R
+union select 	2766194	,	4	--	S57H
+union select 	865472	,	3	--	M606HK
+union select 	41722	,	3	--	M63RMB
+union select 	42603	,	3	--	M63ARMB
+union select 	59725	,	3	--	M63BRMB
+union select 	62832	,	3	--	M63CRMB
+union select 	68407	,	3	--	M63DRMB
+union select 	887185	,	3	--	M63H
+union select 	1044110	,	3	--	M63IRMB
+union select 	1075622	,	3	--	M63IHK
+union select 	3127387	,	4	--	S63H
+union select 	1347767	,	3	--	M270H
+union select 	1407713	,	3	--	M72H
+union select 	1075213	,	3	--	M79BR
+union select 	1114738	,	3	--	M79CR
+union select 	819161	,	3	--	M79AH
+union select 	4204225	,	4	--	79AH
+union select 	4204369	,	4	--	79AR
+union select 	905394	,	3	--	M818H
+union select 	2002448	,	3	--	M818R
+union select 	3686314	,	3	--	M818RA
+union select 	6446813	,	1	--	a818hwrong
+union select 	6448184	,	2	--	A818H
+union select 	78703	,	3	--	M863HK
+union select 	4138910	,	4	--	S863R
+union select 	1111628	,	3	--	M8H
+union select 	1398	,	1	--	733HK
+union select 	8009	,	3	--	M8HK
+union select 	160633	,	3	--	M8RMB
+union select 	1773803	,	4	--	MC
+union select 	1773805	,	4	--	MC1
+union select 	2308589	,	4	--	MC2
+union select 	4144525	,	4	--	MCR
+union select 	10506715	,	4	--	MC3
+union select 	8550141	,	4	--	MLH
+union select 	10457685	,	4	--	MLI
+union select 	128964	,	3	--	MMYNT
+union select 	1609929	,	3	--	MR
+union select 	6321	,	3	--	MSRMB
+union select 	536556	,	1	--	903EU
+union select 	1166414	,	3	--	MTRE
+union select 	4708570	,	3	--	MTRU
+union select 	7765833	,	4	--	POS
+union select 	9513012	,	4	--	POE
+union select 	5340162	,	4	--	POR
+union select 	5340166	,	4	--	POT
+union select 	7945498	,	4	--	U311
+union select 	8488565	,	4	--	POK
+union select 	8621974	,	4	--	POY
+union select 	9934460	,	4	--	POB
+union select 	12300617	,	4	--	POW
+union select 	13543345	,	4	--	KTV
+union select 	14063528	,	4	--	KTW
+union select 	8095139	,	4	--	Pyy
+union select 	9525991	,	4	--	PYH
+union select 	13338762	,	4	--	PYT
+union select 	10231287	,	2	--	REU
+union select 	1435492	,	4	--	S120R
+union select 	3391041	,	4	--	S121R
+union select 	8145099	,	4	--	S122R
+union select 	10447182	,	4	--	S120H
+union select 	12545786	,	4	--	S123R
+union select 	13885989	,	4	--	S124R
+union select 	524760	,	4	--	S16RUP
+union select 	550945	,	4	--	S18RUP
+union select 	1025079	,	4	--	S26AH
+union select 	506062	,	4	--	S27RMB
+union select 	1001999	,	4	--	S27HK
+union select 	2180945	,	4	--	S27H
+union select 	3752852	,	4	--	S27A
+union select 	4744473	,	4	--	SADA
+union select 	7945539	,	4	--	S27TK
+union select 	882346	,	4	--	S2R
+union select 	1045966	,	4	--	S2T
+union select 	1277857	,	4	--	S2AR
+union select 	1335887	,	4	--	S2BR
+union select 	1517541	,	4	--	S2TB
+union select 	4910597	,	4	--	S555
+union select 	4910667	,	4	--	S666
+union select 	800262	,	4	--	S57AR
+union select 	800275	,	3	--	M57AHK
+union select 	942131	,	4	--	S59BR
+union select 	2869345	,	4	--	S989R
+union select 	7817620	,	4	--	S989M
+union select 	10599405	,	4	--	S989H
+union select 	510159	,	4	--	S60RUP
+union select 	1576179	,	4	--	S60AR
+union select 	4419846	,	4	--	D60
+union select 	11748799	,	4	--	E60
+union select 	356942	,	4	--	S80R
+union select 	1598401	,	4	--	S80U
+union select 	3671274	,	4	--	S80H
+union select 	587827	,	3	--	M81ARMB
+union select 	2162072	,	4	--	S81R
+union select 	5402183	,	4	--	S81RA
+union select 	7247970	,	4	--	S81RB
+union select 	1004318	,	4	--	S87R
+union select 	1346	,	1	--	8000HK
+union select 	17623	,	1	--	8000AHK
+union select 	200032	,	4	--	S8T
+union select 	220846	,	4	--	S8R
+union select 	368537	,	4	--	S8U
+union select 	495306	,	4	--	S8KT
+union select 	657896	,	4	--	S8H
+union select 	1841983	,	4	--	S8AR
+union select 	2853838	,	4	--	S8AH
+union select 	3491753	,	4	--	S8BR
+union select 	3494465	,	4	--	S8BH
+union select 	4554012	,	4	--	S9H
+union select 	2383816	,	4	--	SAS
+union select 	2457435	,	1	--	D-SASUS
+union select 	2460833	,	2	--	ASA
+union select 	10321289	,	4	--	SAE
+union select 	13752690	,	4	--	SAI
+union select 	1571570	,	4	--	SB2R
+union select 	2094401	,	4	--	SB3R
+union select 	5088978	,	4	--	SBOK
+union select 	7439977	,	4	--	SB22R
+union select 	944721	,	4	--	SB6R
+union select 	2459722	,	4	--	SB6C
+union select 	955286	,	4	--	SB8R
+union select 	805450	,	4	--	SBHK
+union select 	5266935	,	4	--	SBKK
+union select 	13325186	,	4	--	SBKA
+union select 	2214708	,	4	--	SBRR
+union select 	838365	,	4	--	SBSR
+union select 	932905	,	4	--	SBH
+union select 	1211012	,	4	--	SBSU
+union select 	1593254	,	4	--	SBS
+union select 	1604404	,	4	--	SBM
+union select 	5551985	,	4	--	SBU
+union select 	6418627	,	4	--	SBHA
+union select 	7669811	,	4	--	SBHB
+union select 	7694778	,	4	--	SBHC
+union select 	8017299	,	4	--	SBC
+union select 	8907700	,	4	--	SBHD
+union select 	11581838	,	4	--	MYM
+union select 	11734366	,	4	--	SSF
+union select 	12968884	,	4	--	SBHF
+union select 	12742869	,	4	--	SBHE
+union select 	13549891	,	4	--	SBHG
+union select 	1721616	,	4	--	SBZR
+union select 	7711724	,	4	--	SBZ
+union select 	4283123	,	4	--	SEA
+union select 	7410076	,	4	--	SEB
+union select 	13802900	,	4	--	SEC
+union select 	3139575	,	4	--	SF8
+union select 	5382	,	1	--	305CRMB
+union select 	356937	,	4	--	S305CRMB
+union select 	404941	,	4	--	S305RM
+union select 	408317	,	4	--	S31RM
+union select 	478396	,	4	--	S31RMB
+union select 	752203	,	4	--	S305R
+union select 	771942	,	4	--	S31ARMB
+union select 	837904	,	4	--	SSFH
+union select 	837905	,	4	--	SSF1H
+union select 	972747	,	4	--	S3H
+union select 	1013342	,	4	--	SSF2H
+union select 	2332356	,	4	--	SSF3H
+union select 	2486485	,	3	--	MSFR
+union select 	2823274	,	4	--	SSFK
+union select 	3560324	,	4	--	S3HH
+union select 	4362130	,	4	--	SSF5H
+union select 	7754654	,	4	--	S31BRM
+union select 	7763508	,	4	--	S3HK
+union select 	14084516	,	4	--	S305M
+union select 	11024893	,	1	--	31bsd
+union select 	63254	,	1	--	INDORUP
+union select 	185849	,	4	--	SI
+union select 	641835	,	1	--	WLRUP
+union select 	847386	,	1	--	WLARUP
+union select 	3909347	,	4	--	UU
+union select 	3919061	,	4	--	WH
+union select 	3965567	,	4	--	UT
+union select 	3965614	,	4	--	D8G
+union select 	4048531	,	4	--	UK
+union select 	4100592	,	4	--	IB
+union select 	4100631	,	4	--	LK
+union select 	4152553	,	4	--	JA
+union select 	4212172	,	4	--	AS
+union select 	4253707	,	4	--	UM
+union select 	4314665	,	4	--	AP
+union select 	4320374	,	4	--	SB
+union select 	4320399	,	4	--	UN
+union select 	4323575	,	4	--	UL
+union select 	4378806	,	4	--	IM
+union select 	4404031	,	4	--	AJ
+union select 	4404067	,	4	--	JB
+union select 	4404078	,	4	--	IN
+union select 	4437168	,	4	--	JC
+union select 	4622387	,	4	--	YN
+union select 	4663772	,	4	--	CL
+union select 	4677011	,	4	--	UA
+union select 	4677048	,	4	--	UB
+union select 	4739346	,	4	--	WB
+union select 	4802250	,	4	--	IK
+union select 	4828744	,	4	--	IJ
+union select 	5086616	,	4	--	AN
+union select 	5325470	,	4	--	WU
+union select 	5528833	,	4	--	AT
+union select 	5532706	,	4	--	ZZ
+union select 	5544601	,	4	--	UC
+union select 	5551373	,	4	--	LN
+union select 	5590466	,	4	--	KK
+union select 	5600955	,	4	--	VB
+union select 	5716059	,	4	--	YY
+union select 	5773292	,	4	--	UE
+union select 	5880048	,	4	--	IF
+union select 	6097796	,	4	--	BB
+union select 	6210213	,	4	--	HO
+union select 	6465457	,	4	--	HU
+union select 	6591004	,	4	--	SL
+union select 	6660386	,	4	--	UD
+union select 	6706058	,	4	--	IZ
+union select 	6855660	,	4	--	JK
+union select 	7176459	,	4	--	HW
+union select 	7177766	,	4	--	UW
+union select 	7216279	,	4	--	CX
+union select 	7277118	,	4	--	UV
+union select 	7741414	,	4	--	AK
+union select 	8066804	,	4	--	AZ
+union select 	9412566	,	4	--	JN
+union select 	9670181	,	4	--	AI
+union select 	10064280	,	4	--	JT
+union select 	10278914	,	4	--	UF
+union select 	10792955	,	4	--	CY
+union select 	10797628	,	4	--	UZ
+union select 	11010588	,	4	--	UH
+union select 	11548722	,	4	--	MH
+union select 	14118357	,	4	--	UG
+union select 	13792957	,	4	--	AH
+union select 	641918	,	4	--	HI
+union select 	642291	,	4	--	BI
+union select 	13934944	,	4	--	BJ
+union select 	643456	,	4	--	LI
+union select 	656135	,	4	--	UI
+union select 	689767	,	4	--	II
+union select 	14011590	,	4	--	IA
+union select 	712439	,	4	--	HP
+union select 	747037	,	4	--	GI
+union select 	867735	,	4	--	SW
+union select 	897588	,	4	--	DI
+union select 	1124040	,	4	--	WI
+union select 	1349398	,	4	--	QQ
+union select 	1372998	,	4	--	DW
+union select 	1373748	,	4	--	FF
+union select 	1386293	,	4	--	TI
+union select 	1563928	,	4	--	CI
+union select 	1564982	,	4	--	IP
+union select 	1586764	,	4	--	RR
+union select 	1716173	,	4	--	IC
+union select 	1812820	,	4	--	AW
+union select 	13744152	,	4	--	AG
+union select 	2083036	,	4	--	CO
+union select 	2103376	,	4	--	CU
+union select 	2131553	,	4	--	CS
+union select 	2270259	,	4	--	YI
+union select 	2302419	,	4	--	JJ
+union select 	2831595	,	4	--	IR
+union select 	3216947	,	4	--	VV
+union select 	3526034	,	4	--	ID
+union select 	720475	,	4	--	WW
+union select 	919892	,	4	--	MW
+union select 	1581733	,	4	--	MM
+union select 	3977088	,	4	--	AL
+union select 	13063323	,	4	--	DB
+union select 	13638910	,	4	--	SD
+union select 	1374344	,	4	--	SMQARMB
+union select 	3938541	,	4	--	SSYR
+union select 	4601030	,	4	--	SYI
+union select 	356948	,	4	--	SYLHK
+union select 	409412	,	4	--	SYLRM
+union select 	409422	,	4	--	SYLSD
+union select 	2453866	,	4	--	SYLM
+union select 	4155328	,	4	--	SYLH
+union select 	5049084	,	4	--	SYLHZ
+union select 	7714466	,	4	--	SYLK
+union select 	11400410	,	4	--	SYLG
+union select 	877377	,	3	--	TPBP
+union select 	10398791	,	4	--	VKH
+union select 	12545925	,	4	--	VKS
+union select 	14078197	,	4	--	VKD
+union select 	5867	,	1	--	WE339
+union select 	30168	,	3	--	WBRMB
+union select 	3411725	,	3	--	WBR
+union select 	4348440	,	3	--	WBRR
+union select 	4673332	,	3	--	WBRA
+union select 	6853841	,	3	--	wbrf
+union select 	11485599	,	3	--	WBRG
+union select 	11485623	,	3	--	WBRH
+union select 	11485641	,	3	--	WBRI
+union select 	11485655	,	3	--	WBRJ
+union select 	6853836	,	3	--	wbre
+union select 	4673339	,	3	--	WBRB
+union select 	6853789	,	3	--	WBRC
+union select 	6853827	,	3	--	WBRD
+union select 	1457236	,	4	--	WKH
+union select 	2556663	,	2	--	WKM
+union select 	11761289	,	4	--	WPR
+union select 	1131889	,	4	--	WWR
+union select 	2925993	,	4	--	WKR
+union select 	14015187	,	4	--	XCN
+union select 	10401583	,	4	--	KO
+union select 	2229262	,	4	--	SATU
+union select 	5283781	,	4	--	SATE
+union select 	5395663	,	4	--	SATS
+union select 	7781015	,	4	--	SATM
+union select 	3046451	,	4	--	SCLH
+union select 	3090145	,	4	--	SCLM
+union select 	7756563	,	4	--	QQMZ
+union select 	7756567	,	4	--	QQKR
+union select 	7756579	,	4	--	QQKA
+union select 	7756603	,	4	--	QQMW
+union select 	7756631	,	4	--	QQMY
+union select 	7756637	,	4	--	QQMA
+union select 	7757433	,	4	--	QQKU
+union select 	7763719	,	4	--	QQK3
+union select 	9934169	,	4	--	QQTB
+union select 	10507224	,	4	--	QQUS
+union select 	10848683	,	4	--	QQMR
+union select 	11322574	,	4	--	QQMD
+union select 	11884796	,	4	--	QQHK
+union select 	12957917	,	4	--	QQBS
+union select 	12573245	,	4	--	QQKY
+
+
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #tmpCust
+	SET isfinished = 1
+		,@custid = custid	
+		,@roleid = roleid
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+			
+	EXEC dbo.[Acc_CustSetting_03] @custid = @custid
+		,@roleid = @roleid
+		,@maxcustid = @max_custid
+		,@target = 'DBTRANS'
+		
+	WAITFOR DELAY '00:00:00.280'
+END
+GO
+-- END STEP 3: RUN THIS SCRIPT AT DBTRANS -----
+-------------------------------------------------
