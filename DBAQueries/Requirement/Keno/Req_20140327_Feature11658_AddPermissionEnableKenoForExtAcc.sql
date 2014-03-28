@@ -7,15 +7,17 @@ USE bodb_EAS --DB052
 GO
 
 -- 17 rows affected
-INSERT INTO eaGroupPolicy (GroupID, FuncID, Policy)
-SELECT GroupID, 81, Policy
-FROM eaGroupPolicy with (nolock)
-WHERE FuncID = 79
+UPDATE gp1
+SET gp1.Policy = gp2.Policy
+FROM eaGroupPolicy gp1 WITH (ROWLOCK, UPDLOCK) 
+	INNER JOIN eaGroupPolicy gp2 WITH (NOLOCK) ON gp1.GroupID = gp2.GroupID
+WHERE gp1.FuncID = 81 and gp2.FuncID = 79
 
 GO
 -- 44 rows affected
-INSERT INTO eaUserPolicy (UserID, FuncID, Policy)
-SELECT UserID, 81, Policy
-FROM eaUserPolicy with (nolock)
-WHERE FuncID = 79
+UPDATE up1
+SET up1.Policy = up2.Policy
+FROM eaUserPolicy up1 WITH (ROWLOCK, UPDLOCK) 
+	INNER JOIN eaUserPolicy up2 WITH (NOLOCK) ON up1.UserID = up2.UserID
+WHERE up1.FuncID = 81 and up2.FuncID = 79
  

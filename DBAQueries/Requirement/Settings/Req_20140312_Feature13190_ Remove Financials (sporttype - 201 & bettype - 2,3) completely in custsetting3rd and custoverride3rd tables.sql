@@ -62,6 +62,15 @@ FROM   CustSetting3rd cs WITH (NOLOCK)
 WHERE  cs.sporttype = 201 and bettype IN (2,3)
 	   AND CustId <= @maxCustId
 
+INSERT INTO #temp (CustId, IsFinished)
+SELECT DISTINCT cs.CustId , 0 
+FROM   CustOverride3rd cs WITH (NOLOCK)	
+LEFT JOIN #temp T 
+		ON cs.CustId = T.CustID
+WHERE  cs.sporttype = 201 and bettype IN (2,3)
+	   AND cs.CustId <= @maxCustId
+	   AND T.CustId IS NULL
+
 GO
 
 DECLARE @ids VARCHAR(max), @rowcnt INT
