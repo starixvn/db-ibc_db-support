@@ -8,37 +8,61 @@
 --Step 1: Enable Keno's games on CustGameType for SMA only & upline if upline not enabled yet
 --run @DBTXN/CustDB
 -----------------------------------------------------------------
-DECLARE @custid INT, @roleid INT, @srecommend INT, @mrecommend INT
+CREATE TABLE #tmpCust(custid INT PRIMARY KEY, roleid INT, isfinished bit default(0))
 
-SELECT @custid = xxx--custid of SMA to enable Keno's games
-SELECT @roleid = xx--roleid of SMA
+DECLARE @custid INT, @roleid INT, @srecommend INT, @mrecommend INT, @recommend INT
 
-IF @roleid = 4
-BEGIN
-	UPDATE CustGameType WITH(UPDLOCK,ROWLOCK)
-	SET isDisabled = 0
-	WHERE custid = @custid
-		AND gametypeid NOT IN (2,6)
-END
-ELSE IF @roleid = 3
-BEGIN
-	SELECT @srecommend = srecommend FROM custInfo WITH(NOLOCK) WHERE custid = @custid
+INSERT INTO #tmpCust(custid, roleid)
+	SELECT custid, roleid
+	FROM customer with(NOLOCK)
+	WHERE username IN ('master1','agent1','super1')
 	
-	UPDATE CustGameType WITH(UPDLOCK,ROWLOCK)
-	SET isDisabled = 0
-	WHERE custid IN (@custid,@srecommend)
-		AND gametypeid NOT IN (2,6)
-END
-ELSE IF @roleid = 2
-ELSE IF @roleid = 3
+WHILE (1 = 1)
 BEGIN
-	SELECT @srecommend = srecommend, @mrecommend = mrecommend FROM custInfo WITH(NOLOCK) WHERE custid = @custid
+	UPDATE TOP (1) #tmpCust
+	SET isfinished = 1
+		,@custid = custid	
+		,@roleid = roleid
+	WHERE isfinished = 0
 	
-	UPDATE CustGameType WITH(UPDLOCK,ROWLOCK)
-	SET isDisabled = 0
-	WHERE custid IN (@custid,@srecommend, @mrecommend)
-		AND gametypeid NOT IN (2,6)
-END
+	IF @@ROWCOUNT = 0 BREAK
+	
+	IF @roleid = 4
+	BEGIN
+		UPDATE CustGameType WITH(UPDLOCK,ROWLOCK)
+		SET isDisabled = 0
+		WHERE custid = @custid
+			AND gametypeid NOT IN (2,6)
+	END
+	ELSE IF @roleid = 3
+	BEGIN
+		SELECT @srecommend = srecommend FROM custInfo WITH(NOLOCK) WHERE custid = @custid
+		
+		UPDATE CustGameType WITH(UPDLOCK,ROWLOCK)
+		SET isDisabled = 0
+		WHERE custid IN (@custid,@srecommend)
+			AND gametypeid NOT IN (2,6)
+	END
+	ELSE IF @roleid = 2
+	BEGIN
+		SELECT @srecommend = srecommend, @mrecommend = mrecommend FROM custInfo WITH(NOLOCK) WHERE custid = @custid
+		
+		UPDATE CustGameType WITH(UPDLOCK,ROWLOCK)
+		SET isDisabled = 0
+		WHERE custid IN (@custid,@srecommend, @mrecommend)
+			AND gametypeid NOT IN (2,6)
+	END
+	ELSE IF @roleid = 1
+	BEGIN
+		SELECT @srecommend = srecommend, @mrecommend = mrecommend, @recommend = recommend FROM custInfo WITH(NOLOCK) WHERE custid = @custid
+		
+		UPDATE CustGameType WITH(UPDLOCK,ROWLOCK)
+		SET isDisabled = 0
+		WHERE custid IN (@custid,@srecommend, @mrecommend, @recommend)
+			AND gametypeid NOT IN (2,6)
+	END	
+END	
+
 GO
 --
 -----End step 1
@@ -46,36 +70,60 @@ GO
 --
 --Begin step 2:check HideKeno is on or off for downlines before turn off HideKeno
 ------------------------------------------------------------------
+--get list SMA have downlines not turned HideKeno = 0
 
+CREATE TABLE #tmpCust(custid INT PRIMARY KEY, roleid INT, isfinished bit default(0))
+DECLARE @B TABLE(custid INT, roleid INT, isFinished bit default(0))
 
-DECLARE @custid INT, @roleid INT
+DECLARE @custid INT, @roleid INT, @srecommend INT, @mrecommend INT, @recommend INT
 
-SELECT @custid = xxx--custid of SMA to enable Keno's games
-SELECT @roleid = xx--roleid of SMA
+INSERT INTO @B(custid, roleid)
+	SELECT custid, roleid
+	FROM customer with(NOLOCK)
+	WHERE username IN ('master1','agent1','super1')
 
-IF @roleid = 4
+	
+WHILE (1 = 1)
 BEGIN
-	IF EXISTS (SELECT TOP(1) 1 FROM custInfo WITH(NOLOCK) WHERE srecommend = @custid AND HideKeno = 1)
-		PRINT 'HideKeno''s status of downlines is on. Please move to step 3.'
-	ELSE 
-		PRINT 'Enable Keno''s games for super only done.'	
+	UPDATE TOP (1) @B
+	SET isfinished = 1
+		,@custid = custid	
+		,@roleid = roleid
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+	
+	IF @roleid = 4
+	BEGIN	
+		IF EXISTS (SELECT TOP(1) 1 FROM custinfo WITH(NOLOCK) WHERE srecommend = @custid AND HideKeno = 1)
+			INSERT INTO #tmpCust(custid,roleid)
+			SELECT @custid, 4
+	END
+	ELSE IF @roleid = 3
+	BEGIN	
+		IF EXISTS (SELECT TOP(1) 1 FROM custinfo WITH(NOLOCK) WHERE mrecommend = @custid AND HideKeno = 1)
+			INSERT INTO #tmpCust(custid,roleid)
+			SELECT @custid, 3
+	END
+	ELSE IF @roleid = 2
+	BEGIN	
+		IF EXISTS (SELECT TOP(1) 1 FROM custinfo WITH(NOLOCK) WHERE recommend = @custid AND HideKeno = 1)
+			INSERT INTO #tmpCust(custid,roleid)
+			SELECT @custid, 2
+	END
+	ELSE IF @roleid = 1
+	BEGIN	
+		IF EXISTS (SELECT TOP(1) 1 FROM custinfo WITH(NOLOCK) WHERE custid = @custid AND HideKeno = 1)
+			INSERT INTO #tmpCust(custid,roleid)
+			SELECT @custid, 1
+	END
 END
-ELSE IF @roleid = 3
-BEGIN
-	IF EXISTS (SELECT TOP(1) 1 FROM custInfo WITH(NOLOCK) WHERE mrecommend = @custid AND HideKeno = 1)
-		PRINT 'HideKeno''s status of downlines is on. Please move to step 3.'
-	ELSE 
-		PRINT 'Enable Keno''s games for master only done.'	
-END
-ELSE IF @roleid = 2
-BEGIN
-	IF EXISTS (SELECT TOP(1) 1 FROM custInfo WITH(NOLOCK) WHERE mrecommend = @custid AND HideKeno = 1)
-		PRINT 'HideKeno''s status of downlines is on. Please move to step 3.'
-	ELSE 
-		PRINT 'Enable Keno''s games for agent only done.'	
-END
-GO
 
+
+SELECT * from #tmpCust
+--if row count = 0 -> update done
+--else this is list SMA need turn HideKeno for downlines off(=0)	
+--move to step 3 deploy sp execrep & update list
 --
 --end step 2:check HideKeno is on or off for downlines before turn off HideKeno
 -----------------------------------------------------------------
@@ -126,6 +174,14 @@ BEGIN
 		WHERE (recommend = @custid OR custid IN (@srecommend, @mrecommend))
 			AND custid <= @maxcustid
 	END		
+	ELSE IF @roleid = 1
+	BEGIN
+		SELECT @srecommend = srecommend, @mrecommend = mrecommend, @recommend = recommend FROM CustInfo WITH(NOLOCK) WHERE custid = @custid
+		
+		UPDATE custInfo WITH(UPDLOCK,ROWLOCK)
+		SET hideKeno = 0
+		WHERE custid IN (@custid, @srecommend, @mrecommend,@recommend)
+	END	
 END
 GO
 
@@ -137,17 +193,73 @@ GO
 -- BEGIN STEP 4: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/053/054/06 -----
 --------------------------------------------------------------------------------------
 
-DECLARE @custid INT, @max_custid INT, @roleid INT
+CREATE TABLE #tmpCust(custid INT PRIMARY KEY, roleid INT, isfinished bit default(0))
+DECLARE @B TABLE(custid INT, roleid INT, isFinished bit default(0))
 
-SELECT @custid = xxx--custid of SMA want to disable
-SELECT @roleid = xx--roleid of SMA
+DECLARE @custid INT, @roleid INT, @srecommend INT, @mrecommend INT, @recommend INT
 
-SELECT @max_custid = xx--max custid in system
+INSERT INTO @B(custid, roleid)
+	SELECT custid, roleid
+	FROM customer with(NOLOCK)
+	WHERE username IN ('master1','agent1','super1')
 
-EXEC dbo.[Acc_ExecRep_Cust_09] @custid = @custid
-		,@roleid = @roleid		
-		,@maxcustid = @max_custid
-		,@target = 'REPLICATED'
+	
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) @B	
+	SET isfinished = 1
+		,@custid = custid	
+		,@roleid = roleid
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+	
+	IF @roleid = 4
+	BEGIN	
+		IF EXISTS (SELECT TOP(1) 1 FROM custinfo WITH(NOLOCK) WHERE srecommend = @custid AND HideKeno = 1)
+			INSERT INTO #tmpCust(custid,roleid)
+			SELECT @custid, 4
+	END
+	ELSE IF @roleid = 3
+	BEGIN	
+		IF EXISTS (SELECT TOP(1) 1 FROM custinfo WITH(NOLOCK) WHERE mrecommend = @custid AND HideKeno = 1)
+			INSERT INTO #tmpCust(custid,roleid)
+			SELECT @custid, 3
+	END
+	ELSE IF @roleid = 2
+	BEGIN	
+		IF EXISTS (SELECT TOP(1) 1 FROM custinfo WITH(NOLOCK) WHERE recommend = @custid AND HideKeno = 1)
+			INSERT INTO #tmpCust(custid,roleid)
+			SELECT @custid, 2
+	END
+	ELSE IF @roleid = 1
+	BEGIN	
+		IF EXISTS (SELECT TOP(1) 1 FROM custinfo WITH(NOLOCK) WHERE custid = @custid AND HideKeno = 1)
+			INSERT INTO #tmpCust(custid,roleid)
+			SELECT @custid, 1
+	END
+END
+
+DECLARE @max_custid INT
+
+SET @max_custid = xxx 
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #tmpCust
+	SET isfinished = 1
+		,@custid = custid	
+		,@roleid = roleid
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+
+	EXEC dbo.[Acc_ExecRep_Cust_09] @custid = @custid
+			,@roleid = @roleid		
+			,@maxcustid = @max_custid
+			,@target = 'REPLICATED'
+END
+GO		
 
 -- END STEP 4: DEPLOY THIS SP @ DBTRANS.CustDB -------
 ------------------------------------------------------
@@ -157,18 +269,73 @@ EXEC dbo.[Acc_ExecRep_Cust_09] @custid = @custid
 -- BEGIN STEP 5: RUN THIS SCRIPT AT DBTRANS -----
 -------------------------------------------------
 
-DECLARE @custid INT, @max_custid INT, @roleid INT
+CREATE TABLE #tmpCust(custid INT PRIMARY KEY, roleid INT, isfinished bit default(0))
+DECLARE @B TABLE(custid INT, roleid INT, isFinished bit default(0))
 
-SELECT @custid = xxx--custid of SMA want to disable
-SELECT @roleid = xx--roleid of SMA
+DECLARE @custid INT, @roleid INT, @srecommend INT, @mrecommend INT, @recommend INT
 
-SELECT @max_custid = xx--max custid in system
+INSERT INTO @B(custid, roleid)
+	SELECT custid, roleid
+	FROM customer with(NOLOCK)
+	WHERE username IN ('master1','agent1','super1')
 
-EXEC dbo.[Acc_ExecRep_Cust_09] @custid = @custid
-		,@roleid = @roleid		
-		,@maxcustid = @max_custid
-		,@target = 'DBTRANS'
+	
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) @B
+	SET isfinished = 1
+		,@custid = custid	
+		,@roleid = roleid
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+	
+	IF @roleid = 4
+	BEGIN	
+		IF EXISTS (SELECT TOP(1) 1 FROM custinfo WITH(NOLOCK) WHERE srecommend = @custid AND HideKeno = 1)
+			INSERT INTO #tmpCust(custid,roleid)
+			SELECT @custid, 4
+	END
+	ELSE IF @roleid = 3
+	BEGIN	
+		IF EXISTS (SELECT TOP(1) 1 FROM custinfo WITH(NOLOCK) WHERE mrecommend = @custid AND HideKeno = 1)
+			INSERT INTO #tmpCust(custid,roleid)
+			SELECT @custid, 3
+	END
+	ELSE IF @roleid = 2
+	BEGIN	
+		IF EXISTS (SELECT TOP(1) 1 FROM custinfo WITH(NOLOCK) WHERE recommend = @custid AND HideKeno = 1)
+			INSERT INTO #tmpCust(custid,roleid)
+			SELECT @custid, 2
+	END
+	ELSE IF @roleid = 1
+	BEGIN	
+		IF EXISTS (SELECT TOP(1) 1 FROM custinfo WITH(NOLOCK) WHERE custid = @custid AND HideKeno = 1)
+			INSERT INTO #tmpCust(custid,roleid)
+			SELECT @custid, 1
+	END
+END
 
+DECLARE @max_custid INT
+
+SET @max_custid = xxx 
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #tmpCust
+	SET isfinished = 1
+		,@custid = custid	
+		,@roleid = roleid
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+
+	EXEC dbo.[Acc_ExecRep_Cust_09] @custid = @custid
+			,@roleid = @roleid		
+			,@maxcustid = @max_custid
+			,@target = 'DBTRANS'
+END
+GO	
 
 -- END STEP 5: RUN THIS SCRIPT AT DBTRANS -----
 -------------------------------------------------

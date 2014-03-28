@@ -48,7 +48,15 @@ BEGIN
 		SET hideKeno = 0
 		WHERE (recommend = @custid OR custid IN (@srecommend, @mrecommend))
 			AND custid <= @maxcustid
-	END		
+	END	
+	ELSE IF @roleid = 1	
+	BEGIN
+		SELECT @srecommend = srecommend, @mrecommend = mrecommend, @recommend = recommend FROM CustInfo WITH(NOLOCK) WHERE custid = @custid
+		
+		UPDATE custInfo WITH(UPDLOCK,ROWLOCK)
+		SET hideKeno = 0
+		WHERE custid IN (@custid, @srecommend, @mrecommend, @recommend)			
+	END	
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @ DBTRANS.CustDB -------
@@ -59,35 +67,69 @@ GO
 ---
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/053/054/06 -----
 --------------------------------------------------------------------------------------
-DECLARE @custid INT, @max_custid INT, @roleid INT
+CREATE TABLE #tmpCust(custid INT PRIMARY KEY, roleid INT, isfinished bit default(0))
 
-SELECT @custid = xxx--custid of SMA want to disable
-SELECT @roleid = xx--roleid of SMA
+DECLARE @max_custid INT, @custid INT, @roleid INT
 
-SELECT @max_custid = xx--max custid in system
+SET @max_custid = xxx 
 
-EXEC dbo.[Acc_ExecRep_Cust_09] @custid = @custid
-		,@roleid = @roleid		
-		,@maxcustid = @max_custid
-		,@target = 'REPLICATED'
-		
+INSERT INTO #tmpCust(custid, roleid)
+	SELECT custid, roleid
+	FROM customer with(NOLOCK)
+	WHERE username IN ('master1','agent1','super1')
+
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #tmpCust
+	SET isfinished = 1
+		,@custid = custid	
+		,@roleid = roleid
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+
+	EXEC dbo.[Acc_ExecRep_Cust_09] @custid = @custid
+			,@roleid = @roleid		
+			,@maxcustid = @max_custid
+			,@target = 'REPLICATED'
+END			
+GO		
 -- END STEP 2: DEPLOY THIS SP @ DBTRANS.CustDB -------
 ------------------------------------------------------
 
 ---
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBTRANS -----
 -------------------------------------------------
-DECLARE @custid INT, @max_custid INT, @roleid INT
+CREATE TABLE #tmpCust(custid INT PRIMARY KEY, roleid INT, isfinished bit default(0))
 
-SELECT @custid = xxx--custid of SMA want to disable
-SELECT @roleid = xx--roleid of SMA
+DECLARE @max_custid INT, @custid INT, @roleid INT
 
-SELECT @max_custid = xx--max custid in system
+SET @max_custid = xxx 
 
-EXEC dbo.[Acc_ExecRep_Cust_09] @custid = @custid
-		,@roleid = @roleid		
-		,@maxcustid = @max_custid
-		,@target = 'DBTRANS'
+INSERT INTO #tmpCust(custid, roleid)
+	SELECT custid, roleid
+	FROM customer with(NOLOCK)
+	WHERE username IN ('master1','agent1','super1')
+
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #tmpCust
+	SET isfinished = 1
+		,@custid = custid	
+		,@roleid = roleid
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+
+	EXEC dbo.[Acc_ExecRep_Cust_09] @custid = @custid
+			,@roleid = @roleid		
+			,@maxcustid = @max_custid
+			,@target = 'DBTRANS'
+END			
+GO	
+
 
 -- END STEP 3: RUN THIS SCRIPT AT DBTRANS -----
 -------------------------------------------------	
