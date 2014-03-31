@@ -152,12 +152,12 @@ union select	153	,	16	,	5	--	Yen
 union select	153	,	48	,	30	--	ZAR
 
 
---258 rows affected
+--115 rows affected
 UPDATE rs
 SET rs.minbet = t.minbet
 FROM RacingBetSetting rs WITH(UPDLOCK,ROWLOCK)
 	INNER JOIN @tmpSetting t ON rs.sporttype = t.sporttype AND rs.currency = t.currency
-
+WHERE rs.minbet <> t.minbet
 
 INSERT INTO RacingBetSetting(sporttype, bettype, currency, minbet)
 SELECT s.sporttype, s.bettype, t.currency, t.minbet
