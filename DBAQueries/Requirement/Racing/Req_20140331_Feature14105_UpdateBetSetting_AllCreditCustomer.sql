@@ -275,10 +275,13 @@ BEGIN
 				
 			WAITFOR DELAY '00:00:00.280'
 		END
+		
+		UPDATE #supers 
+		SET isfinished = 0		
 	END		
 END
 GO
--- END STEP 2: DEPLOY THIS SP @ DBTRANS.CustDB -------
+-- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/053/054/06 -----
 ------------------------------------------------------
 ---
 ---
@@ -484,8 +487,11 @@ BEGIN
 				
 			WAITFOR DELAY '00:00:00.280'
 		END
+		
+		UPDATE #supers 
+		SET isfinished = 0	
 	END		
 END
 GO
--- END STEP 3: RUN THIS SCRIPT AT DBTRANS -----
+-- END STEP 3: RUN THIS SCRIPT AT DBTRANS.CustDB -----
 -------------------------------------------------

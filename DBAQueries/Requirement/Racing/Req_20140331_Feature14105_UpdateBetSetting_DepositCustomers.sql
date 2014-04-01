@@ -6,6 +6,8 @@
  */
  
  
+-- BEGIN STEP 1: DEPLOY THIS SP @ DBTRANS.CustDB -------
+------------------------------------------------------
  
  ALTER PROCEDURE [dbo].[Acc_ExecRep_Cust_09]	
 	@srecommend INT,
@@ -273,11 +275,14 @@ BEGIN
 				
 			WAITFOR DELAY '00:00:00.280'
 		END
+		
+		UPDATE #supers 
+		SET isfinished = 0
 	END		
 END
 GO
--- END STEP 2: DEPLOY THIS SP @ DBTRANS.CustDB -------
-------------------------------------------------------
+-- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/053/054/06 -----
+--------------------------------------------------------------------------------------
 ---
 
 ---
@@ -482,9 +487,11 @@ BEGIN
 				
 			WAITFOR DELAY '00:00:00.280'
 		END
+		
+		UPDATE #supers 
+		SET isfinished = 0
 	END		
 END
 GO
 -- END STEP 3: DEPLOY THIS SP @ DBTRANS.CustDB -------
 ------------------------------------------------------
----
