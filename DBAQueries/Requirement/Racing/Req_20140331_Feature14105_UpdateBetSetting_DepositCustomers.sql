@@ -27,29 +27,29 @@ BEGIN
 	IF (SELECT COUNT(1)
 		FROM sys.objects
 		WHERE NAME IN ('custinfo') AND type = 'U'
-		) <> 1 RETURN
+	) <> 1 RETURN
 	
-	IF @sporttype = 151
+	IF @sporttype = 151 -- SA racing
 	BEGIN
 		UPDATE CustInfo WITH(UPDLOCK,ROWLOCK)
-		SET maxpermatch151 = @maxpermatch, 
-			maxpermatch151_OT = @maxpermatch, 
-			MaxPerMatch151_AU = @maxpermatch
+		SET maxpermatch151 = @maxpermatch			
 		WHERE srecommend = @srecommend
 			AND custid <= @maxcustid
 	END
-	ELSE IF @sporttype = 152 
+	ELSE IF @sporttype = 152 -- UK
 	BEGIN
 		UPDATE CustInfo WITH(UPDLOCK,ROWLOCK)
-		SET MaxPerMatch152_UK = @maxpermatch, 
-			MaxPerMatch152_AU = @maxpermatch
+		SET MaxPerMatch151_OT = @maxpermatch, 
+			MaxPerMatch152_UK = @maxpermatch
 		WHERE srecommend = @srecommend
 			AND custid <= @maxcustid
 	END
-	ELSE IF @sporttype = 153
+	ELSE IF @sporttype = 153-- AUS
 	BEGIN
 		UPDATE CustInfo WITH(UPDLOCK,ROWLOCK)
-		SET MaxPerMatch153_AU = @maxpermatch
+		SET MaxPerMatch151_AU = @maxpermatch,
+			MaxPerMatch152_AU = @maxpermatch,
+			MaxPerMatch153_AU = @maxpermatch
 		WHERE srecommend = @srecommend
 			AND custid <= @maxcustid
 	END
@@ -59,15 +59,42 @@ BEGIN
 	WHERE NAME IN ('Dep_custsetting3rd') AND type = 'U'
 	) <> 1 RETURN
 	
-	UPDATE cs
-	SET minbet = @minbet,
-		maxbet = @maxbet
-	FROM Dep_CustSetting3rd cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN CustInfo ci WITH(NOLOCK) ON ci.custid = cs.custid
-	WHERE ci.srecommend = @srecommend
-		AND cs.sporttype = @sporttype
-		AND ci.custid <= @maxcustid
-	
+	IF @sporttype = 151-- SA racing
+	BEGIN
+		UPDATE cs
+		SET minbet = @minbet,
+			maxbet = @maxbet
+		FROM Dep_CustSetting3rd cs WITH(UPDLOCK,ROWLOCK)
+			INNER JOIN CustInfo ci WITH(NOLOCK) ON ci.custid = cs.custid
+		WHERE ci.srecommend = @srecommend
+			AND cs.sporttype = 151
+			AND cs.bettype IN (31,32)
+			AND ci.custid <= @maxcustid
+	END	
+	ELSE IF @sporttype = 152--UK
+	BEGIN
+		UPDATE cs
+		SET minbet = @minbet,
+			maxbet = @maxbet
+		FROM Dep_CustSetting3rd cs WITH(UPDLOCK,ROWLOCK)
+			INNER JOIN CustInfo ci WITH(NOLOCK) ON ci.custid = cs.custid
+		WHERE ci.srecommend = @srecommend
+			AND cs.sporttype IN (151,152)
+			AND cs.bettype IN (41,42)
+			AND ci.custid <= @maxcustid
+	END
+	ELSE IF @sporttype = 153--AUS
+	BEGIN
+		UPDATE cs
+		SET minbet = @minbet,
+			maxbet = @maxbet
+		FROM Dep_CustSetting3rd cs WITH(UPDLOCK,ROWLOCK)
+			INNER JOIN CustInfo ci WITH(NOLOCK) ON ci.custid = cs.custid
+		WHERE ci.srecommend = @srecommend
+			AND cs.sporttype between 151 and 153
+			AND cs.bettype IN (51,52)
+			AND ci.custid <= @maxcustid
+	END
 END
 -- END STEP 1: DEPLOY THIS SP @ DBTRANS.CustDB -------
 ------------------------------------------------------

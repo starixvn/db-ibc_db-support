@@ -119,6 +119,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20140331_Feature14105_UpdateBetSetting_AllCreditCustomer.sql"
          Script = "Req_20140331_Feature14105_UpdateBetSetting_DepositCustomers.sql"
          Script = "Req_20140331_Feature14105_UpdateRacingBetSettingTable.sql"
+         Script = "Req_20140401_Feature14105_UpdateBetSetting_CorrectWrongSettingsForUpdatedCustomers.sql"
          Script = "Req_20140401_Feature14105_UpdateBetSetting_NewlyCreditCustomers.sql"
       End
       Begin Folder = "Reports"

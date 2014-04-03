@@ -27,27 +27,27 @@ BEGIN
 		WHERE NAME IN ('custinfo') AND type = 'U'
 		) <> 1 RETURN
 	
-	IF @sporttype = 151
+	IF @sporttype = 151 -- SA racing
 	BEGIN
 		UPDATE CustInfo WITH(UPDLOCK,ROWLOCK)
-		SET maxpermatch151 = @maxpermatch, 
-			maxpermatch151_OT = @maxpermatch, 
-			MaxPerMatch151_AU = @maxpermatch
+		SET maxpermatch151 = @maxpermatch			
 		WHERE srecommend = @srecommend
 			AND custid <= @maxcustid
 	END
-	ELSE IF @sporttype = 152 
+	ELSE IF @sporttype = 152 -- UK
 	BEGIN
 		UPDATE CustInfo WITH(UPDLOCK,ROWLOCK)
-		SET MaxPerMatch152_UK = @maxpermatch, 
-			MaxPerMatch152_AU = @maxpermatch
+		SET MaxPerMatch151_OT = @maxpermatch, 
+			MaxPerMatch152_UK = @maxpermatch
 		WHERE srecommend = @srecommend
 			AND custid <= @maxcustid
 	END
-	ELSE IF @sporttype = 153
+	ELSE IF @sporttype = 153-- AUS
 	BEGIN
 		UPDATE CustInfo WITH(UPDLOCK,ROWLOCK)
-		SET MaxPerMatch153_AU = @maxpermatch
+		SET MaxPerMatch151_AU = @maxpermatch,
+			MaxPerMatch152_AU = @maxpermatch,
+			MaxPerMatch153_AU = @maxpermatch
 		WHERE srecommend = @srecommend
 			AND custid <= @maxcustid
 	END
@@ -57,15 +57,42 @@ BEGIN
 	WHERE NAME IN ('custsetting3rd') AND type = 'U'
 	) <> 1 RETURN
 	
-	UPDATE cs
-	SET minbet = @minbet,
-		maxbet = @maxbet
-	FROM CustSetting3rd cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN CustInfo ci WITH(NOLOCK) ON ci.custid = cs.custid
-	WHERE ci.srecommend = @srecommend
-		AND cs.sporttype = @sporttype
-		AND ci.custid <= @maxcustid
-	
+	IF @sporttype = 151-- SA racing
+	BEGIN
+		UPDATE cs
+		SET minbet = @minbet,
+			maxbet = @maxbet
+		FROM CustSetting3rd cs WITH(UPDLOCK,ROWLOCK)
+			INNER JOIN CustInfo ci WITH(NOLOCK) ON ci.custid = cs.custid
+		WHERE ci.srecommend = @srecommend
+			AND cs.sporttype = 151
+			AND cs.bettype IN (31,32)
+			AND ci.custid <= @maxcustid
+	END	
+	ELSE IF @sporttype = 152--UK
+	BEGIN
+		UPDATE cs
+		SET minbet = @minbet,
+			maxbet = @maxbet
+		FROM CustSetting3rd cs WITH(UPDLOCK,ROWLOCK)
+			INNER JOIN CustInfo ci WITH(NOLOCK) ON ci.custid = cs.custid
+		WHERE ci.srecommend = @srecommend
+			AND cs.sporttype IN (151,152)
+			AND cs.bettype IN (41,42)
+			AND ci.custid <= @maxcustid
+	END
+	ELSE IF @sporttype = 153--AUS
+	BEGIN
+		UPDATE cs
+		SET minbet = @minbet,
+			maxbet = @maxbet
+		FROM CustSetting3rd cs WITH(UPDLOCK,ROWLOCK)
+			INNER JOIN CustInfo ci WITH(NOLOCK) ON ci.custid = cs.custid
+		WHERE ci.srecommend = @srecommend
+			AND cs.sporttype between 151 and 153
+			AND cs.bettype IN (51,52)
+			AND ci.custid <= @maxcustid
+	END
 END
 -- END STEP 1: DEPLOY THIS SP @ DBTRANS.CustDB -------
 ------------------------------------------------------
@@ -121,7 +148,7 @@ union select	151	,	53	,	20	,	70000	,	140000	--	SEK
 union select	151	,	4	,	100	,	380000	,	760000	--	TB
 union select	151	,	43	,	100	,	380000	,	760000	--	THB
 union select	151	,	3	,	5	,	12000	,	24000	--	US$
-union select	151	,	64	,	5	,	12000	,	24000	--	UT
+--union select	151	,	64	,	5	,	12000	,	24000	--	UT
 union select	151	,	45	,	4000	,	12000000	,	24000000	--	Won
 union select	151	,	36	,	5	,	12000	,	24000	--	Y$US
 union select	151	,	16	,	5	,	12000	,	24000	--	Yen
@@ -169,7 +196,7 @@ union select	152	,	53	,	40	,	8000	,	160000	--	SEK
 union select	152	,	4	,	300	,	40000	,	800000	--	TB
 union select	152	,	43	,	300	,	40000	,	800000	--	THB
 union select	152	,	3	,	10	,	1200	,	24000	--	US$
-union select	152	,	64	,	10	,	1200	,	24000	--	UT
+--union select	152	,	64	,	10	,	1200	,	24000	--	UT
 union select	152	,	45	,	7000	,	1200000	,	24000000	--	Won
 union select	152	,	36	,	10	,	1200	,	24000	--	Y$US
 union select	152	,	16	,	10	,	1200	,	24000	--	Yen
@@ -217,7 +244,7 @@ union select	153	,	53	,	20	,	35000	,	140000	--	SEK
 union select	153	,	4	,	300	,	180000	,	720000	--	TB
 union select	153	,	43	,	300	,	180000	,	720000	--	THB
 union select	153	,	3	,	5	,	6000	,	24000	--	US$
-union select	153	,	64	,	5	,	6000	,	24000	--	UT
+--union select	153	,	64	,	5	,	6000	,	24000	--	UT
 union select	153	,	45	,	7000	,	6000000	,	24000000	--	Won
 union select	153	,	36	,	5	,	6000	,	24000	--	Y$US
 union select	153	,	16	,	5	,	6000	,	24000	--	Yen
@@ -333,7 +360,7 @@ union select	151	,	53	,	20	,	70000	,	140000	--	SEK
 union select	151	,	4	,	100	,	380000	,	760000	--	TB
 union select	151	,	43	,	100	,	380000	,	760000	--	THB
 union select	151	,	3	,	5	,	12000	,	24000	--	US$
-union select	151	,	64	,	5	,	12000	,	24000	--	UT
+--union select	151	,	64	,	5	,	12000	,	24000	--	UT
 union select	151	,	45	,	4000	,	12000000	,	24000000	--	Won
 union select	151	,	36	,	5	,	12000	,	24000	--	Y$US
 union select	151	,	16	,	5	,	12000	,	24000	--	Yen
@@ -381,7 +408,7 @@ union select	152	,	53	,	40	,	8000	,	160000	--	SEK
 union select	152	,	4	,	300	,	40000	,	800000	--	TB
 union select	152	,	43	,	300	,	40000	,	800000	--	THB
 union select	152	,	3	,	10	,	1200	,	24000	--	US$
-union select	152	,	64	,	10	,	1200	,	24000	--	UT
+--union select	152	,	64	,	10	,	1200	,	24000	--	UT
 union select	152	,	45	,	7000	,	1200000	,	24000000	--	Won
 union select	152	,	36	,	10	,	1200	,	24000	--	Y$US
 union select	152	,	16	,	10	,	1200	,	24000	--	Yen
@@ -429,7 +456,7 @@ union select	153	,	53	,	20	,	35000	,	140000	--	SEK
 union select	153	,	4	,	300	,	180000	,	720000	--	TB
 union select	153	,	43	,	300	,	180000	,	720000	--	THB
 union select	153	,	3	,	5	,	6000	,	24000	--	US$
-union select	153	,	64	,	5	,	6000	,	24000	--	UT
+--union select	153	,	64	,	5	,	6000	,	24000	--	UT
 union select	153	,	45	,	7000	,	6000000	,	24000000	--	Won
 union select	153	,	36	,	5	,	6000	,	24000	--	Y$US
 union select	153	,	16	,	5	,	6000	,	24000	--	Yen
