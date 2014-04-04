@@ -49,7 +49,7 @@ union select	151	,	53	,	20	--	SEK
 union select	151	,	4	,	100	--	TB
 union select	151	,	43	,	100	--	THB
 union select	151	,	3	,	5	--	US$
-union select	151	,	64	,	5	--	UT
+--union select	151	,	64	,	5	--	UT
 union select	151	,	45	,	4000	--	Won
 union select	151	,	36	,	5	--	Y$US
 union select	151	,	16	,	5	--	Yen
@@ -97,7 +97,7 @@ union select	152	,	53	,	40	--	SEK
 union select	152	,	4	,	300	--	TB
 union select	152	,	43	,	300	--	THB
 union select	152	,	3	,	10	--	US$
-union select	152	,	64	,	10	--	UT
+--union select	152	,	64	,	10	--	UT
 union select	152	,	45	,	7000	--	Won
 union select	152	,	36	,	10	--	Y$US
 union select	152	,	16	,	10	--	Yen
@@ -145,37 +145,36 @@ union select	153	,	53	,	20	--	SEK
 union select	153	,	4	,	300	--	TB
 union select	153	,	43	,	300	--	THB
 union select	153	,	3	,	5	--	US$
-union select	153	,	64	,	5	--	UT
+--union select	153	,	64	,	5	--	UT
 union select	153	,	45	,	7000	--	Won
 union select	153	,	36	,	5	--	Y$US
 union select	153	,	16	,	5	--	Yen
 union select	153	,	48	,	30	--	ZAR
 
 
---115 rows affected
+; with T as
+	(
+		SELECT currency, 31 as bettype, minbet
+		FROm @tmpSetting
+		where sporttype = 151
+		union 
+		SELECT currency, 41 as bettype, minbet
+		FROm @tmpSetting
+		where sporttype = 152		
+		union 
+		SELECT currency, 51 as bettype, minbet
+		FROm @tmpSetting
+		where sporttype = 153		
+	)
+	
+
+--85 rows affected
 UPDATE rs
 SET rs.minbet = t.minbet
 FROM RacingBetSetting rs WITH(UPDLOCK,ROWLOCK)
-	INNER JOIN @tmpSetting t ON rs.sporttype = t.sporttype AND rs.currency = t.currency
+	INNER JOIN T t ON rs.bettype = t.bettype AND rs.currency = t.currency
 WHERE rs.minbet <> t.minbet
-
-INSERT INTO RacingBetSetting(sporttype, bettype, currency, minbet)
-SELECT s.sporttype, s.bettype, t.currency, t.minbet
-FROM @tmpSetting t
-	INNER JOIN (
-				SELECT 151 as sporttype, 31 as bettype
-				UNION 
-				SELECT 151 as sporttype, 41 as bettype
-				UNION 
-				SELECT 151 as sporttype, 51 as bettype
-				UNION 
-				SELECT 152 as sporttype, 41 as bettype
-				UNION 
-				SELECT 152 as sporttype, 51 as bettype
-				UNION 
-				SELECT 153 as sporttype, 51 as bettype
-			) s ON t.sporttype = s.sporttype 
-WHERE t.currency = 63			
+	
 
 
 
