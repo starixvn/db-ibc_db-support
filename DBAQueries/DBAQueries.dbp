@@ -78,6 +78,8 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20140328_Feature13844_EnableKenoForSMAonly.sql"
          Script = "Req_20140328_Feature13844_Scr1_EnableKenoForSMA_AllDownlines.sql"
          Script = "Req_20140328_Feature13844_Scr2_EnableHideKenoForSMA_AllDownlines.sql"
+         Script = "Req_20140407_Feature14559_Scr1_EnableKenoForListSMA_AllDownlines.sql"
+         Script = "Req_20140407_Feature14559_Scr2_EnableHideKenoForListSMA_AllDownlines.sql"
       End
       Begin Folder = "LAS"
          Script = "Req_20140210_Feature10701_AddLogActionForLAS_SpecialDelete.sql"
