@@ -173,6 +173,8 @@ Begin DataProject = "DBAQueries"
       End
       Begin Folder = "SMATurnover"
          Script = "Req_20130611_Feature1290_ImplementSMATurnoverManagement.sql"
+         Script = "Req_20140408_Feature14426_ModifyTrigger_SMATurnover.sql"
+         Script = "Req_20140408_Feature14426_PrepareStructureSMATurnover.sql"
       End
       Begin Folder = "Summary Winloss(2d)"
          Script = "Req_20130619_Feature2043_ImportDataRptWinloss2.sql"
