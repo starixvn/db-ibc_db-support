@@ -125,6 +125,8 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20140331_Feature14105_UpdateRacingBetSettingTable.sql"
          Script = "Req_20140401_Feature14105_UpdateBetSetting_CorrectWrongSettingsForUpdatedCustomers.sql"
          Script = "Req_20140401_Feature14105_UpdateBetSetting_NewlyCreditCustomers.sql"
+         Script = "Req_20140410_Feature14105_CorrectBetSettings_UpdatedDepositCustomers.sql"
+         Script = "Req_20140410_Feature14105_UpdateBetSettings_NewlyDepositCustomers.sql"
       End
       Begin Folder = "Reports"
          Script = "Req_20140122_Feature11152__UpdateDataForCategoryLeague.sql"
@@ -231,6 +233,8 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20131220_Feature9922_UpdateBetSettingForSpondemo.sql"
          Script = "Req_20140207_Feature11612_DisableVirtualSportsForTHAUS.sql"
          Script = "Req_20140209_EnableVirtualSportSuperOnly_THAUS.sql"
+         Script = "Req_20140408_Feature14496_Scr0_DeleteSettingsForVirtual_Speedway_Cycling.sql"
+         Script = "Req_20140408_Feature14496_Scr1_InsertSettingsForVirtual_Speedway_CyclingFromVirtualSoccerForCreditCustomers.sql"
       End
    End
    Begin Folder = "Support"
