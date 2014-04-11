@@ -2,10 +2,10 @@
 	update enable virtual sports for supers only (under THAUS headline)
 */
 
---- 984 rows affected
-UPDATE custinfo WITH(ROWLOCK,UPDLOCK)
-SET HideVirtualSports = 0
-WHERE srecommend = 12140347  --- TVA1
+----- 984 rows affected
+--UPDATE custinfo WITH(ROWLOCK,UPDLOCK)
+--SET HideVirtualSports = 0
+--WHERE srecommend = 12140347  --- TVA1
 
 
 GO
