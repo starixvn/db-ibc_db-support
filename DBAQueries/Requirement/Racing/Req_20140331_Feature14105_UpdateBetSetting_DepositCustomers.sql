@@ -67,7 +67,8 @@ BEGIN
 		FROM Dep_CustSetting3rd cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN CustInfo ci WITH(NOLOCK) ON ci.custid = cs.custid
 		WHERE ci.srecommend = @srecommend
-			AND cs.sporttype = 151			
+			AND cs.sporttype = 151	
+			AND cs.bettype IN (31,32,41,42,51,52)		
 			AND ci.custid <= @maxcustid
 	END	
 	ELSE IF @sporttype = 152 AND (@minbet IS NOT NULL OR @maxbet IS NOT NULL)--greyhounds
@@ -79,6 +80,7 @@ BEGIN
 			INNER JOIN CustInfo ci WITH(NOLOCK) ON ci.custid = cs.custid
 		WHERE ci.srecommend = @srecommend
 			AND cs.sporttype = 152
+			AND cs.bettype IN (41,42,51,52)
 			AND ci.custid <= @maxcustid
 	END
 	ELSE IF @sporttype = 153 AND (@minbet IS NOT NULL OR @maxbet IS NOT NULL)--harness
@@ -90,6 +92,7 @@ BEGIN
 			INNER JOIN CustInfo ci WITH(NOLOCK) ON ci.custid = cs.custid
 		WHERE ci.srecommend = @srecommend
 			AND cs.sporttype = 153
+			AND cs.bettype IN (51,52)
 			AND ci.custid <= @maxcustid
 	END
 END
