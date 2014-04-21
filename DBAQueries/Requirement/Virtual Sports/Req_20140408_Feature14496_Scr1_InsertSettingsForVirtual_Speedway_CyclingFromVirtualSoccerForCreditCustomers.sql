@@ -52,7 +52,7 @@ BEGIN
 			   ,[isautolivepositiontaking]
 			   ,[autolivempositiontaking]
 			   ,[isautolivempositiontaking])
-    SELECT [custid]
+    SELECT cs.[custid]
 			   ,t.[bettype]
 			   ,t.[sporttype]
 			   ,[apositiontaking]
@@ -84,7 +84,7 @@ BEGIN
 	WHERE ci.srecommend = @srecommend
 		AND ci.custid <= @maxcustid
 		AND cs.sporttype = 180
-		AND cs.bettype = 1231   
+		AND cs.bettype = 1201   
 
 
 	INSERT INTO [dbo].[custOverride3rd]
@@ -95,7 +95,7 @@ BEGIN
 			   ,[maxpositiontaking]
 			   ,[minlivepositiontaking]
 			   ,[maxlivepositiontaking])
-	SELECT 	[custid]
+	SELECT 	cs.[custid]
 		   ,t.[bettype]
 		   ,t.[sporttype]
 		   ,[minpositiontaking]
@@ -111,7 +111,7 @@ BEGIN
 	WHERE ci.srecommend = @srecommend
 		AND ci.custid <= @maxcustid
 		AND cs.sporttype = 180
-		AND cs.bettype = 1231   		 	
+		AND cs.bettype = 1201   		 	
     	
 END
 GO

@@ -6,7 +6,7 @@
  */
  
  ALTER TABLE rmBettrans
-ADD combo2 int NULL
+ADD combo int NULL
 GO
 
 UPDATE rmBettrans WITH(UPDLOCK,ROWLOCK)
