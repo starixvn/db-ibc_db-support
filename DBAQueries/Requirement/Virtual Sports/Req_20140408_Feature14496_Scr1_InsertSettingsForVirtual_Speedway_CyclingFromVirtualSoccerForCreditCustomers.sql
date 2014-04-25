@@ -25,7 +25,7 @@ BEGIN
 	WHERE srecommend = @srecommend
 		AND custid <= @maxcustid
 	
-	IF ( SELECT COUNT(1) FROM sys.objects WHERE NAME IN ('CustSetting3rd') AND type = 'U' ) <> 1
+	IF ( SELECT COUNT(1) FROM sys.objects WHERE NAME IN ('CustSetting3rd','CustOverride3rd') AND type = 'U' ) <> 2
 		RETURN
 
 	INSERT INTO [dbo].[CustSetting3rd]
@@ -52,7 +52,7 @@ BEGIN
 			   ,[isautolivepositiontaking]
 			   ,[autolivempositiontaking]
 			   ,[isautolivempositiontaking])
-    SELECT [custid]
+    SELECT cs.[custid]
 			   ,t.[bettype]
 			   ,t.[sporttype]
 			   ,[apositiontaking]
@@ -84,8 +84,35 @@ BEGIN
 	WHERE ci.srecommend = @srecommend
 		AND ci.custid <= @maxcustid
 		AND cs.sporttype = 180
-		AND cs.bettype = 1231   
-		
+		AND cs.bettype = 1201   
+
+
+	INSERT INTO [dbo].[custOverride3rd]
+			   ([custid]
+			   ,[bettype]
+			   ,[sporttype]
+			   ,[minpositiontaking]
+			   ,[maxpositiontaking]
+			   ,[minlivepositiontaking]
+			   ,[maxlivepositiontaking])
+	SELECT 	cs.[custid]
+		   ,t.[bettype]
+		   ,t.[sporttype]
+		   ,[minpositiontaking]
+		   ,[maxpositiontaking]
+		   ,[minlivepositiontaking]
+		   ,[maxlivepositiontaking]	
+	FROM CustOverride3rd cs WITH(NOLOCK)
+		INNER JOIN custInfo ci WITH(NOLOCK) ON cs.custid = ci.custid
+		CROSS APPLY (
+			SELECT 183 as sporttype, 1231 as bettype
+			UNION SELECT 185, 1231
+		) t
+	WHERE ci.srecommend = @srecommend
+		AND ci.custid <= @maxcustid
+		AND cs.sporttype = 180
+		AND cs.bettype = 1201   		 	
+    	
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @ DBTRANS.CustDB -------
