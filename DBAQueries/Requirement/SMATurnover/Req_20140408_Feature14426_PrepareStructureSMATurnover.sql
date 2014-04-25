@@ -101,6 +101,33 @@ CREATE TABLE [dbo].[DownlineTo_SMAControl](
 GO
 
 ----------------------------------------------------------------
+--Add new table to DBAGE.bodb_Age.dbo.DownlineTo_Match_SMAControl
+----------------------------------------------------------------
+USE [bodb_Age]
+GO
+
+/****** Object:  Table [dbo].[DownlineTo_Match_SMAControl]    Script Date: 4/21/2014 2:42:12 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[DownlineTo_Match_SMAControl](
+	[SMAID] [int] NOT NULL,
+	[MatchID] [int] NOT NULL,
+	[Value] [int] NOT NULL,
+ CONSTRAINT [PK_DownlineTo_Match_SMAControl] PRIMARY KEY CLUSTERED 
+(
+	[MatchID] ASC,
+	[SMAID] ASC
+	
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [ageDATA]
+) ON [ageDATA]
+
+GO
+
+----------------------------------------------------------------
 --Alter table DBAGE.bodb02.dbo.DownlineTurnover_Setting---------
 ----------------------------------------------------------------
 USE [bodb02]
@@ -114,6 +141,7 @@ GO
 USE [bodb02]
 GO
 ALTER TABLE dbo.DownlineTurnover_Setting ADD [Value] INT NULL
+ALTER TABLE dbo.DownlineTurnover_Setting ADD [InheritLevel] TINYINT NULL
 GO
 
 ----------------------------------------------------------------
@@ -141,6 +169,15 @@ GO
 ALTER TABLE dbo.DownlineTurnover_Trigger_tmp ADD mrecommend INT NULL
 ALTER TABLE dbo.DownlineTurnover_Trigger_tmp ADD recommend INT NULL
 GO
+
+----------------------------------------------------------------
+-----------------------------Grant permission-------------------
+----------------------------------------------------------------
+GRANT SELECT ON DownlineTo_SportControl TO bodbAdminNet
+GRANT SELECT ON DownlineTo_LeagueControl TO bodbAdminNet
+GRANT SELECT ON DownlineTo_MatchControl TO bodbAdminNet
+GRANT SELECT ON DownlineTo_SMAControl TO bodbAdminNet
+GRANT SELECT ON DownlineTo_Match_SMAControl TO bodbAdminNet
 ----------------------------END DBAGE---------------------------
 
 ----------------------------DBTXN-------------------------------
@@ -159,4 +196,15 @@ USE [bodb02]
 GO
 sp_RENAME 'DownlineTurnover_Setting.Custid', 'SMAID' , 'COLUMN'
 GO
+
+----------------------------------------------------------------
+-----------------------------Grant permission-------------------
+----------------------------------------------------------------
+GRANT INSERT, DELETE ON DownlineTurnover_Trigger TO bodbAdminNet
+GRANT DELETE ON DownlineTurnover_Trigger_tmp TO bodbAdminNet
+
+GRANT SELECT ON DownlineTurnover_Setting TO bodbAdminNet
+GRANT SELECT ON Dep_CustSuper TO bodbAdminNet
+GRANT SELECT ON bettrans TO bodbAdminNet
+GRANT SELECT ON match TO bodbAdminNet
 ----------------------------END DBTXN---------------------------- 
