@@ -74,16 +74,7 @@ BEGIN
 		GROUP BY srecommend, mrecommend, recommend, matchid
 	END	
 END
-
 GO
-----------------------------------------------------------------
------Disable trigger dto_setting_afterDelete--------------------
-----------------------------------------------------------------
-USE bodb02
-GO
-DISABLE TRIGGER dto_setting_afterDelete ON DownlineTurnover_Setting
-GO
-
 
 ----------------------------------------------------------------
 -----Disable trigger dto_setting_afterInsert--------------------
@@ -453,12 +444,12 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterInsert]    Script Date: 4/25/2014 4:30:35 PM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterInsert]    Script Date: 4/28/2014 10:57:05 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TRIGGER [dbo].[DownlineTo_Match_SMAControl_afterInsert]
+ALTER TRIGGER [dbo].[DownlineTo_Match_SMAControl_afterInsert]
    ON  [dbo].[DownlineTo_Match_SMAControl]
    AFTER INSERT
 AS 
@@ -484,17 +475,17 @@ BEGIN
 		BEGIN
 			DELETE D
 			FROM bodb02.dbo.DownlineTurnOver_Trigger D WITH(ROWLOCK,UPDLOCK)
-			INNER JOIN inserted i ON i.MatchID = D.MatchID AND (D.srecommend = i.SMAID OR D.mrecommend = i.SMAID AND D.recommend = i.SMAID)
+			INNER JOIN inserted i ON i.MatchID = D.MatchID AND (D.srecommend = i.SMAID OR D.mrecommend = i.SMAID OR D.recommend = i.SMAID)
 	
 			DELETE T
 			FROM bodb02.dbo.DownlineTurnOver_Trigger_tmp T WITH(ROWLOCK,UPDLOCK)
-			INNER JOIN inserted i ON i.MatchID = T.MatchID AND (T.srecommend = i.SMAID OR T.mrecommend = i.SMAID AND T.recommend = i.SMAID)
+			INNER JOIN inserted i ON i.MatchID = T.MatchID AND (T.srecommend = i.SMAID OR T.mrecommend = i.SMAID OR T.recommend = i.SMAID)
 	
 			-- Insert statements for trigger here
 			INSERT INTO bodb02.dbo.DownlineTurnOver_Trigger (srecommend, mrecommend, recommend, matchid, sumstake)
 			SELECT b.srecommend, mrecommend, recommend, b.matchid, SUM(b.stake) sumstake
 			FROM bodb02.dbo.bettrans b with (nolock)
-				INNER JOIN inserted i ON i.MatchID = b.MatchID AND (b.srecommend = i.SMAID OR b.mrecommend = i.SMAID AND b.recommend = i.SMAID)
+				INNER JOIN inserted i ON i.MatchID = b.MatchID AND (b.srecommend = i.SMAID OR b.mrecommend = i.SMAID OR b.recommend = i.SMAID)
 			WHERE
 				b.statusid NOT IN (101, 102, 103) 
 			GROUP BY b.srecommend, mrecommend, recommend, b.matchid
@@ -508,12 +499,12 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterInsert]    Script Date: 4/25/2014 6:26:31 PM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterUpdate]    Script Date: 4/28/2014 10:57:41 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TRIGGER [dbo].[DownlineTo_Match_SMAControl_afterUpdate]
+ALTER TRIGGER [dbo].[DownlineTo_Match_SMAControl_afterUpdate]
    ON  [dbo].[DownlineTo_Match_SMAControl]
    AFTER UPDATE
 AS 
@@ -530,17 +521,17 @@ BEGIN
 	BEGIN
 		DELETE D
 		FROM bodb02.dbo.DownlineTurnOver_Trigger D WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN inserted i ON i.MatchID = D.MatchID AND (D.srecommend = i.SMAID OR D.mrecommend = i.SMAID AND D.recommend = i.SMAID)
+		INNER JOIN inserted i ON i.MatchID = D.MatchID AND (D.srecommend = i.SMAID OR D.mrecommend = i.SMAID OR D.recommend = i.SMAID)
 	
 		DELETE T
 		FROM bodb02.dbo.DownlineTurnOver_Trigger_tmp T WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN inserted i ON i.MatchID = T.MatchID AND (T.srecommend = i.SMAID OR T.mrecommend = i.SMAID AND T.recommend = i.SMAID)
+		INNER JOIN inserted i ON i.MatchID = T.MatchID AND (T.srecommend = i.SMAID OR T.mrecommend = i.SMAID OR T.recommend = i.SMAID)
 	
 		-- Insert statements for trigger here
 		INSERT INTO bodb02.dbo.DownlineTurnOver_Trigger (srecommend, mrecommend, recommend, matchid, sumstake)
 		SELECT b.srecommend, mrecommend, recommend, b.matchid, SUM(b.stake) sumstake
 		FROM bodb02.dbo.bettrans b with (nolock)
-			INNER JOIN inserted i ON i.MatchID = b.MatchID AND (b.srecommend = i.SMAID OR b.mrecommend = i.SMAID AND b.recommend = i.SMAID)
+			INNER JOIN inserted i ON i.MatchID = b.MatchID AND (b.srecommend = i.SMAID OR b.mrecommend = i.SMAID OR b.recommend = i.SMAID)
 		WHERE
 			b.statusid NOT IN (101, 102, 103) 
 		GROUP BY b.srecommend, mrecommend, recommend, b.matchid
@@ -553,12 +544,12 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterUpdate]    Script Date: 4/25/2014 6:33:25 PM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterDelete]    Script Date: 4/28/2014 10:56:08 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TRIGGER [dbo].[DownlineTo_Match_SMAControl_afterDelete]
+ALTER TRIGGER [dbo].[DownlineTo_Match_SMAControl_afterDelete]
    ON  [dbo].[DownlineTo_Match_SMAControl]
    AFTER DELETE
 AS 
@@ -586,20 +577,160 @@ BEGIN
 		BEGIN
 			DELETE D
 			FROM bodb02.dbo.DownlineTurnOver_Trigger D WITH(ROWLOCK,UPDLOCK)
-			INNER JOIN inserted i ON i.MatchID = D.MatchID AND (D.srecommend = i.SMAID OR D.mrecommend = i.SMAID AND D.recommend = i.SMAID)
+			INNER JOIN inserted i ON i.MatchID = D.MatchID AND (D.srecommend = i.SMAID OR D.mrecommend = i.SMAID OR D.recommend = i.SMAID)
 	
 			DELETE T
 			FROM bodb02.dbo.DownlineTurnOver_Trigger_tmp T WITH(ROWLOCK,UPDLOCK)
-			INNER JOIN inserted i ON i.MatchID = T.MatchID AND (T.srecommend = i.SMAID OR T.mrecommend = i.SMAID AND T.recommend = i.SMAID)
+			INNER JOIN inserted i ON i.MatchID = T.MatchID AND (T.srecommend = i.SMAID OR T.mrecommend = i.SMAID OR T.recommend = i.SMAID)
 	
 			-- Insert statements for trigger here
 			INSERT INTO bodb02.dbo.DownlineTurnOver_Trigger (srecommend, mrecommend, recommend, matchid, sumstake)
 			SELECT b.srecommend, mrecommend, recommend, b.matchid, SUM(b.stake) sumstake
 			FROM bodb02.dbo.bettrans b with (nolock)
-				INNER JOIN inserted i ON i.MatchID = b.MatchID AND (b.srecommend = i.SMAID OR b.mrecommend = i.SMAID AND b.recommend = i.SMAID)
+				INNER JOIN inserted i ON i.MatchID = b.MatchID AND (b.srecommend = i.SMAID OR b.mrecommend = i.SMAID OR b.recommend = i.SMAID)
 			WHERE
 				b.statusid NOT IN (101, 102, 103) 
 			GROUP BY b.srecommend, mrecommend, recommend, b.matchid
 		END
 	END
+END
+GO
+
+----------------------------------------------------------------
+-----Add trigger DownlineTo_SMAControl_afterUpdate--------------
+----------------------------------------------------------------
+USE [bodb_Age]
+GO
+/****** Object:  Trigger [dbo].[DownlineTo_SMAControl_afterUpdate]    Script Date: 4/28/2014 11:14:08 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TRIGGER [dbo].[DownlineTo_SMAControl_afterUpdate]
+   ON  [dbo].[DownlineTo_SMAControl]
+   AFTER UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON
+
+	DECLARE @OldOffset INT, @NewOffset INT
+	SELECT @OldOffset = Offset FROM deleted
+	SELECT @NewOffset = Offset FROM inserted
+
+	IF @OldOffset = 0 AND @NewOffset <> 0
+	BEGIN
+		DELETE D
+		FROM bodb02.dbo.DownlineTurnOver_Trigger D WITH(ROWLOCK,UPDLOCK)
+		INNER JOIN inserted i ON D.srecommend = i.SMAID OR D.mrecommend = i.SMAID OR D.recommend = i.SMAID
+		WHERE NOT EXISTS (	SELECT 1 
+							FROM bodb02.dbo.DownlineTurnOver_Setting s WITH (NOLOCK) 
+							INNER JOIN bodb02.dbo.match m WITH (NOLOCK) ON s.matchid = m.matchid 
+							WHERE eventstatus <> 'completed' AND D.matchID = s.matchID AND (s.SMAID = D.srecommend OR s.SMAID = D.mrecommend OR s.SMAID = D.recommend))
+
+		DELETE T
+		FROM bodb02.dbo.DownlineTurnOver_Trigger_tmp T WITH(ROWLOCK,UPDLOCK)
+		INNER JOIN inserted i ON T.srecommend = i.SMAID OR T.mrecommend = i.SMAID OR T.recommend = i.SMAID
+		WHERE NOT EXISTS (	SELECT 1 
+							FROM bodb02.dbo.DownlineTurnOver_Setting s WITH (NOLOCK) 
+							INNER JOIN bodb02.dbo.match m WITH (NOLOCK) ON s.matchid = m.matchid 
+							WHERE eventstatus <> 'completed' AND T.matchID = s.matchID AND (s.SMAID = T.srecommend OR s.SMAID = T.mrecommend OR s.SMAID = T.recommend))
+
+		-- Insert statements for trigger here
+		INSERT INTO bodb02.dbo.DownlineTurnOver_Trigger (srecommend, mrecommend, recommend, matchid, sumstake)
+		SELECT b.srecommend, mrecommend, recommend, b.matchid, SUM(b.stake) sumstake
+		FROM bodb02.dbo.bettrans b with (nolock)
+			INNER JOIN inserted i ON b.srecommend = i.SMAID OR b.mrecommend = i.SMAID OR b.recommend = i.SMAID
+		WHERE
+			b.statusid NOT IN (101, 102, 103) AND
+			NOT EXISTS (	SELECT 1 
+							FROM bodb02.dbo.DownlineTurnOver_Setting s WITH (NOLOCK) 
+							INNER JOIN bodb02.dbo.match m WITH (NOLOCK) ON s.matchid = m.matchid 
+							WHERE eventstatus <> 'completed' AND b.matchID = s.matchID AND (s.SMAID = b.srecommend OR s.SMAID = b.mrecommend OR s.SMAID = b.recommend))
+		GROUP BY b.srecommend, mrecommend, recommend, b.matchid
+	END
+END
+GO
+
+----------------------------------------------------------------
+-----Add trigger DownlineTo_SMAControl_afterDelete--------------
+----------------------------------------------------------------
+USE [bodb_Age]
+GO
+/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterUpdate]    Script Date: 4/28/2014 10:48:03 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TRIGGER [dbo].[DownlineTo_SMAControl_afterDelete]
+   ON  [dbo].[DownlineTo_SMAControl]
+   AFTER UPDATE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON
+
+	DECLARE @Offset INT
+	SELECT @Offset = Offset FROM deleted
+
+	IF @Offset = 0
+	BEGIN
+		DELETE DT
+		FROM bodb02.dbo.DownlineTurnOver_Trigger DT WITH(ROWLOCK,UPDLOCK)
+		INNER JOIN deleted d ON DT.srecommend = d.SMAID OR DT.mrecommend = d.SMAID OR DT.recommend = d.SMAID
+		WHERE NOT EXISTS (	SELECT 1 
+							FROM bodb02.dbo.DownlineTurnOver_Setting s WITH (NOLOCK) 
+							INNER JOIN bodb02.dbo.match m WITH (NOLOCK) ON s.matchid = m.matchid 
+							WHERE eventstatus <> 'completed' AND DT.matchID = s.matchID AND (s.SMAID = DT.srecommend OR s.SMAID = DT.mrecommend OR s.SMAID = DT.recommend))
+
+		DELETE T
+		FROM bodb02.dbo.DownlineTurnOver_Trigger_tmp T WITH(ROWLOCK,UPDLOCK)
+		INNER JOIN deleted d ON T.srecommend = d.SMAID OR T.mrecommend = d.SMAID OR T.recommend = d.SMAID
+		WHERE NOT EXISTS (	SELECT 1 
+							FROM bodb02.dbo.DownlineTurnOver_Setting s WITH (NOLOCK) 
+							INNER JOIN bodb02.dbo.match m WITH (NOLOCK) ON s.matchid = m.matchid 
+							WHERE eventstatus <> 'completed' AND T.matchID = s.matchID AND (s.SMAID = T.srecommend OR s.SMAID = T.mrecommend OR s.SMAID = T.recommend))
+
+		-- Insert statements for trigger here
+		INSERT INTO bodb02.dbo.DownlineTurnOver_Trigger (srecommend, mrecommend, recommend, matchid, sumstake)
+		SELECT b.srecommend, mrecommend, recommend, b.matchid, SUM(b.stake) sumstake
+		FROM bodb02.dbo.bettrans b with (nolock)
+			INNER JOIN deleted d ON b.srecommend = d.SMAID OR b.mrecommend = d.SMAID OR b.recommend = d.SMAID
+		WHERE
+			b.statusid NOT IN (101, 102, 103) AND
+			NOT EXISTS (	SELECT 1 
+							FROM bodb02.dbo.DownlineTurnOver_Setting s WITH (NOLOCK) 
+							INNER JOIN bodb02.dbo.match m WITH (NOLOCK) ON s.matchid = m.matchid 
+							WHERE eventstatus <> 'completed' AND b.matchID = s.matchID AND (s.SMAID = b.srecommend OR s.SMAID = b.mrecommend OR s.SMAID = b.recommend))
+		GROUP BY b.srecommend, mrecommend, recommend, b.matchid
+	END
+END
+GO
+
+----------------------------------------------------------------
+-----Alter trigger dto_setting_afterDelete----------------------
+----------------------------------------------------------------
+USE [bodb02]
+GO
+/****** Object:  Trigger [dbo].[dto_setting_afterDelete]    Script Date: 4/28/2014 5:24:33 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER TRIGGER [dbo].[dto_setting_afterDelete]
+   ON  [dbo].[DownlineTurnOver_Setting]
+   AFTER DELETE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+    INSERT INTO dbo.DownlineTurnOver_Setting_Delete (SMAID, matchid)
+    SELECT SMAID, matchid
+    FROM deleted
+
 END

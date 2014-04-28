@@ -171,6 +171,14 @@ ALTER TABLE dbo.DownlineTurnover_Trigger_tmp ADD recommend INT NULL
 GO
 
 ----------------------------------------------------------------
+--Alter table DBAGE.bodb02.dbo.DownlineTurnOver_Setting_Delete--
+----------------------------------------------------------------
+USE [bodb02]
+GO
+sp_RENAME 'DownlineTurnOver_Setting_Delete.Custid', 'SMAID' , 'COLUMN'
+GO
+
+----------------------------------------------------------------
 -----------------------------Grant permission-------------------
 ----------------------------------------------------------------
 GRANT SELECT ON DownlineTo_SportControl TO bodbAdminNet
