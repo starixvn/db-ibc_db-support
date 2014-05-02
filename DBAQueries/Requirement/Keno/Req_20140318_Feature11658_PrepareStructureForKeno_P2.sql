@@ -74,7 +74,7 @@ GO
 ----------------------------------------------------------------
 USE CustDB
 GO
-INSERT INTO ProductBetSetting (Sporttype, Bettype, Currency, MinBet) 
+INSERT INTO ProductBetSetting (Sporttype, Bettype, Currency, MinBet, IsDep) 
 SELECT 202,1501,20,10,0
 UNION ALL
 SELECT 202,1502,20,10,0
@@ -99,7 +99,7 @@ GO
 ----------------------------------------------------------------
 USE CustDB
 GO
-INSERT INTO ProductGlobalSetting (Sporttype, Bettype, MaxPositiontaking, Maxsdiscount) 
+INSERT INTO ProductGlobalSetting (Sporttype, Bettype, MaxPositiontaking, Maxsdiscount, IsDep) 
 SELECT 202,1501,0.85,0,0
 UNION ALL
 SELECT 202,1502,0.85,0,0
