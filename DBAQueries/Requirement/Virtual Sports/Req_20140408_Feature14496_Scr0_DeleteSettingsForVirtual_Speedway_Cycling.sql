@@ -7,3 +7,8 @@
 
 DELETE CustSetting3rd WITH(ROWLOCK,UPDLOCK)
 WHERE sporttype IN (183,185) AND bettype = 1231
+GO
+
+
+DELETE CustOverride3rd WITH(ROWLOCK,UPDLOCK)
+WHERE sporttype IN (183,185) AND bettype = 1231
