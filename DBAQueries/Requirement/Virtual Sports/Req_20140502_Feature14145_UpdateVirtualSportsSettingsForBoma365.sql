@@ -45,7 +45,7 @@ WHERE custid IN (12910607, --Boma365SuperRMB
 12910608, --Boma365RMB
 12910609  --Boma365RMB01
 )
-	AND sporttype = 180	      
+	AND cs.sporttype = 180	      
 GO
 
 --STEP 2: UPDATE max per match for all virtual sports
