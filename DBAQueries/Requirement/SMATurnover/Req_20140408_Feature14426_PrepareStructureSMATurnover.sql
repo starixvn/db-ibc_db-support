@@ -3,6 +3,21 @@
 	Date: 2014-04-08
 	Task: Prepare structure for SMA Turnover [Redmine:#14426]	
 */
+--Disable job and trigger before modifying structure
+--DBTXN
+USE [bodb02]
+GO
+exec msdb.dbo.sp_update_job @job_name = N'bodb02 : Sync DownlineTurnOver_Setting', @enabled = 0
+GO
+--DBAGE
+USE bodb02
+GO
+DISABLE TRIGGER dto_setting_afterInsert ON DownlineTurnover_Setting
+GO
+DISABLE TRIGGER dto_setting_afterDelete ON DownlineTurnover_Setting
+GO
+DISABLE TRIGGER bettrans_DownlineTurnOver_Setting  ON DownlineTurnover_Setting
+GO
 ----------------------------DBAGE-------------------------------
 ----------------------------------------------------------------
 --Add new table to DBAGE.bodb_Age.dbo.DownlineTo_SportControl---

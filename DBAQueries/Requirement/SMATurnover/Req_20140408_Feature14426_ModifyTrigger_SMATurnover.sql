@@ -7,7 +7,12 @@
 ----------------------------------------------------------------
 -----Modify trigger bettrans_DownlineTurnOver_Setting-----------
 ----------------------------------------------------------------
-USE bodb02
+USE [bodb02]
+GO
+/****** Object:  Trigger [dbo].[bettrans_DownlineTurnOver_Setting]    Script Date: 5/15/2014 1:45:45 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
 GO
 ALTER TRIGGER [dbo].[bettrans_DownlineTurnOver_Setting]
    ON  [dbo].[bettrans]
@@ -77,11 +82,30 @@ END
 GO
 
 ----------------------------------------------------------------
------Disable trigger dto_setting_afterInsert--------------------
+-----Modify trigger dto_setting_afterDelete---------------------
 ----------------------------------------------------------------
-USE bodb02
+USE [bodb02]
 GO
-DISABLE TRIGGER dto_setting_afterInsert ON DownlineTurnover_Setting
+/****** Object:  Trigger [dbo].[dto_setting_afterDelete]    Script Date: 5/15/2014 1:47:19 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER TRIGGER [dbo].[dto_setting_afterDelete]
+   ON  [dbo].[DownlineTurnOver_Setting]
+   AFTER DELETE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for trigger here
+    INSERT INTO dbo.DownlineTurnOver_Setting_Delete (SMAID, matchid)
+    SELECT SMAID, matchid
+    FROM deleted
+
+END
 GO
 
 ----------------------------------------------------------------
@@ -89,12 +113,12 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_SportControl_afterInsert]    Script Date: 4/24/2014 4:42:51 PM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_SportControl_afterInsert]    Script Date: 5/15/2014 2:06:31 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TRIGGER [dbo].[DownlineTo_SportControl_afterInsert]
+ALTER TRIGGER [dbo].[DownlineTo_SportControl_afterInsert]
    ON  [dbo].[DownlineTo_SportControl]
    AFTER INSERT
 AS 
@@ -134,12 +158,12 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_LeagueControl_afterInsert]    Script Date: 4/24/2014 3:46:14 PM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_LeagueControl_afterInsert]    Script Date: 5/15/2014 2:07:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TRIGGER [dbo].[DownlineTo_LeagueControl_afterInsert]
+ALTER TRIGGER [dbo].[DownlineTo_LeagueControl_afterInsert]
    ON  [dbo].[DownlineTo_LeagueControl]
    AFTER INSERT
 AS 
@@ -151,7 +175,7 @@ BEGIN
 					FROM DownlineTo_SportControl sc WITH (NOLOCK) 
 						INNER JOIN bodb02.dbo.league l WITH (NOLOCK) ON l.sporttype = sc.sportID
 						INNER JOIN inserted i ON l.leagueID = i.LeagueID
-						WHERE i.Value <> 0) --sport setting
+					WHERE i.Value <> 0) --sport setting
 	BEGIN
 		DELETE D
 		FROM bodb02.dbo.DownlineTurnOver_Trigger D WITH(ROWLOCK,UPDLOCK)
@@ -184,7 +208,7 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_LeagueControl_afterUpdate]    Script Date: 4/25/2014 5:13:03 PM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_LeagueControl_afterUpdate]    Script Date: 5/15/2014 2:08:00 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -234,12 +258,12 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_LeagueControl_afterDelete]    Script Date: 4/25/2014 4:13:37 PM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_LeagueControl_afterDelete]    Script Date: 5/15/2014 2:08:13 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TRIGGER [dbo].[DownlineTo_LeagueControl_afterDelete]
+ALTER TRIGGER [dbo].[DownlineTo_LeagueControl_afterDelete]
    ON  [dbo].[DownlineTo_LeagueControl]
    AFTER DELETE
 AS 
@@ -284,7 +308,7 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_MatchControl_afterInsert]    Script Date: 5/8/2014 11:03:00 AM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_MatchControl_afterInsert]    Script Date: 5/15/2014 2:09:06 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -342,7 +366,7 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_MatchControl_afterUpdate]    Script Date: 4/25/2014 5:14:36 PM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_MatchControl_afterUpdate]    Script Date: 5/15/2014 2:09:17 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -390,7 +414,7 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_MatchControl_afterDelete]    Script Date: 5/8/2014 11:08:27 AM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_MatchControl_afterDelete]    Script Date: 5/15/2014 2:09:30 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -452,7 +476,7 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterInsert]    Script Date: 5/9/2014 6:16:23 PM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterInsert]    Script Date: 5/15/2014 2:52:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -512,7 +536,7 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterUpdate]    Script Date: 4/28/2014 10:57:41 AM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterUpdate]    Script Date: 5/15/2014 2:54:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -557,7 +581,7 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterDelete]    Script Date: 5/9/2014 6:21:12 PM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterDelete]    Script Date: 5/15/2014 2:54:40 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -620,12 +644,12 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_SMAControl_afterUpdate]    Script Date: 4/28/2014 11:14:08 AM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_SMAControl_afterUpdate]    Script Date: 5/15/2014 2:54:54 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TRIGGER [dbo].[DownlineTo_SMAControl_afterUpdate]
+ALTER TRIGGER [dbo].[DownlineTo_SMAControl_afterUpdate]
    ON  [dbo].[DownlineTo_SMAControl]
    AFTER UPDATE
 AS 
@@ -677,7 +701,7 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_SMAControl_afterDelete]    Script Date: 5/7/2014 4:12:38 PM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_SMAControl_afterDelete]    Script Date: 5/15/2014 2:55:04 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -728,28 +752,16 @@ BEGIN
 END
 GO
 
-----------------------------------------------------------------
------Alter trigger dto_setting_afterDelete----------------------
-----------------------------------------------------------------
+--Enable job and trigger 
+--DBTXN
 USE [bodb02]
 GO
-/****** Object:  Trigger [dbo].[dto_setting_afterDelete]    Script Date: 4/28/2014 5:24:33 PM ******/
-SET ANSI_NULLS ON
+exec msdb.dbo.sp_update_job @job_name = N'bodb02 : Sync DownlineTurnOver_Setting', @enabled = 1
 GO
-SET QUOTED_IDENTIFIER ON
+--DBAGE
+USE bodb02
 GO
-ALTER TRIGGER [dbo].[dto_setting_afterDelete]
-   ON  [dbo].[DownlineTurnOver_Setting]
-   AFTER DELETE
-AS 
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
-
-    -- Insert statements for trigger here
-    INSERT INTO dbo.DownlineTurnOver_Setting_Delete (SMAID, matchid)
-    SELECT SMAID, matchid
-    FROM deleted
-
-END
+ENABLE TRIGGER dto_setting_afterDelete ON DownlineTurnover_Setting
+GO
+ENABLE TRIGGER bettrans_DownlineTurnOver_Setting  ON DownlineTurnover_Setting
+GO
