@@ -215,4 +215,5 @@ GRANT SELECT ON DownlineTurnover_Setting TO bodbAdminNet
 GRANT SELECT ON Dep_CustSuper TO bodbAdminNet
 GRANT SELECT ON bettrans TO bodbAdminNet
 GRANT SELECT ON match TO bodbAdminNet
+GRANT SELECT ON match TO bodbDownlineNet
 ----------------------------END DBTXN---------------------------- 

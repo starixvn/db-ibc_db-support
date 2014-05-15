@@ -452,7 +452,7 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterInsert]    Script Date: 5/8/2014 10:44:01 AM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterInsert]    Script Date: 5/9/2014 6:16:23 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -468,21 +468,23 @@ BEGIN
 
 	IF EXISTS (SELECT 1 FROM inserted WHERE Value <> 0)
 	BEGIN
-		DECLARE @SportID INT, @LeagueID INT, @MatchID INT
-		SELECT @SportID = m.sporttype, @LeagueID = m.leagueid, @MatchID = m.matchID
+		DECLARE @SportID INT, @LeagueID INT, @MatchID INT, @SMAOffset INT, @SMAID INT
+		SELECT @SportID = m.sporttype, @LeagueID = m.leagueid, @MatchID = m.matchID, @SMAID = i.SMAID
 		FROM bodb02.dbo.match m WITH (NOLOCK) 
 			INNER JOIN inserted i ON m.matchID = i.MatchID
 		
 		DECLARE @SportValue INT, @LeagueValue INT, @MatchValue INT
-		SELECT @SportValue = NULL, @LeagueValue = NULL, @MatchValue = NULL
+		SELECT @SportValue = NULL, @LeagueValue = NULL, @MatchValue = NULL, @SMAOffset = NULL
 
 		SELECT @SportValue = Value FROM DownlineTo_SportControl sc WITH (NOLOCK) WHERE sc.SportID = @SportID
 		SELECT @LeagueValue = Value FROM DownlineTo_LeagueControl lc WITH (NOLOCK) WHERE lc.leagueID = @LeagueID
 		SELECT @MatchValue = Value FROM DownlineTo_MatchControl mc WITH (NOLOCK) WHERE mc.MatchID = @MatchID
+		SELECT @SMAOffset = Offset FROM DownlineTo_SMAControl sma WITH (NOLOCK) WHERE sma.SMAID = @SMAID
 
-		IF NOT ((@MatchValue IS NOT NULL AND @MatchValue <> 0) 
+		IF  NOT ((@MatchValue IS NOT NULL AND @MatchValue <> 0) 
 		OR (@LeagueValue IS NOT NULL AND @LeagueValue <> 0 AND (@MatchValue <> 0 OR @MatchValue IS NULL))
 		OR (@SportValue IS NOT NULL AND (@LeagueValue <> 0 OR @LeagueValue IS NULL) AND (@MatchValue <> 0 OR @MatchValue IS NULL)))
+		OR (@SMAOffset IS NOT NULL AND @SMAOffset = 0)
 		BEGIN
 			DELETE D
 			FROM bodb02.dbo.DownlineTurnOver_Trigger D WITH(ROWLOCK,UPDLOCK)
@@ -555,7 +557,7 @@ GO
 ----------------------------------------------------------------
 USE [bodb_Age]
 GO
-/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterDelete]    Script Date: 5/8/2014 10:53:56 AM ******/
+/****** Object:  Trigger [dbo].[DownlineTo_Match_SMAControl_afterDelete]    Script Date: 5/9/2014 6:21:12 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -574,21 +576,23 @@ BEGIN
 
 	IF @Value = 0
 	BEGIN
-		DECLARE @SportID INT, @LeagueID INT, @MatchID INT
-		SELECT @SportID = m.sporttype, @LeagueID = m.leagueid, @MatchID = m.matchID 
+		DECLARE @SportID INT, @LeagueID INT, @MatchID INT, @SMAOffset INT, @SMAID INT
+		SELECT @SportID = m.sporttype, @LeagueID = m.leagueid, @MatchID = m.matchID, @SMAID = d.SMAID 
 		FROM bodb02.dbo.match m WITH (NOLOCK) 
 			INNER JOIN deleted d ON m.matchID = d.MatchID
 		
 		DECLARE @SportValue INT, @LeagueValue INT, @MatchValue INT
-		SELECT @SportValue = NULL, @LeagueValue = NULL, @MatchValue = NULL
+		SELECT @SportValue = NULL, @LeagueValue = NULL, @MatchValue = NULL, @SMAOffset = NULL
 
 		SELECT @SportValue = Value FROM DownlineTo_SportControl sc WITH (NOLOCK) WHERE sc.SportID = @SportID
 		SELECT @LeagueValue = Value FROM DownlineTo_LeagueControl lc WITH (NOLOCK) WHERE lc.leagueID = @LeagueID
 		SELECT @MatchValue = Value FROM DownlineTo_MatchControl mc WITH (NOLOCK) WHERE mc.MatchID = @MatchID
+		SELECT @SMAOffset = Offset FROM DownlineTo_SMAControl sma WITH (NOLOCK) WHERE sma.SMAID = @SMAID
 
 		IF (@MatchValue IS NOT NULL AND @MatchValue <> 0) 
 		OR (@LeagueValue IS NOT NULL AND @LeagueValue <> 0 AND (@MatchValue <> 0 OR @MatchValue IS NULL))
 		OR (@SportValue IS NOT NULL AND (@LeagueValue <> 0 OR @LeagueValue IS NULL) AND (@MatchValue <> 0 OR @MatchValue IS NULL))
+		AND (@SMAOffset IS NULL OR @SMAOffset <> 0)
 		BEGIN
 			DELETE DT
 			FROM bodb02.dbo.DownlineTurnOver_Trigger DT WITH(ROWLOCK,UPDLOCK)
