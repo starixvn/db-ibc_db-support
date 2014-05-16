@@ -46,35 +46,11 @@ SELECT 9512959,    3--12BETUS$DOM
 GO
 
 --Clear balance for dormant accounts
-DECLARE @custid INT, @Dom_CustID INT, @closingBalance MONEY, @currency INT
-
-WHILE (1=1)
-BEGIN
-	UPDATE TOP(1) c
-	SET @Dom_CustID = custid,
-		@currency = currency,
-		isfinished = 1
-	FROM #DomAccounts
-	WHERE isfinished = 0
-	
-	IF @@ROWCOUNT = 0 BREAK;
-	
-	WHILE (1=1)
-	BEGIN
-		UPDATE TOP(1) t
-		SET @custid = custid,
-			@closingBalance = -closingBalance,
-			isfinished = 1
-		FROM #tmpCust
-		WHERE currency = @currency 
-			AND isfinished = 0
-			
-		IF @@ROWCOUNT = 0 BREAK
-		
-		EXEC Dot_Dep_BettransInsTransaction_Cust
-			@amount	=	@ClosingBalance,
-			@custid	=	@CUSTID,
-			@bal_custid	=	@DOM_CUSTID,
-			@transdesc = 'clear member balance'
-	END
-END
+SELECT 'EXEC Dot_Dep_BettransInsTransaction_Cust
+			@amount	=	'+ convert(varchar(12),-ClosingBalance)+',
+			@custid	=	'+ convert(varchar(12),t.custid)+',
+			@bal_custid	=	'+ convert(varchar(12),c.custid)+',
+			@transdesc = ''clear member balance'''
+FROM #tmpCust t
+	INNER JOIN #DomAccounts c ON t.currency = c.currency		
+where closingBalance <> 0			
