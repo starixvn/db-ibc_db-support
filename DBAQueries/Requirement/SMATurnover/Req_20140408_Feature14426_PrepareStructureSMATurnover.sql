@@ -176,6 +176,22 @@ ALTER TABLE dbo.DownlineTurnover_Trigger ADD mrecommend INT NULL
 ALTER TABLE dbo.DownlineTurnover_Trigger ADD recommend INT NULL
 GO
 
+----------------------------------------------------------------
+--Modify index on DBAGE.bodb02.dbo.DownlineTurnover_Trigger--
+----------------------------------------------------------------
+USE [bodb02]
+GO
+
+/****** Object:  Index [CIX_DownlineTurnOver_Trigger]    Script Date: 05/18/2014 22:33:54 ******/
+CREATE CLUSTERED INDEX [CIX_DownlineTurnOver_Trigger] ON [dbo].[DownlineTurnOver_Trigger] 
+(
+	[srecommend] ASC,
+	[mrecommend] ASC,
+	[recommend] ASC,
+	[matchid] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = ON, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [Bettrans_table]
+GO
+
 --------------------------------------------------------------------
 --Add new fields to DBAGE.bodb02.dbo.DownlineTurnover_Trigger_tmp---
 --------------------------------------------------------------------
@@ -183,6 +199,22 @@ USE [bodb02]
 GO
 ALTER TABLE dbo.DownlineTurnover_Trigger_tmp ADD mrecommend INT NULL
 ALTER TABLE dbo.DownlineTurnover_Trigger_tmp ADD recommend INT NULL
+GO
+
+----------------------------------------------------------------
+--Modify index on DBAGE.bodb02.dbo.DownlineTurnover_Trigger_tmp--
+----------------------------------------------------------------
+USE [bodb02]
+GO
+
+/****** Object:  Index [CIX_DownlineTurnOver_Trigger_tmp]    Script Date: 05/18/2014 22:34:41 ******/
+CREATE CLUSTERED INDEX [CIX_DownlineTurnOver_Trigger_tmp] ON [dbo].[DownlineTurnOver_Trigger_tmp] 
+(
+	[srecommend] ASC,
+	[mrecommend] ASC,
+	[recommend] ASC,
+	[matchid] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = ON, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [Bettrans_table]
 GO
 
 ----------------------------------------------------------------
