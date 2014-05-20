@@ -228,6 +228,20 @@ GO
 ----------------------------------------------------------------
 -----------------------------Grant permission-------------------
 ----------------------------------------------------------------
+USE [bodb02]
+GRANT SELECT, INSERT, DELETE ON DownlineTurnover_Trigger TO bodbAdminNet
+GRANT SELECT, DELETE ON DownlineTurnover_Trigger_tmp TO bodbAdminNet
+GRANT SELECT ON DownlineTurnover_Setting TO bodbAdminNet
+
+GRANT SELECT ON Dep_CustSuper TO bodbAdminNet
+GRANT SELECT ON bettrans TO bodbAdminNet
+GRANT SELECT ON match TO bodbAdminNet
+GRANT SELECT ON Sports TO bodbAdminNet
+GRANT SELECT ON league TO bodbAdminNet
+GRANT SELECT ON Exchange TO bodbAdminNet
+
+USE [bodb_Age]
+GO
 GRANT SELECT ON DownlineTo_SportControl TO bodbAdminNet
 GRANT SELECT ON DownlineTo_LeagueControl TO bodbAdminNet
 GRANT SELECT ON DownlineTo_MatchControl TO bodbAdminNet
@@ -236,31 +250,8 @@ GRANT SELECT ON DownlineTo_Match_SMAControl TO bodbAdminNet
 ----------------------------END DBAGE---------------------------
 
 ----------------------------DBTXN-------------------------------
-----------------------------------------------------------------
---Alter table DBTXN.bodb02.dbo.DownlineTurnover_Setting_tmp-----
-----------------------------------------------------------------
-USE [bodb02]
-GO
-sp_RENAME 'DownlineTurnover_Setting_tmp.Custid', 'SMAID' , 'COLUMN'
-GO
-
-----------------------------------------------------------------
---Alter table DBTXN.bodb02.dbo.DownlineTurnover_Setting---------
-----------------------------------------------------------------
-USE [bodb02]
-GO
-sp_RENAME 'DownlineTurnover_Setting.Custid', 'SMAID' , 'COLUMN'
-GO
-
-----------------------------------------------------------------
 -----------------------------Grant permission-------------------
 ----------------------------------------------------------------
-GRANT INSERT, DELETE ON DownlineTurnover_Trigger TO bodbAdminNet
-GRANT DELETE ON DownlineTurnover_Trigger_tmp TO bodbAdminNet
-
-GRANT SELECT ON DownlineTurnover_Setting TO bodbAdminNet
-GRANT SELECT ON Dep_CustSuper TO bodbAdminNet
-GRANT SELECT ON bettrans TO bodbAdminNet
 GRANT SELECT ON match TO bodbAdminNet
 GRANT SELECT ON match TO bodbDownlineNet
 ----------------------------END DBTXN---------------------------- 
