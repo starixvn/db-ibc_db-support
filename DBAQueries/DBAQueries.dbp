@@ -88,6 +88,9 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20140305_Feature10701_PrepareStructureLogForLas.sql"
          Script = "Req_20140328_Sup_AddLogAction_UpdateWinlostDate_LAS.sql"
       End
+      Begin Folder = "LimitLoss"
+         Script = "Req_20140522_Feature16502_PrepareStructurer_LimitLoss.sql"
+      End
       Begin Folder = "Live CS"
          Script = "Req_20130912_Feature5611_3star88_UpdatePTsettingforUUS.sql"
          Script = "Req_20130913_Feature5606_VCAsia_UpdatePTSettingForAllCurrencies.sql"
