@@ -14,7 +14,8 @@ SELECT @max_custid = 14670555
 
 INSERT INTO @tmpSettings(currency, maxbet, maxpermatch)
 SELECT 13, 3000, 10000 -- RMB  
-UNION SELECT 2, 80000, 50000 -- RM  
+UNION SELECT 2, 2000, 5000 -- RM  
+UNION SELECT 4, 20000, 50000 -- TB 
 UNION SELECT 15, 5000, 15000 -- IN 
 UNION SELECT 45, 200000, 700000 --WON
 UNION SELECT 51, 10000, 30000 -- INH  
@@ -26,7 +27,7 @@ FROM custinfo WITH(NOLOCK)
 WHERE srecommend IN (SELECT custid 
 					FROM Dep_CustSuper WITH(NOLOCK)
 					WHERE site = '12bet'
-						And currency IN (13,2,15,45,51)
+						And currency IN (13,2,4,15,45,51)
 					)
 	AND custid> @max_custid
 	AND roleid = 1					
