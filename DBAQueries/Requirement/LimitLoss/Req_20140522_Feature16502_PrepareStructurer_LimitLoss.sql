@@ -65,7 +65,7 @@ GO
 USE [bodb_Age]
 GO
 
-/****** Object:  Table [dbo].[LimitLoss_Setting]    Script Date: 5/22/2014 1:34:08 PM ******/
+/****** Object:  Table [dbo].[LimitLoss_Setting]    Script Date: 5/23/2014 10:14:33 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -77,7 +77,9 @@ CREATE TABLE [dbo].[LimitLoss_Setting](
 	[MaxLoss] [money] NOT NULL,
 	[TotalBalance] [money] NULL,
 	[LevelID] [tinyint] NOT NULL,
-	[IsDone] [bit] NOT NULL,
+	--[IsDone] [bit] NOT NULL,
+	--[HighestLevel] [tinyint] NOT NULL,
+	--[HighestLevelLastUpd] [datetime] NOT NULL,
  CONSTRAINT [PK_LimitLoss_Setting] PRIMARY KEY CLUSTERED 
 (
 	[CustID] ASC
@@ -89,6 +91,14 @@ GO
 ALTER TABLE [dbo].[LimitLoss_Setting] ADD  CONSTRAINT [DF_LimitLoss_Setting_LevelID]  DEFAULT ((0)) FOR [LevelID]
 GO
 
-ALTER TABLE [dbo].[LimitLoss_Setting] ADD  CONSTRAINT [DF_LimitLoss_Setting_IsDone]  DEFAULT ((1)) FOR [IsDone]
-GO
+--ALTER TABLE [dbo].[LimitLoss_Setting] ADD  CONSTRAINT [DF_LimitLoss_Setting_IsDone]  DEFAULT ((1)) FOR [IsDone]
+--GO
+
+--ALTER TABLE [dbo].[LimitLoss_Setting] ADD  CONSTRAINT [DF_LimitLoss_Setting_HighestLevel]  DEFAULT ((0)) FOR [HighestLevel]
+--GO
+
+--ALTER TABLE [dbo].[LimitLoss_Setting] ADD  CONSTRAINT [DF_LimitLoss_Setting_HighestLevelLastUpd]  DEFAULT (getdate()) FOR [HighestLevelLastUpd]
+--GO
+
+
 
