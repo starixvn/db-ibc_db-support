@@ -68,3 +68,31 @@ END
 USE bodb_Age
 GO
 DISABLE TRIGGER DownlineTo_Match_SMAControl_afterDelete ON DownlineTo_Match_SMAControl
+
+GO
+DISABLE TRIGGER DownlineTo_SportControl_afterInsert ON DownlineTo_SportControl
+
+GO
+DISABLE TRIGGER DownlineTo_LeagueControl_afterInsert ON DownlineTo_LeagueControl
+GO
+DISABLE TRIGGER DownlineTo_LeagueControl_afterUpdate ON DownlineTo_LeagueControl
+GO
+DISABLE TRIGGER DownlineTo_LeagueControl_afterDelete ON DownlineTo_LeagueControl
+
+GO
+DISABLE TRIGGER DownlineTo_MatchControl_afterInsert ON DownlineTo_MatchControl
+GO
+DISABLE TRIGGER DownlineTo_MatchControl_afterUpdate ON DownlineTo_MatchControl
+GO
+DISABLE TRIGGER DownlineTo_MatchControl_afterDelete ON DownlineTo_MatchControl
+
+GO
+DISABLE TRIGGER DownlineTo_SMAControl_afterUpdate ON DownlineTo_SMAControl
+GO
+DISABLE TRIGGER DownlineTo_SMAControl_afterDelete ON DownlineTo_SMAControl
+
+--Grant permission
+--DBAGE
+USE bodb02
+GO
+GRANT SELECT ON Acc_CustDirect TO bodbAdminNet
