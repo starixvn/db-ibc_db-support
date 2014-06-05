@@ -33,4 +33,15 @@ GO
 ALTER TABLE [dbo].[GameType_tmp] ADD  CONSTRAINT [DF_GameType_tmp_IsDisabled]  DEFAULT ((0)) FOR [IsDisabled]
 GO
 
+----------------------------------------------------------------
+--Insert data into DBAGE.bodb02.dbo.GameType_tmp-------------------
+---------------------------------------------------------------- 
+INSERT INTO GameType_tmp(GameTypeID, GameTypeName, IsDisabled, IBCBetTypeID)
+SELECT GameTypeID, GameTypeName, IsDisabled, IBCBetTypeID
+FROM GameType WITH (NOLOCK)
+
+GO
+UPDATE GameType_tmp set GameTypeID = 11, IBCBetTypeID = 1511, GameTypeName = 'Kentucky' where GameTypeID = 2
+GO
+UPDATE GameType_tmp set GameTypeID = 13, IBCBetTypeID = 1513, GameTypeName = 'Michigan' where GameTypeID = 6
 
