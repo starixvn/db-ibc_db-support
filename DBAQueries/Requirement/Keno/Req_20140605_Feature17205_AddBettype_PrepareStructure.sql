@@ -36,12 +36,14 @@ GO
 ----------------------------------------------------------------
 --Insert data into DBAGE.bodb02.dbo.GameType_tmp-------------------
 ---------------------------------------------------------------- 
+USE [bodb02]
+GO
 INSERT INTO GameType_tmp(GameTypeID, GameTypeName, IsDisabled, IBCBetTypeID)
 SELECT GameTypeID, GameTypeName, IsDisabled, IBCBetTypeID
 FROM GameType WITH (NOLOCK)
 
 GO
-UPDATE GameType_tmp set GameTypeID = 11, IBCBetTypeID = 1511, GameTypeName = 'Kentucky' where GameTypeID = 2
+UPDATE GameType_tmp set GameTypeID = 11, IBCBetTypeID = 1511, GameTypeName = 'Kentucky', IsDisabled = 0 where GameTypeID = 2
 GO
-UPDATE GameType_tmp set GameTypeID = 13, IBCBetTypeID = 1513, GameTypeName = 'Michigan' where GameTypeID = 6
+UPDATE GameType_tmp set GameTypeID = 13, IBCBetTypeID = 1513, GameTypeName = 'Michigan', IsDisabled = 0 where GameTypeID = 6
 
