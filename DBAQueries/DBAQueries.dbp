@@ -91,7 +91,8 @@ Begin DataProject = "DBAQueries"
       End
       Begin Folder = "LimitLoss"
          Script = "Req_20140522_Feature16502_PrepareStructurer_LimitLoss.sql"
-         Script = "Req_20140530_Feature16502_InsertData.sql"
+         Script = "Req_20140530_Feature16502_InsertTestData.sql"
+         Script = "Req_20140609_Feature16502_InsertData.sql"
       End
       Begin Folder = "Live CS"
          Script = "Req_20130912_Feature5611_3star88_UpdatePTsettingforUUS.sql"
