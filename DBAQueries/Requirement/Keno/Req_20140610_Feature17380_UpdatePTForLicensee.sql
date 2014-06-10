@@ -71,6 +71,7 @@ where srecommend IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK) WHERE currenc
 DECLARE @max_custid INT, @srecommend INT
 SET @max_custid = xxx 
 
+--2500163 row affected
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers
