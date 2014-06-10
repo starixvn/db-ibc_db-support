@@ -1098,10 +1098,12 @@ SELECT 14727729, -100000.00
 GO
 ------DBACC-------
 ----------------------------------------------------------------
---Insert data into DBACC.bodb_Acc.dbo.Acc_MailingList-----------
+--Update data into DBACC.bodb_Acc.dbo.Acc_MailingList-----------
 ----------------------------------------------------------------
 USE [bodb_Acc]
 GO
 
-INSERT INTO Acc_MailingList (SiteId, FuncID, ToList, CcList, BccList)
-SELECT 0, 322, 'Sean3363@gmail.com;jet8868@gmail.com;adrian_simm@hotmail.com;byron8558@gmail.com;ahwan23@gmail.com;miribestodds@hotmail.com;Junebritney@hotmail.com;khiong3082@hotmail.com;yhloo@hotmail.com;foo@sms-vn.com;teckkee@sms-vn.com;szesim80@hotmail.com;farn.chia@gmail.com', '', 'Julien.le@nexcel.vn;Ronny.nguyen@nexcel.vn'
+UPDATE Acc_MailingList WITH (ROWLOCK, UPDLOCK)
+SET ToList = 'Sean3363@gmail.com;jet8868@gmail.com;adrian_simm@hotmail.com;byron8558@gmail.com;ahwan23@gmail.com;miribestodds@hotmail.com;Junebritney@hotmail.com;khiong3082@hotmail.com;yhloo@hotmail.com;foo@sms-vn.com;teckkee@sms-vn.com;szesim80@hotmail.com;farn.chia@gmail.com',
+	BCCList = 'julien.le@starixsoft.com;ronny.nguyen@starixsoft.com'
+WHERE FuncID = 322 and siteid = 0
