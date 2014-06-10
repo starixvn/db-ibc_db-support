@@ -1,4 +1,10 @@
-﻿--SELECT 'SELECT ' + CAST(CustID AS VARCHAR(15)) + ', ' + CAST([MaxLoss] AS VARCHAR(20)) + ' UNION ALL' from LimitLoss_Setting_tmp with (nolock)
+﻿/*
+	Created by: Elodie
+	Date: 2014-06-10
+	Task: Update data for Limit Loss [Redmine:#17349]	
+*/
+------DBAGE-------
+USE [bodb_Age]
 
 DECLARE @tmp TABLE (CustID INT, MaxLoss MONEY)
 
@@ -44,7 +50,9 @@ SELECT 14776453, -500000.00 UNION ALL
 SELECT 14783808, -300000.00 UNION ALL
 SELECT 14786733, -5000000.00 UNION ALL
 SELECT 14804092, -500000.00 UNION ALL
-SELECT 14807061, -100000000.00
+SELECT 14807061, -100000000.00 UNION ALL
+SELECT 10603429, -50000000.00
+
 
 -- Create a temporary table variable to hold the output actions.
 DECLARE @SummaryOfChanges TABLE(Change VARCHAR(20));
@@ -61,4 +69,4 @@ OUTPUT $action INTO @SummaryOfChanges;
 -- Query the results of the table variable.
 SELECT Change, COUNT(*) AS CountPerChange
 FROM @SummaryOfChanges
-GROUP BY Change;
+GROUP BY Change
