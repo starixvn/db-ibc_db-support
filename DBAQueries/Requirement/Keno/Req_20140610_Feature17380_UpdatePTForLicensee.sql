@@ -184,7 +184,7 @@ CREATE TABLE #supers (custid int, isfinished bit default(0))
 INSERT INTO #supers(custid)
 SELECT DISTINCT srecommend 
 FROM translog with(NOLOCK)
-where srecommend IN (SELECT custid FROM CustDB.dbo.Dep_CustSuper WITH(NOLOCK) WHERE currency <> 20)	
+where srecommend IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK) WHERE currency <> 20)	
 	AND winlostdate = '2014-06-11' OR winlostdate = '2014-06-12'
 	AND statusid = 0
 	
