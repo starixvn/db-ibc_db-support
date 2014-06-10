@@ -109,7 +109,7 @@ AND (username LIKE '%ACC%' OR username LIKE '%AFF%')
 
 INSERT INTO #supers(custid)
 SELECT DISTINCT srecommend 
-FROM Dep_CustSetting3rd cs with(NOLOCK)
+FROM CustSettingGame cs with(NOLOCK)
 	inner join custInfo ci with(nolock) on cs.custid = ci.custid
 where srecommend IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK) WHERE currency <> 20)	
 	AND mrecommend NOT IN (SELECT custid from #DummyMasters)
