@@ -96,6 +96,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20140530_Feature16502_InsertTestData.sql"
          Script = "Req_20140609_Feature16502_InsertData.sql"
          Script = "Req_20140610_Feature17349_UpdateData.sql"
+         Script = "Req_20140611_Feature17349_UpdateListSMA_20140611.sql"
       End
       Begin Folder = "Live CS"
          Script = "Req_20130912_Feature5611_3star88_UpdatePTsettingforUUS.sql"
