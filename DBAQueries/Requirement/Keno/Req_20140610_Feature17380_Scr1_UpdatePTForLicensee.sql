@@ -7,7 +7,7 @@
 
 -- BEGIN STEP 1: DEPLOY THIS SP @DBTRANS.CustDB ------
 ------------------------------------------------------
-ALTER PROCEDURE [dbo].[Acc_CustSetting_03]
+ALTER PROCEDURE [dbo].[Acc_ExecRep_Cust_09]
 	@srecommend INT	
 	,@maxcustid INT
 	,@target VARCHAR(20)
@@ -81,7 +81,7 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0 BREAK
 			
-	EXEC dbo.[Acc_CustSetting_03] @srecommend = @srecommend		
+	EXEC dbo.[Acc_ExecRep_Cust_09] @srecommend = @srecommend		
 		,@maxcustid = @max_custid
 		,@target = 'REPLICATED'
 		
@@ -130,7 +130,7 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0 BREAK
 			
-	EXEC dbo.[Acc_CustSetting_03] @srecommend = @srecommend		
+	EXEC dbo.[Acc_ExecRep_Cust_09] @srecommend = @srecommend		
 		,@maxcustid = @max_custid
 		,@target = 'DBTRANS'
 		

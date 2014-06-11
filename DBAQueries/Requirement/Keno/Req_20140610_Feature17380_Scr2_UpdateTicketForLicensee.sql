@@ -26,7 +26,7 @@ BEGIN
 	set tpositiontaking = 0.9, apositiontaking = 0.9
 	from translog b with(UPDLOCK,ROWLOCK)
 	where srecommend = @srecommend
-		AND winlostdate = '2014-06-11' OR winlostdate = '2014-06-12'
+		AND (winlostdate = '2014-06-11' OR winlostdate = '2014-06-12')
 		AND statusid = 0
 END
 GO
@@ -44,7 +44,7 @@ INSERT INTO #supers(custid)
 SELECT DISTINCT srecommend 
 FROM translog with(NOLOCK)
 where srecommend IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK) WHERE currency <> 20)	
-	AND winlostdate = '2014-06-11' OR winlostdate = '2014-06-12'
+	AND (winlostdate = '2014-06-11' OR winlostdate = '2014-06-12')
 	AND statusid = 0
 	
 DECLARE @srecommend INT
@@ -79,7 +79,7 @@ INSERT INTO #supers(custid)
 SELECT DISTINCT srecommend 
 FROM translog with(NOLOCK)
 where srecommend IN (SELECT custid FROM CustDB.dbo.Dep_CustSuper WITH(NOLOCK) WHERE currency <> 20)	
-	AND winlostdate = '2014-06-11' OR winlostdate = '2014-06-12'
+	AND (winlostdate = '2014-06-11' OR winlostdate = '2014-06-12')
 	AND statusid = 0
 	
 DECLARE @srecommend INT
