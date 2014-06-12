@@ -1,0 +1,142 @@
+﻿/*
+	Created: Elodie
+	Date: 2014-06-10
+	Task: Update pt settings for licensees on Keno
+	DB: DBTXN/CustDB
+*/ 
+
+-- BEGIN STEP 1: DEPLOY THIS SP @DBTRANS.CustDB ------
+------------------------------------------------------
+ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_19]
+	@srecommend INT	
+	,@maxcustid INT
+	,@target VARCHAR(20)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBTRANS') RETURN	-- run at all replicated servers
+	IF (@target = 'DBTRANS' AND @@SERVERNAME <> 'DBTRANS') RETURN -- run at dbtrans only
+		
+	IF (SELECT COUNT(1)
+		FROM sys.objects
+		WHERE NAME IN ('custinfo','CustSettingGame') AND type = 'U'
+		) <> 2 RETURN	
+	
+	
+	UPDATE cs
+	set spositiontaking = CASE WHEN roleid = 4 THEN 0.9 ELSE 0 END,
+		mpositiontaking = CASE WHEN roleid IN (4,3) then 0.9 else 0 END,
+		apositiontaking = CASE WHEN roleid IN (4,2,1) then 0.9 else 0 END		
+	from CustSettingGame cs with(UPDLOCK,ROWLOCK)
+		inner join custInfo ci with(nolock) on cs.custid = ci.custid
+	where srecommend = @srecommend
+		AND ci.custid <= @maxcustid		
+		AND sporttype = 202 AND bettype = 1501
+		AND 1 <> case	when roleid in(4,2,1) AND apositiontaking = 0.9 then 1 
+						when roleid in (4,3) AND mpositiontaking = 0.9 then 1 
+						when roleid = 4 AND spositiontaking = 0.9 then 1 else 0 end
+		AND cs.custid > 14858527
+	
+END
+GO
+-- END STEP 1: DEPLOY THIS SP @DBTRANS.CustDB --------
+------------------------------------------------------
+
+
+---
+---
+-- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/054/06/DBTP) -----
+--------------------------------------------------------------------------------------
+ 
+CREATE TABLE #supers (custid int, isfinished bit default(0))
+CREATE TABLE #DummyMasters(custid int)
+
+INSERT INTO #DummyMasters(custid)
+SELECT custid 
+FROM Customer WITH(NOLOCK)
+WHERE srecommend IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK) WHERE currency <> 20)
+AND roleid =3
+AND (username LIKE '%ACC%' OR username LIKE '%AFF%')
+
+INSERT INTO #supers(custid)
+SELECT DISTINCT srecommend 
+FROM CustSettingGame cs with(NOLOCK)
+	inner join custInfo ci with(nolock) on cs.custid = ci.custid
+where srecommend IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK) WHERE currency <> 20)	
+	AND mrecommend NOT IN (SELECT custid from #DummyMasters)
+	and sporttype = 202 AND bettype = 1501
+	and 1 <> case	when roleid in(4,2,1) and apositiontaking = 0.9 then 1 
+					when roleid in (4,3) and mpositiontaking = 0.9 then 1 
+					when roleid = 4 and spositiontaking = 0.9 then 1 else 0 end
+	AND cs.custid > 14858527
+	
+DECLARE @max_custid INT, @srecommend INT
+SET @max_custid = xxx 
+
+--50 row affected
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #Supers
+	SET isfinished = 1
+		,@srecommend = custid	
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+			
+	EXEC dbo.[Acc_CustSetting3rd_19] @srecommend = @srecommend		
+		,@maxcustid = @max_custid
+		,@target = 'REPLICATED'
+		
+	WAITFOR DELAY '00:00:00.280'
+END
+GO
+
+-- END STEP 2: -------
+------------------------------------------------------
+
+---
+---
+-- BEGIN STEP 3: RUN THIS SCRIPT AT @DBTRANS.CUSTDB -----
+-------------------------------------------------
+
+CREATE TABLE #supers (custid int, isfinished bit default(0))
+CREATE TABLE #DummyMasters(custid int)
+
+INSERT INTO #DummyMasters(custid)
+SELECT custid 
+FROM Customer WITH(NOLOCK)
+WHERE srecommend IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK) WHERE currency <> 20)
+AND roleid =3
+AND (username LIKE '%ACC%' OR username LIKE '%AFF%')
+
+INSERT INTO #supers(custid)
+SELECT DISTINCT srecommend 
+FROM CustSettingGame cs with(NOLOCK)
+	inner join custInfo ci with(nolock) on cs.custid = ci.custid
+where srecommend IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK) WHERE currency <> 20)	
+	AND mrecommend NOT IN (SELECT custid from #DummyMasters)
+	and sporttype = 202 AND bettype = 1501
+	and 1 <> case	when roleid in(4,2,1) and apositiontaking = 0.9 then 1 
+					when roleid in (4,3) and mpositiontaking = 0.9 then 1 
+					when roleid = 4 and spositiontaking = 0.9 then 1 else 0 end
+	AND cs.custid > 14858527
+
+DECLARE @max_custid INT, @srecommend INT
+SET @max_custid = xxx 
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #Supers
+	SET isfinished = 1
+		,@srecommend = custid	
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+			
+	EXEC dbo.[Acc_CustSetting3rd_19] @srecommend = @srecommend		
+		,@maxcustid = @max_custid
+		,@target = 'DBTRANS'
+		
+	WAITFOR DELAY '00:00:00.280'
+END
+GO

@@ -1,0 +1,193 @@
+﻿/*
+	Created: Elodie
+	Date: 2014-06-12
+	Task: Insert pt settings for licensees on Keno
+	DB: DBTXN/CustDB
+*/ 
+
+USE [CustDB]
+GO
+ --157 row affected
+INSERT INTO [dbo].[CustSettingGame] (CustID, Bettype, Sporttype, apositiontaking, mpositiontaking, spositiontaking, playerdiscount, discount, adiscount, sdiscount, autopositiontaking, isautopositiontaking, autompositiontaking, isautompositiontaking)
+SELECT custid, 1501 AS bettype, 202 AS Sporttype, 
+		CASE WHEN roleid = 4 THEN 0.9
+			 WHEN roleid = 2 THEN 0.9
+			 WHEN roleid = 1 THEN 0.9
+			 ELSE 0 END AS apositiontaking,
+		CASE WHEN roleid = 4 THEN 0.9
+			 WHEN roleid = 3 THEN 0.9
+			 ELSE 0 END AS mpositiontaking,
+		CASE WHEN roleid = 4 THEN 0.9
+			 ELSE 0 END AS spositiontaking,
+		0 AS playerdiscount,
+		0 AS discount,
+		0 AS adiscount,
+		0 AS sdiscount,
+		0.00 AS autopositiontaking,
+		0 AS isautopositiontaking,
+		0.00 AS autompositiontaking,
+		0 AS isautompositiontaking
+FROM 
+(	
+	SELECT 14179943 AS custid, 4 AS roleid UNION ALL
+	SELECT 14179957 AS custid, 4 AS roleid UNION ALL
+	SELECT 14179968 AS custid, 4 AS roleid UNION ALL
+	SELECT 14179979 AS custid, 4 AS roleid UNION ALL
+	SELECT 14179990 AS custid, 4 AS roleid UNION ALL
+	SELECT 14180002 AS custid, 4 AS roleid UNION ALL
+	SELECT 14180012 AS custid, 4 AS roleid UNION ALL
+	SELECT 14217425 AS custid, 4 AS roleid UNION ALL
+	SELECT 14236170 AS custid, 4 AS roleid UNION ALL
+	SELECT 14373729 AS custid, 4 AS roleid UNION ALL
+	SELECT 14428593 AS custid, 4 AS roleid UNION ALL
+	SELECT 14428617 AS custid, 4 AS roleid UNION ALL
+	SELECT 14442433 AS custid, 4 AS roleid UNION ALL
+	SELECT 14452576 AS custid, 4 AS roleid UNION ALL
+	SELECT 14452589 AS custid, 4 AS roleid UNION ALL
+	SELECT 14452606 AS custid, 4 AS roleid UNION ALL
+	SELECT 14452623 AS custid, 4 AS roleid UNION ALL
+	SELECT 14543786 AS custid, 4 AS roleid UNION ALL
+	SELECT 14543817 AS custid, 4 AS roleid UNION ALL
+	SELECT 14553923 AS custid, 4 AS roleid UNION ALL
+	SELECT 14553939 AS custid, 4 AS roleid UNION ALL
+	SELECT 14554385 AS custid, 4 AS roleid UNION ALL
+	SELECT 14605299 AS custid, 4 AS roleid UNION ALL
+	SELECT 14605339 AS custid, 4 AS roleid UNION ALL
+	SELECT 14605367 AS custid, 4 AS roleid UNION ALL
+	SELECT 14605406 AS custid, 4 AS roleid UNION ALL
+	SELECT 14605428 AS custid, 4 AS roleid UNION ALL
+	SELECT 14605448 AS custid, 4 AS roleid UNION ALL
+	SELECT 14605469 AS custid, 4 AS roleid UNION ALL
+	SELECT 14616557 AS custid, 4 AS roleid UNION ALL
+	SELECT 14616583 AS custid, 4 AS roleid UNION ALL
+	SELECT 14616607 AS custid, 4 AS roleid UNION ALL
+	SELECT 14616619 AS custid, 4 AS roleid UNION ALL
+	SELECT 14616628 AS custid, 4 AS roleid UNION ALL
+	SELECT 14649180 AS custid, 4 AS roleid UNION ALL
+	SELECT 14649202 AS custid, 4 AS roleid UNION ALL
+	SELECT 14649240 AS custid, 4 AS roleid UNION ALL
+	SELECT 14650244 AS custid, 4 AS roleid UNION ALL
+	SELECT 14650260 AS custid, 4 AS roleid UNION ALL
+	SELECT 14756740 AS custid, 4 AS roleid UNION ALL
+	SELECT 14756779 AS custid, 4 AS roleid UNION ALL
+	SELECT 14757331 AS custid, 4 AS roleid UNION ALL
+	SELECT 14757371 AS custid, 4 AS roleid UNION ALL
+
+	SELECT 14616584 AS custid, 3 AS roleid UNION ALL
+	SELECT 14616608 AS custid, 3 AS roleid UNION ALL
+	SELECT 14649203 AS custid, 3 AS roleid UNION ALL
+	SELECT 14179980 AS custid, 3 AS roleid UNION ALL
+	SELECT 14605449 AS custid, 3 AS roleid UNION ALL
+	SELECT 14179969 AS custid, 3 AS roleid UNION ALL
+	SELECT 14373730 AS custid, 3 AS roleid UNION ALL
+	SELECT 14442434 AS custid, 3 AS roleid UNION ALL
+	SELECT 14616629 AS custid, 3 AS roleid UNION ALL
+	SELECT 14756741 AS custid, 3 AS roleid UNION ALL
+	SELECT 14605407 AS custid, 3 AS roleid UNION ALL
+	SELECT 14605470 AS custid, 3 AS roleid UNION ALL
+	SELECT 14428594 AS custid, 3 AS roleid UNION ALL
+	SELECT 14179991 AS custid, 3 AS roleid UNION ALL
+	SELECT 14236171 AS custid, 3 AS roleid UNION ALL
+	SELECT 14616558 AS custid, 3 AS roleid UNION ALL
+	SELECT 14605300 AS custid, 3 AS roleid UNION ALL
+	SELECT 14452624 AS custid, 3 AS roleid UNION ALL
+	SELECT 14756780 AS custid, 3 AS roleid UNION ALL
+	SELECT 14452607 AS custid, 3 AS roleid UNION ALL
+	SELECT 14650245 AS custid, 3 AS roleid UNION ALL
+	SELECT 14649181 AS custid, 3 AS roleid UNION ALL
+	SELECT 14650261 AS custid, 3 AS roleid UNION ALL
+	SELECT 14605429 AS custid, 3 AS roleid UNION ALL
+	SELECT 14605368 AS custid, 3 AS roleid UNION ALL
+	SELECT 14543818 AS custid, 3 AS roleid UNION ALL
+	SELECT 14179958 AS custid, 3 AS roleid UNION ALL
+	SELECT 14616620 AS custid, 3 AS roleid UNION ALL
+	SELECT 14757332 AS custid, 3 AS roleid UNION ALL
+	SELECT 14452577 AS custid, 3 AS roleid UNION ALL
+	SELECT 14428618 AS custid, 3 AS roleid UNION ALL
+	SELECT 14553940 AS custid, 3 AS roleid UNION ALL
+	SELECT 14757372 AS custid, 3 AS roleid UNION ALL
+	SELECT 14180013 AS custid, 3 AS roleid UNION ALL
+	SELECT 14180003 AS custid, 3 AS roleid UNION ALL
+	SELECT 14553924 AS custid, 3 AS roleid UNION ALL
+	SELECT 14605340 AS custid, 3 AS roleid UNION ALL
+	SELECT 14452590 AS custid, 3 AS roleid UNION ALL
+	SELECT 14554386 AS custid, 3 AS roleid UNION ALL
+	SELECT 14649241 AS custid, 3 AS roleid UNION ALL
+	SELECT 14217426 AS custid, 3 AS roleid UNION ALL
+	SELECT 14543787 AS custid, 3 AS roleid UNION ALL
+	SELECT 14179944 AS custid, 3 AS roleid UNION ALL
+
+	SELECT 14179945 AS custid, 2 AS roleid UNION ALL
+	SELECT 14180004 AS custid, 2 AS roleid UNION ALL
+	SELECT 14543819 AS custid, 2 AS roleid UNION ALL
+	SELECT 14243020 AS custid, 2 AS roleid UNION ALL
+	SELECT 14452591 AS custid, 2 AS roleid UNION ALL
+	SELECT 14616559 AS custid, 2 AS roleid UNION ALL
+	SELECT 14452578 AS custid, 2 AS roleid UNION ALL
+	SELECT 14179981 AS custid, 2 AS roleid UNION ALL
+	SELECT 14179959 AS custid, 2 AS roleid UNION ALL
+	SELECT 14543956 AS custid, 2 AS roleid UNION ALL
+	SELECT 14179992 AS custid, 2 AS roleid UNION ALL
+	SELECT 14543892 AS custid, 2 AS roleid UNION ALL
+	SELECT 14562122 AS custid, 2 AS roleid UNION ALL
+	SELECT 14543788 AS custid, 2 AS roleid UNION ALL
+	SELECT 14649182 AS custid, 2 AS roleid UNION ALL
+	SELECT 14616621 AS custid, 2 AS roleid UNION ALL
+	SELECT 14605341 AS custid, 2 AS roleid UNION ALL
+	SELECT 14605701 AS custid, 2 AS roleid UNION ALL
+	SELECT 14562271 AS custid, 2 AS roleid UNION ALL
+	SELECT 14243182 AS custid, 2 AS roleid UNION ALL
+	SELECT 14562208 AS custid, 2 AS roleid UNION ALL
+	SELECT 14617333 AS custid, 2 AS roleid UNION ALL
+	SELECT 14452608 AS custid, 2 AS roleid UNION ALL
+	SELECT 14649242 AS custid, 2 AS roleid UNION ALL
+	SELECT 14616585 AS custid, 2 AS roleid UNION ALL
+	SELECT 14617326 AS custid, 2 AS roleid UNION ALL
+	SELECT 14617340 AS custid, 2 AS roleid UNION ALL
+	SELECT 14553925 AS custid, 2 AS roleid UNION ALL
+	SELECT 14605680 AS custid, 2 AS roleid UNION ALL
+	SELECT 14554801 AS custid, 2 AS roleid UNION ALL
+	SELECT 14243083 AS custid, 2 AS roleid UNION ALL
+	SELECT 14452625 AS custid, 2 AS roleid UNION ALL
+	SELECT 14616630 AS custid, 2 AS roleid UNION ALL
+	SELECT 14605633 AS custid, 2 AS roleid UNION ALL
+	SELECT 14605450 AS custid, 2 AS roleid UNION ALL
+	SELECT 14650246 AS custid, 2 AS roleid UNION ALL
+	SELECT 14756781 AS custid, 2 AS roleid UNION ALL
+	SELECT 14605471 AS custid, 2 AS roleid UNION ALL
+	SELECT 14605610 AS custid, 2 AS roleid UNION ALL
+	SELECT 14617303 AS custid, 2 AS roleid UNION ALL
+	SELECT 14243041 AS custid, 2 AS roleid UNION ALL
+	SELECT 14179970 AS custid, 2 AS roleid UNION ALL
+	SELECT 14605430 AS custid, 2 AS roleid UNION ALL
+	SELECT 14616609 AS custid, 2 AS roleid UNION ALL
+	SELECT 14243121 AS custid, 2 AS roleid UNION ALL
+	SELECT 14236172 AS custid, 2 AS roleid UNION ALL
+	SELECT 14551801 AS custid, 2 AS roleid UNION ALL
+	SELECT 14562191 AS custid, 2 AS roleid UNION ALL
+	SELECT 14373731 AS custid, 2 AS roleid UNION ALL
+	SELECT 14553941 AS custid, 2 AS roleid UNION ALL
+	SELECT 14442436 AS custid, 2 AS roleid UNION ALL
+	SELECT 14605572 AS custid, 2 AS roleid UNION ALL
+	SELECT 14428595 AS custid, 2 AS roleid UNION ALL
+	SELECT 14605663 AS custid, 2 AS roleid UNION ALL
+	SELECT 14428619 AS custid, 2 AS roleid UNION ALL
+	SELECT 14617316 AS custid, 2 AS roleid UNION ALL
+	SELECT 14180014 AS custid, 2 AS roleid UNION ALL
+	SELECT 14554387 AS custid, 2 AS roleid UNION ALL
+	SELECT 14217427 AS custid, 2 AS roleid UNION ALL
+	SELECT 14605302 AS custid, 2 AS roleid UNION ALL
+	SELECT 14236613 AS custid, 2 AS roleid UNION ALL
+	SELECT 14650262 AS custid, 2 AS roleid UNION ALL
+	SELECT 14757373 AS custid, 2 AS roleid UNION ALL
+	SELECT 14605369 AS custid, 2 AS roleid UNION ALL
+	SELECT 14605408 AS custid, 2 AS roleid UNION ALL
+	SELECT 14649204 AS custid, 2 AS roleid UNION ALL
+	SELECT 14242876 AS custid, 2 AS roleid UNION ALL
+	SELECT 14756742 AS custid, 2 AS roleid UNION ALL
+	SELECT 14243150 AS custid, 2 AS roleid UNION ALL
+	SELECT 14605547 AS custid, 2 AS roleid UNION ALL
+	SELECT 14757333 AS custid, 2 AS roleid
+) tmp
+
+
