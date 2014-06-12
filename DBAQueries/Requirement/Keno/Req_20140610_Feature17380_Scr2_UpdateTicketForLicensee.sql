@@ -35,7 +35,7 @@ GO
 
 ---
 ---
--- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/053/054/06 -----
+-- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/054/06/DBTP)----
 --------------------------------------------------------------------------------------
  
 CREATE TABLE #supers (custid int, isfinished bit default(0))
