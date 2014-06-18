@@ -89,6 +89,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20140610_Feature17380_Scr3_CorrectPTForLicensee.sql"
          Script = "Req_20140610_Feature17380_Scr4_InsertPTKenoForLicensee.sql"
          Script = "Req_20140610_Feature17380_Scr5_CorrectPTForLicensee.sql"
+         Script = "Req_20140618_Feature11658_PrepareStructureForKeno_ArchiveUnusedAccount.sql"
       End
       Begin Folder = "LAS"
          Script = "Req_20140210_Feature10701_AddLogActionForLAS_SpecialDelete.sql"
