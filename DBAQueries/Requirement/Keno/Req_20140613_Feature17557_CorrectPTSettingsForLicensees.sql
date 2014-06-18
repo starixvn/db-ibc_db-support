@@ -1363,7 +1363,7 @@ union select 	14817127	--	HONBETRMB01064
 union select 	14817511	--	HONBETRMB01065 
 
 UPDATE CustSettingGame WITH (UPDLOCK,ROWLOCK)
-SET apositiontaking = 0.85
+SET apositiontaking = 0.9
 WHERE custid IN (SELECT custid FROM @tmpCust)
 	AND sporttype = 202
 	AND bettype = 1501
