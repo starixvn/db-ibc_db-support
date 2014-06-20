@@ -104,6 +104,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20140610_Feature17349_UpdateData.sql"
          Script = "Req_20140611_Feature17349_UpdateListSMA_20140611.sql"
          Script = "Req_20140612_Feature17349_UpdateMailingList_LimitLoss.sql"
+         Script = "Req_20140620_Feature17906_PrepareStructure_AddIcon_LimitLoss.sql"
       End
       Begin Folder = "Live CS"
          Script = "Req_20130912_Feature5611_3star88_UpdatePTsettingforUUS.sql"
