@@ -19,6 +19,9 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20130628_Feature2437_NegativeBalanceBBIN_AddNewTables.sql"
          Script = "Req_20140513_Feature16082_ZeroriseDormantAccountsFor12bet.sql"
       End
+      Begin Folder = "BetRardar"
+         Script = "Req_20140707_Feature16903_CopySettingsFromCorrectScoreForBetRadar.sql"
+      End
       Begin Folder = "Bingo"
          Script = "Req_20130708_Feature1940_UpdateMatchidBingo_73.sql"
          Script = "Req_20130725_Feature2344_scr01 UpdateBingoStatus_AllCreditCustomer.sql"
