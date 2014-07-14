@@ -49,6 +49,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20140324_Feature13819_GetSuperlist.sql"
          Script = "Req_20140404_Feature14538_DisableAllproductsExceptSBForVipSuper.sql"
          Script = "Req_20140404_Feature14538_DisableKenoGameForVipSupers.sql"
+         Script = "Req_20140714_UpdateVirtualRateForLicensees.sql"
       End
       Begin Folder = "HRFixedOdds"
          Script = "Req_20131011_Feature6505_AddLogAction.sql"
