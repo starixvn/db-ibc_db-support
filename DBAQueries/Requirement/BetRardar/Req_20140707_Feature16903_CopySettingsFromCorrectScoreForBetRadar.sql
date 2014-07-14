@@ -10,7 +10,7 @@ DECLARE @max_custid INT
 SELECT @max_custid= xx
  
 DELETE CustSetting WITH(UPDLOCK,ROWLOCK)
-WHERE sporttype = 1 AND bettype = 9999
+WHERE sporttype IN (1,5) AND bettype = 9999
 	AND custid<= @max_custid
 GO
 
@@ -63,7 +63,7 @@ BEGIN
 			   ,[isautolivempositiontaking])
 	SELECT cs.[custid]
 		   ,9999 as [bettype]
-		   ,1 as [sporttype]
+		   ,cs.[sporttype]
 		   ,[apositiontaking]
 		   ,[mpositiontaking]
 		   ,[spositiontaking]
@@ -92,10 +92,14 @@ BEGIN
 		   ,[isautolivempositiontaking]
 	FROM custSetting cs WITH(NOLOCK)
 		INNER JOIN custInfo ci WITH(NOLOCK) ON cs.custid = ci.custid
+		INNER JOIN (
+			SELECT 1 as sporttype, 4 as bettype
+			UNION 
+			SELECT 5, 1  
+		) t ON cs.sporttype = t.sporttype and cs.bettype = t.bettype
 	WHERE ci.srecommend = @srecommend 
 		AND ci.custid <= @maxcustid
-		AND cs.sporttype = 1 
-		AND cs.bettype = 4--correct score
+		
 		
 END	
 GO
