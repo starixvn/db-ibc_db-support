@@ -20,7 +20,15 @@ BEGIN
 	
 	IF ( SELECT COUNT(1) FROM sys.objects WHERE NAME IN ('Custinfo','Dep_CustSetting3rd') AND type = 'U' ) <> 2
 		RETURN
-
+	
+	DELETE cs
+	FROM Dep_custSetting3rd cs WITH(UPDLOCK,ROWLOCK)		   
+		INNER JOIN custinfo ci WITH(NOLOCK) ON cs.custid = ci.custid
+	WHERE cs.sporttype in (182,184)
+		and cs.bettype = 1231
+		and ci.srecommend = @srecommend
+		and ci.custid <= @maxcustid
+		
 	INSERT INTO [dbo].[Dep_CustSetting3rd]
 			   ([custid]
 			   ,[bettype]
