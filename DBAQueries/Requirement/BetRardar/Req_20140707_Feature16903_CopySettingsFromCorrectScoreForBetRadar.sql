@@ -27,7 +27,7 @@ BEGIN
 	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBTRANS') RETURN	-- run at all replicated servers
 	IF (@target = 'DBTRANS' AND @@SERVERNAME <> 'DBTRANS') RETURN -- run at dbtrans only
 	
-	IF ( SELECT COUNT(1) FROM sys.objects WHERE NAME IN ('Custinfo','CustSetting','custOverride') AND type = 'U' ) <> 2
+	IF ( SELECT COUNT(1) FROM sys.objects WHERE NAME IN ('Custinfo','CustSetting','custOverride') AND type = 'U' ) <> 3
 		RETURN
 				
 
