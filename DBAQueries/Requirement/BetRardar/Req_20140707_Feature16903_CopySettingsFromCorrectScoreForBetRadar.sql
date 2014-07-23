@@ -111,8 +111,8 @@ BEGIN
 			   ,[maxlivepositiontaking])
 	SELECT
 		co.[custid]
-	   ,t.[bettype]
-	   ,t.[sporttype]
+	   ,9999 as [bettype]
+	   ,co.[sporttype]
 	   ,[minpositiontaking]
 	   ,[maxpositiontaking]
 	   ,[minlivepositiontaking]
