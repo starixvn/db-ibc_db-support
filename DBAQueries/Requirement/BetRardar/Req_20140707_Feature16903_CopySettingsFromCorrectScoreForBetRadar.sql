@@ -27,7 +27,7 @@ BEGIN
 	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBTRANS') RETURN	-- run at all replicated servers
 	IF (@target = 'DBTRANS' AND @@SERVERNAME <> 'DBTRANS') RETURN -- run at dbtrans only
 	
-	IF ( SELECT COUNT(1) FROM sys.objects WHERE NAME IN ('Custinfo','CustSetting') AND type = 'U' ) <> 2
+	IF ( SELECT COUNT(1) FROM sys.objects WHERE NAME IN ('Custinfo','CustSetting','custOverride') AND type = 'U' ) <> 2
 		RETURN
 				
 
@@ -100,7 +100,33 @@ BEGIN
 	WHERE ci.srecommend = @srecommend 
 		AND ci.custid <= @maxcustid
 		
-		
+
+	INSERT INTO [dbo].[custOverride]
+			   ([custid]
+			   ,[bettype]
+			   ,[sporttype]
+			   ,[minpositiontaking]
+			   ,[maxpositiontaking]
+			   ,[minlivepositiontaking]
+			   ,[maxlivepositiontaking])
+	SELECT
+		co.[custid]
+	   ,t.[bettype]
+	   ,t.[sporttype]
+	   ,[minpositiontaking]
+	   ,[maxpositiontaking]
+	   ,[minlivepositiontaking]
+	   ,[maxlivepositiontaking]
+	FROM [custOverride] co WITH(NOLOCK)
+		INNER JOIN custInfo ci WITH(NOLOCK) ON co.custid = ci.custid
+		INNER JOIN (
+			SELECT 1 as sporttype, 4 as bettype
+			UNION 
+			SELECT 5, 1  
+		) t ON co.sporttype = t.sporttype and co.bettype = t.bettype
+	WHERE ci.srecommend = @srecommend 
+		AND ci.custid <= @maxcustid			   
+  	
 END	
 GO
 
