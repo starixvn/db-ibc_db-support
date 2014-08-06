@@ -5,10 +5,8 @@
 	DB: DBTXN/CustDB
 */ 
 
---Step 0: delete existing Keno's settings
 DECLARE @max_custid INT
 SELECT @max_custid = xx
-
 
 --STEP 1: DEPLOY THIS SP @ DBTRANS.CustDB -----
 ------------------------------------------------------
