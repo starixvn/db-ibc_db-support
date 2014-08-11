@@ -14,6 +14,11 @@ WHERE sporttype IN (1,5) AND bettype = 9999
 	AND custid<= @max_custid
 GO
 
+DELETE custOverride WITH(UPDLOCK,ROWLOCK)
+WHERE sporttype IN (1,5) AND bettype = 9999
+	AND custid<= @max_custid
+GO
+
 --STEP 1: DEPLOY THIS SP @ DBTRANS.CustDB -----
 ------------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_CustSetting_03]
