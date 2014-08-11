@@ -8,10 +8,23 @@
 DECLARE @max_custid INT
 SELECT @max_custid = xx
 
+--STEP 0: DELETE UUS DATA @ DBTRANS.CustDB -----
+DELETE cs
+  FROM CustSettingGame cs WITH(NOLOCK)
+INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid = cs.CustID
+ WHERE ci.currency = 20
+   AND cs.Sporttype = 202
+ 
+ DELETE co
+  FROM CustOverrideGame co WITH(NOLOCK)
+INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid = co.CustID
+ WHERE ci.currency = 20
+   AND co.Sporttype = 202 
+
 --STEP 1: DEPLOY THIS SP @ DBTRANS.CustDB -----
 ------------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_CustSetting_03]
-	@srecommend INT
+	@custid INT
   , @max_custid INT
   , @target     VARCHAR(20)
 AS
@@ -62,7 +75,7 @@ BEGIN
 		 , 0 --isautompos
 	FROM custInfo ci WITH(NOLOCK)
 CROSS JOIN ProductGlobalSetting ps WITH(NOLOCK)
-   WHERE ci.srecommend = @srecommend
+   WHERE ci.custid = @custid
      AND NOT EXISTS (SELECT 1
                        FROM CustSettingGame cg
                       WHERE cg.CustID = ci.custid
@@ -83,7 +96,7 @@ CROSS JOIN ProductGlobalSetting ps WITH(NOLOCK)
 		 , 0 --minpos
 	FROM custInfo ci WITH(NOLOCK)
 CROSS JOIN ProductGlobalSetting ps WITH(NOLOCK)
-   WHERE ci.srecommend = @srecommend
+   WHERE ci.custid = @custid
      AND NOT EXISTS (SELECT 1
                        FROM CustOverrideGame cg
                       WHERE cg.CustID = ci.custid
@@ -107,7 +120,7 @@ DECLARE @max_custid INT, @srecommend INT
 SELECT @max_custid= xx
 
 INSERT INTO #CustomersKenoSetting(custid)
-SELECT DISTINCT ci.srecommend
+SELECT ci.custid--DISTINCT ci.srecommend
   FROM custinfo ci WITH(NOLOCK)
  WHERE ci.srecommend NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
    AND 9 > (SELECT COUNT(*)
