@@ -10,21 +10,26 @@ SELECT @max_custid = xx
 
 --STEP 0: DELETE UUS DATA @ DBTRANS.CustDB -----
 DELETE cs
-  FROM CustSettingGame cs WITH(NOLOCK)
-INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid = cs.CustID
- WHERE ci.currency = 20
-   AND cs.Sporttype = 202
+FROM CustSettingGame cs WITH(NOLOCK)
+	INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid = cs.CustID
+WHERE ci.currency = 20
+	AND cs.Sporttype = 202
+	AND ci.srecommend NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+ 
+ GO
  
 DELETE co
-  FROM CustOverrideGame co WITH(NOLOCK)
-INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid = co.CustID
- WHERE ci.currency = 20
-   AND co.Sporttype = 202 
+FROM CustOverrideGame co WITH(NOLOCK)
+	INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid = co.CustID
+WHERE ci.currency = 20
+	AND co.Sporttype = 202
+	AND ci.srecommend NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 
+GO
 --STEP 1: DEPLOY THIS SP @ DBTRANS.CustDB -----
-------------------------------------------------------
-ALTER PROCEDURE [dbo].[Acc_CustSetting_03_Keno]
-	@custid INT
+-----------------------------------------------
+ALTER PROCEDURE [dbo].[Acc_CustSetting_03]
+	@srecommend INT
   , @max_custid INT
   , @target     VARCHAR(20)
 AS
@@ -75,12 +80,7 @@ BEGIN
 		 , 0 --isautompos
 	FROM custInfo ci WITH(NOLOCK)
 CROSS JOIN ProductGlobalSetting ps WITH(NOLOCK)
-   WHERE ci.custid = @custid
-     AND NOT EXISTS (SELECT 1
-                       FROM CustSettingGame cg
-                      WHERE cg.CustID = ci.custid
-                        AND cg.Sporttype = 202
-                        AND cg.Bettype = ps.Bettype)
+   WHERE ci.srecommend = @srecommend     
 
     --CustOverrideGame
     INSERT INTO [dbo].[CustOverrideGame]
@@ -96,14 +96,8 @@ CROSS JOIN ProductGlobalSetting ps WITH(NOLOCK)
 		 , 0 --minpos
 	FROM custInfo ci WITH(NOLOCK)
 CROSS JOIN ProductGlobalSetting ps WITH(NOLOCK)
-   WHERE ci.custid = @custid
-     AND ci.roleid <> 1
-     AND NOT EXISTS (SELECT 1
-                       FROM CustOverrideGame cg
-                      WHERE cg.CustID = ci.custid
-                        AND cg.Sporttype = 202
-                        AND cg.Bettype = ps.Bettype
-                    )
+   WHERE ci.srecommend = @srecommend
+     AND ci.roleid <> 1    
 
 END
 GO
@@ -115,38 +109,36 @@ GO
 ---
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/053/054/06 -----
 --------------------------------------------------------------------------------------
-CREATE TABLE #CustomersKenoSetting(Custid INT , isfinished bit default(0))	
-DECLARE @max_custid INT, @custid INT
+CREATE TABLE #CustomersKenoSetting(srecommend INT , isfinished bit default(0))	
+DECLARE @max_custid INT, @srecommend INT
 
-SELECT @max_custid= xx
+SELECT @max_custid= xxx
 
-INSERT INTO #CustomersKenoSetting(custid)
-SELECT ci.custid--DISTINCT ci.srecommend
-  FROM custinfo ci WITH(NOLOCK)
- WHERE ci.srecommend NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
-   AND 9 > (SELECT COUNT(*)
-               FROM CustSettingGame csg WITH(NOLOCK)
-         INNER JOIN CustOverrideGame cog WITH(NOLOCK) ON csg.CustID = cog.CustID
-                                                     AND csg.Sporttype = cog.Sporttype
-                                                     AND csg.Bettype = cog.Bettype
-              WHERE csg.custid = ci.custid
-                AND csg.Sporttype = 202
-           ) --missing Keno setting in CustSettingGame or CustOverrideGame
-   AND custid <= @max_custid
+INSERT INTO #CustomersKenoSetting(srecommend)
+SELECT DISTINCT ci.srecommend
+FROM custinfo ci WITH(NOLOCK)
+WHERE ci.srecommend NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))	
+	AND ci.custid <= @max_custid
+	AND roleid = 4
 
+GO
+
+DECLARE @max_custid INT, @srecommend INT
+
+SELECT @max_custid= xxx
 
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #CustomersKenoSetting
 	   SET isfinished = 1
-		 , @custid = custid
+		 , @srecommend = srecommend
 	 WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
 
-	EXEC dbo.[Acc_CustSetting_03_Keno]
-	    @custid = @custid
-	  , @maxcustid = @max_custid
+	EXEC dbo.[Acc_CustSetting_03]
+	    @srecommend = @srecommend
+	  , @max_custid = @max_custid
 	  , @target = 'REPLICATED'
 END
 
@@ -159,38 +151,30 @@ GO
 ---
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBTRANS -----
 -------------------------------------------------
-CREATE TABLE #CustomersKenoSetting(Custid INT , isfinished bit default(0))	
-DECLARE @max_custid INT, @custid INT
+CREATE TABLE #CustomersKenoSetting(srecommend INT , isfinished bit default(0))	
+DECLARE @max_custid INT, @srecommend INT
 
 SELECT @max_custid = xx
 
-INSERT INTO #CustomersKenoSetting(custid)
-SELECT  ci.custid--DISTINCT ci.srecommend
+INSERT INTO #CustomersKenoSetting(srecommend)
+SELECT DISTINCT ci.srecommend
   FROM custinfo ci WITH(NOLOCK)
- WHERE ci.srecommend NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
-   AND 9 > (SELECT COUNT(*)
-               FROM CustSettingGame csg WITH(NOLOCK)
-         INNER JOIN CustOverrideGame cog WITH(NOLOCK) ON csg.CustID = cog.CustID
-                                                     AND csg.Sporttype = cog.Sporttype
-                                                     AND csg.Bettype = cog.Bettype
-              WHERE csg.custid = ci.custid
-                AND csg.Sporttype = 202
-           ) --missing Keno setting in CustSettingGame or CustOverrideGame
-   AND custid <= @max_custid
-
+ WHERE ci.srecommend NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))  
+   AND ci.custid <= @max_custid
+   AND roleid = 4
 
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #CustomersKenoSetting
 	   SET isfinished = 1
-		 , @custid = custid			
+		 , @srecommend = srecommend			
 	 WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
 
-	EXEC dbo.[Acc_CustSetting_03_Keno]
-	    @custid = @custid
-	  , @maxcustid = @max_custid
+	EXEC dbo.[Acc_CustSetting_03]
+	    @srecommend = @srecommend
+	  , @max_custid = @max_custid
 	  , @target = 'DBTRANS'
 END
 
