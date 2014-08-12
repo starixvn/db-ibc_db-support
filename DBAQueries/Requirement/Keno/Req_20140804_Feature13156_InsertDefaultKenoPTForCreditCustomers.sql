@@ -15,7 +15,7 @@ INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid = cs.CustID
  WHERE ci.currency = 20
    AND cs.Sporttype = 202
  
- DELETE co
+DELETE co
   FROM CustOverrideGame co WITH(NOLOCK)
 INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid = co.CustID
  WHERE ci.currency = 20
@@ -41,7 +41,7 @@ BEGIN
        ) <> 3
 		RETURN
 
-
+    --CustSettingGame
 	INSERT INTO [dbo].[CustSettingGame]
 	(
 	    [custid]
@@ -82,7 +82,7 @@ CROSS JOIN ProductGlobalSetting ps WITH(NOLOCK)
                         AND cg.Sporttype = 202
                         AND cg.Bettype = ps.Bettype)
 
-    
+    --CustOverrideGame
     INSERT INTO [dbo].[CustOverrideGame]
 	(
 	    [custid]
@@ -97,6 +97,7 @@ CROSS JOIN ProductGlobalSetting ps WITH(NOLOCK)
 	FROM custInfo ci WITH(NOLOCK)
 CROSS JOIN ProductGlobalSetting ps WITH(NOLOCK)
    WHERE ci.custid = @custid
+     AND ci.roleid <> 1
      AND NOT EXISTS (SELECT 1
                        FROM CustOverrideGame cg
                       WHERE cg.CustID = ci.custid
