@@ -23,7 +23,7 @@ INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid = co.CustID
 
 --STEP 1: DEPLOY THIS SP @ DBTRANS.CustDB -----
 ------------------------------------------------------
-ALTER PROCEDURE [dbo].[Acc_CustSetting_03]
+ALTER PROCEDURE [dbo].[Acc_CustSetting_03_Keno]
 	@custid INT
   , @max_custid INT
   , @target     VARCHAR(20)
@@ -116,7 +116,7 @@ GO
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/053/054/06 -----
 --------------------------------------------------------------------------------------
 CREATE TABLE #CustomersKenoSetting(Custid INT , isfinished bit default(0))	
-DECLARE @max_custid INT, @srecommend INT
+DECLARE @max_custid INT, @custid INT
 
 SELECT @max_custid= xx
 
@@ -139,13 +139,13 @@ WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #CustomersKenoSetting
 	   SET isfinished = 1
-		 , @srecommend = custid			
+		 , @custid = custid
 	 WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
 
-	EXEC dbo.[Acc_CustSetting_03]
-	    @srecommend = @srecommend
+	EXEC dbo.[Acc_CustSetting_03_Keno]
+	    @custid = @custid
 	  , @maxcustid = @max_custid
 	  , @target = 'REPLICATED'
 END
@@ -160,12 +160,12 @@ GO
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBTRANS -----
 -------------------------------------------------
 CREATE TABLE #CustomersKenoSetting(Custid INT , isfinished bit default(0))	
-DECLARE @max_custid INT, @srecommend INT
+DECLARE @max_custid INT, @custid INT
 
 SELECT @max_custid = xx
 
 INSERT INTO #CustomersKenoSetting(custid)
-SELECT DISTINCT ci.srecommend
+SELECT  ci.custid--DISTINCT ci.srecommend
   FROM custinfo ci WITH(NOLOCK)
  WHERE ci.srecommend NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
    AND 9 > (SELECT COUNT(*)
@@ -183,13 +183,13 @@ WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #CustomersKenoSetting
 	   SET isfinished = 1
-		 , @srecommend = custid			
+		 , @custid = custid			
 	 WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
 
-	EXEC dbo.[Acc_CustSetting_03]
-	    @srecommend = @srecommend
+	EXEC dbo.[Acc_CustSetting_03_Keno]
+	    @custid = @custid
 	  , @maxcustid = @max_custid
 	  , @target = 'DBTRANS'
 END
