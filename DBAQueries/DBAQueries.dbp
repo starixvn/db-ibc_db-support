@@ -21,7 +21,9 @@ Begin DataProject = "DBAQueries"
       End
       Begin Folder = "BetRardar"
          Script = "Req_20140707_Feature16903_CopySettingsFromCorrectScoreForBetRadar.sql"
+         Script = "Req_20140813_Feature16903_CopySettingForMissingCustomers.sql"
          Script = "Req_20140813_Feature16903_CopySettingsForNewlyCustomers.sql"
+         Script = "Req_20140813_Feature16903_UpdateSettingForSporttingSolutions.sql"
       End
       Begin Folder = "Bingo"
          Script = "Req_20130708_Feature1940_UpdateMatchidBingo_73.sql"
