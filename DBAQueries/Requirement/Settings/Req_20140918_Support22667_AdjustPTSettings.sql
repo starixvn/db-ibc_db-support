@@ -59,6 +59,7 @@ GO
 
 --wrong N4 > S1 + M1 + A1
 --Correct B26T downlines
+--B26T (2508822)
 EXEC Acc_CustSetting_04 @srecommend = 2508822, @roleid = 4
 
 
