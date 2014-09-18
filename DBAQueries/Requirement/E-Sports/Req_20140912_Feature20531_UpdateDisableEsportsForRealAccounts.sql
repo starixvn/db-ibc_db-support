@@ -39,7 +39,7 @@ GO
 
 ---
 ---
--- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/053/054/06 -----
+-- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/054/06/DBTP -----
 --------------------------------------------------------------------------------------
 CREATE TABLE #CustSuper(srecommend INT , isfinished BIT DEFAULT(0))	
 
@@ -72,7 +72,7 @@ END
 DROP TABLE #CustSuper
 
 GO		
--- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/053/054/06 -----
+-- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/054/06/DBTP -----
 -----------------------------------------------------------------------------------
 
 ---
