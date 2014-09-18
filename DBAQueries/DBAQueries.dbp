@@ -203,6 +203,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20131217_Feature7398_RemoveSettingForDisabledAccounts.sql"
          Script = "Req_20140326_Support13916_ ClearCreditForDisabledAccounts.sql"
          Script = "Req_20140828_Support21294_AdjustPTSettings.sql"
+         Script = "Req_20140918_Support22667_AdjustPTSettings.sql"
       End
       Begin Folder = "SMATurnover"
          Script = "Req_20130611_Feature1290_ImplementSMATurnoverManagement.sql"
