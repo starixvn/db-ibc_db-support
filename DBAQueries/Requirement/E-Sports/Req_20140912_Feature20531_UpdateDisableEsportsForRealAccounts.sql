@@ -7,7 +7,7 @@
 
 --STEP 1: DEPLOY THIS SP @ DBTRANS.CustDB -----
 -----------------------------------------------
-ALTER PROCEDURE [dbo].[Acc_CustSetting_03]
+ALTER PROCEDURE [dbo].[Acc_ExecRep_Cust_09]
 	@srecommend INT
   , @max_custid INT
   , @target     VARCHAR(20)
@@ -63,10 +63,12 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0 BREAK
 
-	EXEC dbo.[Acc_CustSetting_03]
+	EXEC dbo.Acc_ExecRep_Cust_09
 	    @srecommend = @srecommend
 	  , @max_custid = @max_custid
 	  , @target = 'REPLICATED'
+
+    WAITFOR DELAY '00:00:00.280'
 END
 
 DROP TABLE #CustSuper
@@ -100,10 +102,12 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0 BREAK
 
-	EXEC dbo.[Acc_CustSetting_03]
+	EXEC dbo.Acc_ExecRep_Cust_09
 	    @srecommend = @srecommend
 	  , @max_custid = @max_custid
 	  , @target = 'DBTRANS'
+	  
+	WAITFOR DELAY '00:00:00.280'
 END
 
 DROP TABLE #CustSuper
