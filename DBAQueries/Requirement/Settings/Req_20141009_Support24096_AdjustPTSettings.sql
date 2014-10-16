@@ -379,7 +379,7 @@ GO
 --POE (9513012), PYH (9525991), YDH(12183294), QQKY(12573245), S98K(12653798), S6P(12665939)
 --EQH(13213942), PYT(13338762), 2CT(13344620),  JAR(13469220), HAK(14537929), KHR(15092757),
 --WMB(8864806), S2C(10357130), MTEST(1688074), S11M4(9387993),sg9m(9507450)
---C3(10775412), VKS(12545925), MOU(12932432), BBD(13715655)
+--C3(10775412), VKS(12545925), MOU(12932432)
 
 --SET PT = 0.85/0.8/0.75
 UPDATE CustSetting3rd WITH(UPDLOCK,ROWLOCK)
@@ -400,6 +400,24 @@ WHERE custid IN (9513012,9525991,12183294,12573245,12653798,12665939
 	AND sporttype BETWEEN 180 AND 186
 GO
 
+--------------------------------------------------------------------------
+-- BBD(13715655)
+--PT = 0.85/0.85/0.85
+UPDATE CustSetting3rd WITH(UPDLOCK,ROWLOCK)
+SET spositiontaking = CASE WHEN spositiontaking >0.85 THEN 0.85 ELSE spositiontaking END,
+	mpositiontaking = CASE WHEN mpositiontaking >0.85 THEN 0.85 ELSE mpositiontaking END,
+	apositiontaking = CASE WHEN apositiontaking >0.85 THEN 0.85 ELSE apositiontaking END
+WHERE custid IN ( 13715655)
+	AND sporttype BETWEEN 180 AND 186
+
+UPDATE CustOverride3rd WITH(UPDLOCK,ROWLOCK)
+SET maxpositiontaking = CASE WHEN maxpositiontaking >0.85 THEN 0.85 ELSE maxpositiontaking END	
+WHERE custid IN (13715655
+	)
+	AND sporttype BETWEEN 180 AND 186
+GO
+
+-------------------------------------------------------------------------
 --JARWRONG(13469206),MLH (8550141), SWX(8864778), SBHD(8907700), FYK(9428916),HHHK2(10794837)
 --TEG(12696856), POD(9649538), QAG(10406668), SG33H(10719518), WTA(13216226),SMCH(13294314)
 --SQHH(14210898), SX5(14822871), SVJ(8489914), gtwrong(8551070), SAE(10321289), S999S(10440396)
@@ -447,9 +465,13 @@ GO
 ---MTEST 1688074, master MTEST01 1688137
 --C3	10775412
 --PT = 0.85/0.8/0.75
-
+ DECLARE @mpos SMALLMONEY
+      , @apos SMALLMONEY
+      , @spos SMALLMONEY
+      
 UPDATE cs
-SET spositiontaking = CASE WHEN spositiontaking >0.85 THEN 0.85 ELSE spositiontaking END,
+SET @apos = CASE WHEN 
+	spositiontaking = CASE WHEN spositiontaking >0.85 THEN 0.85 ELSE spositiontaking END,
 	mpositiontaking = CASE WHEN mpositiontaking >0.8 THEN 0.8 ELSE mpositiontaking END,
 	apositiontaking = CASE WHEN apositiontaking >0.75 THEN 0.75 ELSE apositiontaking END,
 	autopositiontaking = CASE WHEN autopositiontaking >0.85 THEN 0.85 ELSE autopositiontaking END,
@@ -483,3 +505,58 @@ WHERE ci.srecommend = 10775412 AND roleid = 1
 	)
 	AND sporttype BETWEEN 180 and 186
 
+
+--MOU (12932432),VKS(12545925)
+--PT =0.85/0.85/0.85
+UPDATE CustSetting3rd WITH(UPDLOCK,ROWLOCK)
+SET spositiontaking = 0.85,
+	mpositiontaking = 0.85,
+	apositiontaking = 0.85
+WHERE custid IN (12932432,12545925)
+	AND sporttype BETWEEN 180 AND 186
+
+--JIP (9573322),MP(11674030), MO(11674017)
+--PT = 0.8/0.77/0.73
+
+UPDATE CustSetting3rd WITH(UPDLOCK,ROWLOCK)
+SET spositiontaking = 0.8,
+	mpositiontaking = 0.77,
+	apositiontaking = 0.73
+WHERE custid IN (9573322,11674030,11674017)
+	AND sporttype BETWEEN 180 AND 186
+	
+	
+--SVJ(8489914)
+--PT = 0.7/0.7/0.7
+UPDATE CustSetting3rd WITH(UPDLOCK,ROWLOCK)
+SET spositiontaking = CASE WHEN spositiontaking >0.7 THEN 0.7 ELSE spositiontaking END,
+	mpositiontaking = CASE WHEN mpositiontaking >0.7 THEN 0.7 ELSE mpositiontaking END,
+	apositiontaking = CASE WHEN apositiontaking >0.7 THEN 0.7 ELSE apositiontaking END
+WHERE custid IN (8489914)
+	AND sporttype BETWEEN 180 AND 186
+
+UPDATE CustOverride3rd WITH(UPDLOCK,ROWLOCK)
+SET maxpositiontaking = CASE WHEN maxpositiontaking >0.7 THEN 0.7 ELSE maxpositiontaking END	
+WHERE custid IN (8489914)
+	AND sporttype BETWEEN 180 AND 186
+
+--correct downlines for master,agent
+---MTEST 1688074, master MTEST01 1688137
+--C3	10775412
+--PT = 0.85/0.8/0.75
+ DECLARE @mpos SMALLMONEY
+      , @apos SMALLMONEY
+      , @spos SMALLMONEY
+      
+UPDATE cs
+SET @apos = CASE WHEN apositiontaking > 0.75 THEN 0.75 ELSE apositiontaking END,
+	apositiontaking = @apos,
+	@mpos = CASE WHEN mpositiontaking + @apos > 0.8 THEN 0.8 - @apos ELSE mpositiontaking END,
+	mpositiontaking = @mpos,
+	@spos = CASE WHEN spositiontaking + @mpos + @apos > 0.85 THEN 0.85 - @mpos - @apos ELSE spositiontaking END,
+	spositiontaking = @spos
+FROM CustSetting3rd cs WITH(UPDLOCK,ROWLOCK)
+	INNER JOIN custInfo ci WITH(NOLOCK) ON cs.custid = ci.custid
+WHERE ci.srecommend IN (1688074,10775412) AND roleid IN (2,3)
+	AND sporttype BETWEEN 180 and 186
+GO		
