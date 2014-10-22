@@ -9,10 +9,6 @@
        SET csk.apositiontaking = csn.apositiontaking
 	     , csk.mpositiontaking = csn.mpositiontaking
 	     , csk.spositiontaking = csn.spositiontaking
-	     , csk.playerdiscount  = csn.playerdiscount
-	     , csk.discount        = csn.discount
-	     , csk.adiscount       = csn.adiscount
-	     , csk.sdiscount       = csn.sdiscount
 	     , csk.autopositiontaking    = csn.autopositiontaking
 	     , csk.isautopositiontaking  = csn.isautopositiontaking
 	     , csk.autompositiontaking   = csn.autompositiontaking
@@ -27,10 +23,6 @@ INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid = csn.CustID
        AND (csk.apositiontaking <> csn.apositiontaking
             OR csk.mpositiontaking <> csn.mpositiontaking
 	        OR csk.spositiontaking <> csn.spositiontaking
-	        OR csk.playerdiscount  <> csn.playerdiscount
-	        OR csk.discount        <> csn.discount
-	        OR csk.adiscount       <> csn.adiscount
-	        OR csk.sdiscount       <> csn.sdiscount
 	        OR csk.autopositiontaking    <> csn.autopositiontaking
 	        OR csk.isautopositiontaking  <> csn.isautopositiontaking
 	        OR csk.autompositiontaking   <> csn.autompositiontaking
