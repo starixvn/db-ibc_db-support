@@ -61,7 +61,7 @@ INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid = con.CustID
        AND con.Sporttype = 161
        AND con.bettype   = 81
 
-    --CustSettingGame
+    --CustGameType
     UPDATE csg WITH(ROWLOCK, UPDLOCK)
        SET csg.MinBet = csn.minbet
          , csg.MaxBet = csn.maxbet
