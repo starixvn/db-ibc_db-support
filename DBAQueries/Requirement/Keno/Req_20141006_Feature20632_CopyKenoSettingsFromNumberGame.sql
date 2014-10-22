@@ -23,9 +23,9 @@ BEGIN
 	
 	IF (SELECT COUNT(1)
 	      FROM sys.objects
-	     WHERE NAME IN ('Custinfo', 'CustSettingGame', 'CustOverrideGame', 'CustGameType')
+	     WHERE NAME IN ('Custinfo', 'CustSettingGame', 'CustOverrideGame', 'CustGameType', 'CustSetting3rd', 'custOverride3rd')
 	       AND type = 'U'
-       ) <> 4
+       ) <> 6
 		RETURN
 
     --CustSettingGame
