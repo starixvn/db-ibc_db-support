@@ -33,10 +33,6 @@ BEGIN
        SET csk.apositiontaking = csn.apositiontaking
 	     , csk.mpositiontaking = csn.mpositiontaking
 	     , csk.spositiontaking = csn.spositiontaking
-	     , csk.playerdiscount  = csn.playerdiscount
-	     , csk.discount        = csn.discount
-	     , csk.adiscount       = csn.adiscount
-	     , csk.sdiscount       = csn.sdiscount
 	     , csk.autopositiontaking    = csn.autopositiontaking
 	     , csk.isautopositiontaking  = csn.isautopositiontaking
 	     , csk.autompositiontaking   = csn.autompositiontaking
