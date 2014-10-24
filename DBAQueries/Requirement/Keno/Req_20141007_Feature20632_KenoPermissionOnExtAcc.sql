@@ -5,28 +5,19 @@
 	DB: DBEAS/bodb_EAS
 */ 
 
---eaFunction
-INSERT INTO dbo.eaUserPolicy
-(
-    UserID
-  , FuncID
-  , Policy
-)
-SELECT UserID
-     , 82
-     , Policy
-  FROM dbo.eaUserPolicy WITH(NOLOCK)
- WHERE FuncID = 49
+--eaUserPolicy
+UPDATE Keno WITH(ROWLOCK, UPDLOCK)
+   SET Keno.Policy = SB.Policy
+  FROM eaUserPolicy Keno
+INNER JOIN eaUserPolicy SB ON Keno.UserID = SB.UserID
+ WHERE Keno.FuncID = 82
+   AND SB.FuncID = 49
+
 
 --eaGroupPolicy
-INSERT INTO dbo.eaGroupPolicy
-(
-    GroupID
-  , FuncID
-  , Policy
-)
-SELECT GroupID
-     , 82
-     , Policy
-  FROM dbo.eaGroupPolicy WITH(NOLOCK)
- WHERE FuncID = 49
+UPDATE Keno WITH(ROWLOCK, UPDLOCK)
+   SET Keno.Policy = SB.Policy
+  FROM eaGroupPolicy Keno
+INNER JOIN eaGroupPolicy SB ON Keno.GroupID = SB.GroupID
+ WHERE Keno.FuncID = 82
+   AND SB.FuncID = 49
