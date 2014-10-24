@@ -4,6 +4,8 @@
 	Task: Copy permission for Keno from Sportbook
 	DB: DBEAS/bodb_EAS
 */ 
+USE bodb_EAS
+GO
 
 --eaUserPolicy
 UPDATE Keno WITH(ROWLOCK, UPDLOCK)
