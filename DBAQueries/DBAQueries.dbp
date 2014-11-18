@@ -212,6 +212,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20141009_Support24096_AdjustPTSettings.sql"
          Script = "Req_20141106_Feature25562_Copy settings for Tennis Others.sql"
          Script = "Req_20141113_Feature25562_Adjust settings after copy settings for Tennis Others.sql"
+         Script = "Req_20141118_Feature26139_Update Minbet for credit customers under TB and THB currencies.sql"
       End
       Begin Folder = "SMATurnover"
          Script = "Req_20130611_Feature1290_ImplementSMATurnoverManagement.sql"
