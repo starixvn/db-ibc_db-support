@@ -104,6 +104,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20140618_Feature11658_PrepareStructureForKeno_ArchiveUnusedAccount.sql"
          Script = "Req_20140709_Feature18703_EnableKentucky_MichiganFor12bet.sql"
          Script = "Req_20140722_Feature19406_EnableMichigan_KentuckyForSpondemo.sql"
+         Script = "Req_20141119_Feature26226_Adjust wrong PT settings.sql"
       End
       Begin Folder = "LAS"
          Script = "Req_20140210_Feature10701_AddLogActionForLAS_SpecialDelete.sql"
