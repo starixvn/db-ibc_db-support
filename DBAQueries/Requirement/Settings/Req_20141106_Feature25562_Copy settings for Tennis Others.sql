@@ -1,7 +1,8 @@
 ﻿ /*
 	Created: Johnson
 	Date: 2014-11-06
-	Task: Copy settings for tennis others bettype from tennis handicap bettype
+	Task: Copy pt and bet settings for tennis others bettype from tennis handicap bettype
+		copy comm settings from tennis other comm group
 	DB: DBTXN/CustDB
  */
  
@@ -22,6 +23,7 @@ BEGIN
 		WHERE NAME IN ('custinfo','CustSetting','CustOverride') AND type = 'U'
 		) <> 3 RETURN	
 	
+	--copy pt and bet settings from tennis handicap
 	UPDATE cs1
 	set cs1.spositiontaking = cs2.spositiontaking,
 		cs1.mpositiontaking = cs2.mpositiontaking,
@@ -31,8 +33,18 @@ BEGIN
 		cs1.isautopositiontaking = cs2.isautopositiontaking,
 		cs1.isautompositiontaking = cs2.isautompositiontaking,
 		cs1.minbet = cs2.minbet,
-		cs1.maxbet = cs2.maxbet,
-		cs1.playerdiscount = cs2.playerdiscount,
+		cs1.maxbet = cs2.maxbet 
+	from CustSetting cs1 with(UPDLOCK,ROWLOCK)
+		INNER JOIN custInfo ci with(nolock) on cs1.custid = ci.custid
+		INNER JOIN CustSetting cs2 WITH(NOLOCK) ON cs2.custid = ci.custid
+	where srecommend = @srecommend
+		AND ci.custid <= @maxcustid		
+		AND cs1.sporttype = 5 AND cs1.bettype = 9999
+		AND cs2.sporttype = 5 AND cs2.bettype = 1
+
+	--copy comm settings from tennis Other comm group		
+	UPDATE cs1
+	SET cs1.playerdiscount = cs2.playerdiscount,
 		cs1.discount = cs2.discount,
 		cs1.adiscount = cs2.adiscount,
 		cs1.sdiscount = cs2.sdiscount, 
@@ -41,14 +53,16 @@ BEGIN
 		cs1.groupc = cs2.groupc,
 		cs1.groupd = cs2.groupd, 
 		cs1.groupe = cs2.groupe,
-		cs1.groupf = cs2.groupf 
+		cs1.groupf = cs2.groupf	
 	from CustSetting cs1 with(UPDLOCK,ROWLOCK)
 		INNER JOIN custInfo ci with(nolock) on cs1.custid = ci.custid
 		INNER JOIN CustSetting cs2 WITH(NOLOCK) ON cs2.custid = ci.custid
 	where srecommend = @srecommend
 		AND ci.custid <= @maxcustid		
 		AND cs1.sporttype = 5 AND cs1.bettype = 9999
-		AND cs2.sporttype = 5 AND cs2.bettype = 1
+		AND cs2.sporttype = 5 AND cs2.bettype = 20
+		
+			
 		
 	UPDATE cs1
 	SET cs1.minpositiontaking = cs2.minpositiontaking,
