@@ -1,8 +1,7 @@
 ﻿/*
 	Created: Johnson
 	Date: 2014-12-03
-	Task: Copy country Korea(bettype : 1514) settings for Keno from Australia Market for deposit customers
-		site affected: 12Bet,ITCBet,i668bet,spondemo,Macaubet,iBET,XTD3,Aoncash,M8bola,Q8bola,NBCbet,AG,Athena000
+	Task: Copy country Korea(bettype : 1514) settings for Keno from Australia Market for deposit customers		
 	DB: DBTXN/CustDB
 */ 
 
@@ -61,7 +60,6 @@ SELECT @max_custid= xx
 INSERT INTO #supers(custid)
 SELECT custid 
 FROM Dep_CustSuper WITH(NOLOCK)
-WHERE site IN ('12Bet','ITCBet','i668bet','spondemo','Macaubet','iBET','XTD3','Aoncash','M8bola','Q8bola','NBCbet','AG','Athena000')
 
 
 WHILE (1 = 1)
@@ -95,7 +93,6 @@ SELECT @max_custid= xx
 INSERT INTO #supers(custid)
 SELECT custid 
 FROM Dep_CustSuper WITH(NOLOCK)
-WHERE site IN ('12Bet','ITCBet','i668bet','spondemo','Macaubet','iBET','XTD3','Aoncash','M8bola','Q8bola','NBCbet','AG','Athena000')
 
 WHILE (1 = 1)
 BEGIN
