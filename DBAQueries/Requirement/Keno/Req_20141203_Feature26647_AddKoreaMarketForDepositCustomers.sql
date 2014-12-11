@@ -1,7 +1,7 @@
 ﻿/*
 	Created: Johnson
 	Date: 2014-12-03
-	Task: Copy country Korea(bettype : 1514) settings for Keno from Australia Market for deposit customers		
+	Task: Copy country Korea(bettype : 1514) settings for Keno from Australia Market for deposit customers EXCEPT 12bet site		
 	DB: DBTXN/CustDB
 */ 
 
@@ -61,6 +61,7 @@ SELECT @max_custid= xx
 INSERT INTO #supers(custid)
 SELECT custid 
 FROM Dep_CustSuper WITH(NOLOCK)
+WHERE site <> '12bet'
 
 
 WHILE (1 = 1)
@@ -94,6 +95,7 @@ SELECT @max_custid= xx
 INSERT INTO #supers(custid)
 SELECT custid 
 FROM Dep_CustSuper WITH(NOLOCK)
+WHERE site <> '12bet'
 
 WHILE (1 = 1)
 BEGIN

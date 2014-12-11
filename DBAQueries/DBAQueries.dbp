@@ -109,6 +109,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20141203_Feature26647_AddKoreaMarketForDepositCustomers.sql"
          Script = "Req_20141204_Feature26647_AdjustPTAfterCopyKenoSettingsForCreditCustomers.sql"
          Script = "Req_20141211_Feature26647_scr0_Delete existings Korea settings.sql"
+         Script = "Req_20141211_Feature27455_Copy settings for Korea market for 12bet.sql"
       End
       Begin Folder = "LAS"
          Script = "Req_20140210_Feature10701_AddLogActionForLAS_SpecialDelete.sql"
