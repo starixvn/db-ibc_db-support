@@ -4,41 +4,7 @@
 	Task: Copy country Korea(bettype : 1514) settings for Keno from Australia Market for credit customers
 	DB: DBTXN/CustDB
 */ 
-
---step 1: Add setting into ProductGlobalSetting
-USE [CustDB]
-GO
-
-INSERT INTO [dbo].[ProductGlobalSetting]
-           ([Sporttype]
-           ,[Bettype]
-           ,[MaxPositiontaking]
-           ,[Maxsdiscount]
-           ,[IsDep])
-VALUES(202,1514,0.85,0,0)    
-GO
-----------------------------------------------
-
---step 2: Add settings into ProductBetSetting
-
-INSERT INTO [dbo].[ProductBetSetting]
-           ([Sporttype]
-           ,[Bettype]
-           ,[Currency]
-           ,[MinBet]
-           ,[IsDep])
-SELECT[Sporttype]
-       ,1514 as [Bettype]
-       ,[Currency]
-       ,[MinBet]
-       ,[IsDep]
-FROM [ProductBetSetting] WITH(NOLOCK)
-WHERE sporttype = 202
-	AND bettype = 1501
-GO
--------------------------------------------
-
---Step 3: add customer settings into CustGameType, CustSettingGame
+--Step 1: add customer settings into CustGameType, CustSettingGame
 -- DEPLOY THIS SP @ DBTRANS.CustDB -----
 ------------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_19]
@@ -130,13 +96,13 @@ BEGIN
 END
 GO
 
--- END STEP 3: DEPLOY THIS SP @ DBTRANS.CustDB -------
+-- END STEP 1: DEPLOY THIS SP @ DBTRANS.CustDB -------
 ------------------------------------------------------	
 
 
 ---
 ---
--- BEGIN STEP 4: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/054/06/DBTP) -----
+-- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/054/06/DBTP) -----
 --------------------------------------------------------------------------------------
  
 CREATE TABLE #supers (custid int, isfinished bit default(0))
@@ -169,11 +135,11 @@ BEGIN
 	WAITFOR DELAY '00:00:00.280'			
 END			
 GO		
--- END STEP 4: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/053/054/06 -----
+-- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DB052/053/053/054/06 -----
 -----------------------------------------------------------------------------------
 
 ---
--- BEGIN STEP 5: RUN THIS SCRIPT AT DBTRANS -----
+-- BEGIN STEP 3: RUN THIS SCRIPT AT DBTRANS -----
 -------------------------------------------------
 CREATE TABLE #supers (custid int, isfinished bit default(0))
 
@@ -207,5 +173,5 @@ END
 GO		
 
 
--- END STEP 5: RUN THIS SCRIPT AT DBTRANS -----
+-- END STEP 3: RUN THIS SCRIPT AT DBTRANS -----
 -------------------------------------------------
