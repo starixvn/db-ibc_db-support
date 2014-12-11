@@ -3,10 +3,10 @@
 	Date: 2014-12-04
 	Task: adjust Keno settings after copying for credit customers
 	DB: DBTXN/CustDB
+	Runtime: UM
  */
  
---STEP 1: Adjust settings for credit customers
-
+--STEP 1: copy settings for newly created credit customers
 CREATE TABLE #supers (custid int)
 
 INSERT INTO #supers(custid)
@@ -16,6 +16,85 @@ WHERE custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND roleid = 4
 GO
 
+DECLARE @maxcustid INT 
+SELECT @maxcustid = xx --lastest custid
+
+INSERT INTO [dbo].[CustSettingGame]
+			   ([CustID]
+			   ,[Bettype]
+			   ,[Sporttype]
+			   ,[apositiontaking]
+			   ,[mpositiontaking]
+			   ,[spositiontaking]
+			   ,[playerdiscount]
+			   ,[discount]
+			   ,[adiscount]
+			   ,[sdiscount]
+			   ,[autopositiontaking]
+			   ,[isautopositiontaking]
+			   ,[autompositiontaking]
+			   ,[isautompositiontaking])
+	SELECT cs.[CustID]
+		   ,1514 as [Bettype]
+		   ,[Sporttype]
+		   ,[apositiontaking]
+		   ,[mpositiontaking]
+		   ,[spositiontaking]
+		   ,[playerdiscount]
+		   ,[discount]
+		   ,[adiscount]
+		   ,[sdiscount]
+		   ,[autopositiontaking]
+		   ,[isautopositiontaking]
+		   ,[autompositiontaking]
+		   ,[isautompositiontaking]
+	FROM [CustSettingGame] cs WITH(NOLOCK)
+		INNER JOIN custinfo ci WITH(NOLOCK)	ON ci.custid = cs.custid
+	WHERE ci.srecommend IN (SELECT custid FROM #supers)
+		AND ci.custid > @maxcustid
+		AND sporttype = 202
+		AND bettype = 1501		   
+ 
+	INSERT INTO [dbo].[CustOverrideGame]
+			   ([CustID]
+			   ,[Bettype]
+			   ,[Sporttype]
+			   ,[minpositiontaking])
+	SELECT co.[CustID]
+		   ,1514 as [Bettype]
+		   ,[Sporttype]
+		   ,[minpositiontaking]
+	FROM [CustOverrideGame] co WITH(NOLOCK)	
+		INNER JOIN custinfo ci WITH(NOLOCK) ON ci.custid = co.custid	 
+	WHERE ci.srecommend IN (SELECT custid FROM #supers)
+		AND ci.custid > @maxcustid
+		AND sporttype = 202
+		AND bettype = 1501
+		
+	INSERT INTO [dbo].[CustGameType]
+			   ([CustID]
+			   ,[GameTypeID]
+			   ,[StakeLevelList]
+			   ,[MaxPerGameType]
+			   ,[MinBet]
+			   ,[MaxBet]
+			   ,[IsDisabled])
+    SELECT cg.[CustID]
+		   ,14 as [GameTypeID]
+		   ,[StakeLevelList]
+		   ,[MaxPerGameType]
+		   ,[MinBet]
+		   ,[MaxBet]
+		   ,[IsDisabled]
+    FROM [CustGameType] cg WITH(NOLOCK)
+		INNER JOIN custinfo ci WITH(NOLOCK) ON cg.custid = ci.custid
+    WHERE ci.srecommend IN (SELECT custid FROM #supers)
+			AND ci.custid > @maxcustid
+		 AND gameTypeID = 1
+GO
+		 
+
+--STEP 2: Adjust settings for credit customers
 	
 --adjust [CustSettingGame]
 UPDATE cs1
@@ -86,7 +165,7 @@ GO
 --------------------------------------------------------------------
 
 
---STEP 2: Adjust settings for deposit customers
+--STEP 3: Adjust settings for deposit customers
 --adjust [CustGameType]
 
 
