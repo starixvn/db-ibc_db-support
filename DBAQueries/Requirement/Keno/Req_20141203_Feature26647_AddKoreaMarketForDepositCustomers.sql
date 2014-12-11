@@ -19,6 +19,7 @@ BEGIN
 	IF (@target = 'DBTRANS' AND @@SERVERNAME <> 'DBTRANS') RETURN -- run at dbtrans only
 	
 	IF ( SELECT COUNT(1) FROM sys.objects WHERE NAME IN ('Custinfo','CustGameType') AND type = 'U' ) <> 2
+	RETURN
 	
 	INSERT INTO [dbo].[CustGameType]
 			   ([CustID]

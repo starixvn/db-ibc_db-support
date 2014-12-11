@@ -18,7 +18,7 @@ GO
 
 	
 --adjust [CustSettingGame]
-UPDATE 
+UPDATE cs1
 SET cs1.[apositiontaking] = cs2.[apositiontaking]
    ,cs1.[mpositiontaking] = cs2.[mpositiontaking]
    ,cs1.[spositiontaking] = cs2.[spositiontaking]
@@ -89,14 +89,6 @@ GO
 --STEP 2: Adjust settings for deposit customers
 --adjust [CustGameType]
 
-CREATE TABLE #supers (custid int)
-
-INSERT INTO #supers(custid)
-SELECT custid 
-FROM Dep_CustSuper WITH(NOLOCK)
-WHERE site IN ('12Bet','ITCBet','i668bet','spondemo','Macaubet','iBET','XTD3','Aoncash','M8bola','Q8bola','NBCbet','AG','Athena000')
-
-GO
 
 UPDATE cg1
 SET cg1.[StakeLevelList] = cg2.[StakeLevelList]
@@ -107,7 +99,7 @@ SET cg1.[StakeLevelList] = cg2.[StakeLevelList]
 FROM [CustGameType] cg1 WITH(UPDLOCK,ROWLOCK)
 	INNER JOIN custinfo ci WITH(NOLOCK) ON cg1.custid = ci.custid
 	INNER JOIN [CustGameType] cg2 WITH(NOLOCK) ON cg2.custid = ci.custid
-WHERE ci.srecommend IN (SELECT custid FROM #Supers)
+WHERE ci.srecommend IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND cg1.gameTypeID = 14	
 	AND cg2.GameTYpeID = 1
 	AND ( cg1.[StakeLevelList] <> cg2.[StakeLevelList]
