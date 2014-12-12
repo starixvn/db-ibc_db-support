@@ -166,6 +166,36 @@ GO
 
 
 --STEP 3: Adjust settings for deposit customers
+--copy settings for newly created deposit customers
+
+SELECT ci.custid
+into #tmp
+from dbo.custInfo ci WITH(NOLOCK)
+	INNER join dbo.CustGameType cs1 WITH(NOLOCK) on ci.custid = cs1.CustID AND cs1.GameTypeID = 1
+	left join dbo.CustGameType cs2 WITH(NOLOCK) ON ci.custid = cs2.CustID and cs2.GameTypeID = 14
+where ci.srecommend IN (select custid from dbo.Dep_CustSuper with(NOLOCK))	
+	and cs2.CustID is null
+	
+INSERT INTO [dbo].[CustGameType]
+			   ([CustID]
+			   ,[GameTypeID]
+			   ,[StakeLevelList]
+			   ,[MaxPerGameType]
+			   ,[MinBet]
+			   ,[MaxBet]
+			   ,[IsDisabled])
+    SELECT cg.[CustID]
+		   ,14 as [GameTypeID]
+		   ,[StakeLevelList]
+		   ,[MaxPerGameType]
+		   ,[MinBet]
+		   ,[MaxBet]
+		   ,[IsDisabled]
+    FROM [CustGameType] cg WITH(NOLOCK)		
+    WHERE custid IN (SELECT custid FROM #tmp)
+		 AND gameTypeID = 1
+GO
+		 	
 --adjust [CustGameType]
 
 
