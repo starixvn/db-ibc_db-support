@@ -14,17 +14,7 @@
 		cs1.isautopositiontaking = cs2.isautopositiontaking,
 		cs1.isautompositiontaking = cs2.isautompositiontaking,
 		cs1.minbet = cs2.minbet,
-		cs1.maxbet = cs2.maxbet,
-		cs1.playerdiscount = cs2.playerdiscount,
-		cs1.discount = cs2.discount,
-		cs1.adiscount = cs2.adiscount,
-		cs1.sdiscount = cs2.sdiscount, 
-		cs1.groupa = cs2.groupa,  
-		cs1.groupb = cs2.groupb,
-		cs1.groupc = cs2.groupc,
-		cs1.groupd = cs2.groupd, 
-		cs1.groupe = cs2.groupe,
-		cs1.groupf = cs2.groupf 
+		cs1.maxbet = cs2.maxbet	
 	from CustSetting cs1 with(UPDLOCK,ROWLOCK)
 		INNER JOIN custInfo ci with(nolock) on cs1.custid = ci.custid
 		INNER JOIN CustSetting cs2 WITH(NOLOCK) ON cs2.custid = ci.custid
@@ -41,9 +31,28 @@
 				OR	cs1.isautompositiontaking <> cs2.isautompositiontaking
 				
 				OR	cs1.minbet <> cs2.minbet
-				OR	cs1.maxbet <> cs2.maxbet
-				
-				OR	cs1.playerdiscount <> cs2.playerdiscount
+				OR	cs1.maxbet <> cs2.maxbet				
+		)
+GO
+UPDATE cs1
+	SET cs1.playerdiscount = cs2.playerdiscount,
+		cs1.discount = cs2.discount,
+		cs1.adiscount = cs2.adiscount,
+		cs1.sdiscount = cs2.sdiscount, 
+		cs1.groupa = cs2.groupa,  
+		cs1.groupb = cs2.groupb,
+		cs1.groupc = cs2.groupc,
+		cs1.groupd = cs2.groupd, 
+		cs1.groupe = cs2.groupe,
+		cs1.groupf = cs2.groupf	
+	from CustSetting cs1 with(UPDLOCK,ROWLOCK)
+		INNER JOIN custInfo ci with(nolock) on cs1.custid = ci.custid
+		INNER JOIN CustSetting cs2 WITH(NOLOCK) ON cs2.custid = ci.custid
+	where srecommend  NOT IN (SELECT custid FROM Dep_custSuper WITH(NOLOCK))				
+		AND cs1.sporttype = 5 AND cs1.bettype = 9999
+		AND cs2.sporttype = 5 AND cs2.bettype = 20
+		AND (
+					cs1.playerdiscount <> cs2.playerdiscount
 				OR	cs1.discount <> cs2.discount
 				OR	cs1.adiscount <> cs2.adiscount
 				OR	cs1.sdiscount <> cs2.sdiscount 
@@ -52,8 +61,9 @@
 				OR 	cs1.groupc <> cs2.groupc
 				OR 	cs1.groupd <> cs2.groupd
 				OR 	cs1.groupe <> cs2.groupe
-				OR 	cs1.groupf <> cs2.groupf 
-		)
+				OR 	cs1.groupf <> cs2.groupf
+			) 
+				
 GO
 		
 	UPDATE cs1
