@@ -52,7 +52,7 @@ BEGIN
 		,BetCount INT NULL
 	)
 
-	WHILE( @winlostdate < @ToDate)
+	WHILE( @winlostdate <= @ToDate)
 	BEGIN
 		IF DATEPART(DW, @winlostdate) <> 7
 		BEGIN
