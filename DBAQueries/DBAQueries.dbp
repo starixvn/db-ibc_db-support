@@ -57,6 +57,7 @@ Begin DataProject = "DBAQueries"
          Script = "Req_20141016_Feature24481_SuspendAccountsUnderSite722222 .sql"
          Script = "Req_20141017_Feature24481_Rollback un-suspend for affected accounts.sql"
          Script = "Req_20141031_Feature25357_GetAgentListAndDownlines.sql"
+         Script = "Req_20141231_Feature25840_SeparateVirtualRateBySporttypeBettype.sql"
       End
       Begin Folder = "HRFixedOdds"
          Script = "Req_20131011_Feature6505_AddLogAction.sql"
