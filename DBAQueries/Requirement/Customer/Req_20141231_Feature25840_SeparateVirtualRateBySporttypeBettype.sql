@@ -29,7 +29,7 @@ BEGIN
 	IF (SELECT COUNT(1)
 		FROM sys.objects
 		WHERE NAME IN ('CustInfo','CustVirtualRate') AND type = 'U'
-		) = 2 AND @target = 'DBTRANS'
+		) = 2 AND @@SERVERNAME = 'DBTRANS'
 	BEGIN	
 		INSERT INTO [dbo].[CustVirtualRate]
 			   ([custid]
