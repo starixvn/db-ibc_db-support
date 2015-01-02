@@ -253,7 +253,8 @@ BEGIN
 			OR (
 				SUM(ISNULL(tmp.Voidamt,0)
 				+ISNULL(tmp.BetCount,0)
-				+ISNULL(tmp.Transferamt,0)) <>0)
+				--+ISNULL(tmp.Transferamt,0)
+				) <>0)
 		
 		TRUNCATE TABLE #rptStatementTable
 
