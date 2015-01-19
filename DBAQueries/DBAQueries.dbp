@@ -11,6 +11,7 @@ Begin DataProject = "DBAQueries"
    End
    Begin Folder = "Queries"
    End
+   Script = "Req_20150119_Feature6304_LicenseeSettingConfiguration.sql"
    Begin Folder = "Requirement"
       Script = "000_Sample.sql"
       Script = "000_Sample.sql"
