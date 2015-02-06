@@ -308,6 +308,9 @@ Begin DataProject = "DBAQueries"
    End
    Begin Folder = "Support"
       Script = "000_Sample.sql"
+      Begin Folder = "CRM"
+         Script = "Sup_20150206_Support30672_AddMissingHeadline.sql"
+      End
       Begin Folder = "Currency"
          Script = "Sup_20130918_Support5824_ChangeCurrencyName.sql"
       End
