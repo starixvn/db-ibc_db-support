@@ -17,7 +17,7 @@ INSERT INTO crmInformHeadline (	HeadlineID
 								,TitleID
 								,CreatedTime
 								,StatusID
-								,UpdatedTime
+								,UpdatedTime  
 								,Remark
 								,Creator
 								,UpdatedBy
